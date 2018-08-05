@@ -1,5 +1,6 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
 
 android {
     compileSdkVersion 28
@@ -31,6 +32,10 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+
+    sourceSets {
+        main.java.srcDirs += 'src/main/kotlin'
+    }
 }
 
 repositories {
@@ -58,8 +63,9 @@ dependencies {
     }
 
     implementation 'com.android.support:appcompat-v7'
-    implementation 'com.android.support.constraint:constraint-layout:1.1.2'
-    implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.2.51'
+    implementation 'com.android.support.constraint:constraint-layout:1.1.0'
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+
 }
 
 //---------------------------------- Bintray ----------------------------------//
@@ -69,6 +75,9 @@ apply plugin: 'com.jfrog.bintray'
 apply plugin: 'com.github.dcendents.android-maven'
 
 buildscript {
+
+    ext.kotlin_version = '1.2.60'
+
     repositories {
         google()
         jcenter()
@@ -78,7 +87,6 @@ buildscript {
         classpath 'com.android.tools.build:gradle:3.0.1'
         classpath 'com.github.dcendents:android-maven-gradle-plugin:2.0'
         classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.0'
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.2.51"
     }
 }
 
