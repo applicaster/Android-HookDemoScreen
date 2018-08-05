@@ -15,6 +15,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="start|center_vertical"
+        tools:ignore="contentDescription"
         tools:src="@drawable/ic_menu_back" />
 
     <ImageView
@@ -22,6 +23,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="end|center_vertical"
+        tools:ignore="contentDescription"
         tools:src="@drawable/close" />
 
 </FrameLayout>
