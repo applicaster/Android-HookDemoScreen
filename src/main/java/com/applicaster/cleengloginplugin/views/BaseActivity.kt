@@ -1,5 +1,6 @@
 package com.applicaster.cleengloginplugin.views
 
+import android.app.AlertDialog
 import android.app.ProgressDialog
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
@@ -73,30 +74,13 @@ abstract class BaseActivity : AppCompatActivity() {
             else -> return
         }
 
-//        this.showAlertDialog(
-//                ViewCustomization(
-//                        textFont = "CleengLoginAlertTitle",
-//                        localization = localizationKeys[0]),
-//                ViewCustomization(
-//                        textFont = "CleengLoginAlertDescription",
-//                        localization = localizationKeys[1]),
-//                {})
+        this.showAlertDialog(localizationKeys[0], localizationKeys[1],{})
     }
 
-//    fun showAlertDialog(titleCustomization: ViewCustomization, subtitleCustomization: ViewCustomization, callback: () -> Unit) {
-//        val dialog = AlertDialog(this,
-//                ViewCustomization(
-//                        bgColor = "cleeng_login_alert_component"),
-//                titleCustomization,
-//                subtitleCustomization,
-//                ViewCustomization(
-//                        bgImage = "cleeng_login_confirm_button",
-//                        textFont = "CleengLoginConfirmButtonText",
-//                        localization = "cleeng_login_confirm_button"),
-//                callback)
-//
-//        dialog.show()
-//    }
+    fun showAlertDialog(title: String, subtitle: String, callback: () -> Unit) {
+        val dialog = AlertDialog(this, title, subtitle, callback)
+        dialog.show()
+    }
 
 
     fun getUserFromInput(): User? {
