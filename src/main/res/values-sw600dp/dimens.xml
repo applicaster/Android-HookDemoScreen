@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <dimen name="subscription_horizontal_space">56dp</dimen>
+    <dimen name="login_horizontal_space">350dp</dimen>
+    <dimen name="action_button_height">55dp</dimen>
+    <dimen name="bottom_bar_height">80dp</dimen>
+
+    <dimen name="logo_height">104dp</dimen>
+
+</resources>
