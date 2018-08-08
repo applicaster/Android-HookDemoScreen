@@ -7,5 +7,6 @@
     <dimen name="bottom_bar_height">80dp</dimen>
 
     <dimen name="logo_height">104dp</dimen>
+    <dimen name="logo_width">219dp</dimen>
 
 </resources>
