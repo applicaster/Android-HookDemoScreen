@@ -29,7 +29,7 @@ class LoginActivity : BaseActivity() {
 
         CustomizationHelper.updateEditTextView(this, R.id.input_email, DEFAULT_1, true);
         CustomizationHelper.updateEditTextView(this, R.id.input_password, DEFAULT_2, true);
-        CustomizationHelper.updateTextView(this, R.id.forgot_password, RESET_PASSWORD_ACTION_TEXT)//need to change to the correct text
+        CustomizationHelper.updateTextView(this, R.id.forgot_password, RESET_PASSWORD_ACTION_TEXT)
         CustomizationHelper.updateButtonViewText(this, R.id.action_button, SIGN_IN_BUTTON)
 
         updateViews();
@@ -59,16 +59,20 @@ class LoginActivity : BaseActivity() {
         }
 
         bottom_bar_container.setOnClickListener{
-        //launch restore
+            RestoreActivity.launchRestoreActivity(this)
             this.finish()
+        }
+
+        forgot_password.setOnClickListener{
+            ResetPasswordActivity.launchResetActivity(this)
         }
     }
 
     fun updateViews() {
-        if( !StringUtil.booleanValue(PluginConfigurationHelper.getConfigurationValue(FACEBOOK_LOGIN_AVAILABLE) as String)){
-            facebook_button.visibility = GONE;
-            google_button.visibility = GONE;
-        }
+            if( !StringUtil.booleanValue(PluginConfigurationHelper.getConfigurationValue(FACEBOOK_LOGIN_AVAILABLE) as String)){
+                facebook_button.visibility = GONE;
+                google_button.visibility = GONE;
+            }
     }
 
     companion object {

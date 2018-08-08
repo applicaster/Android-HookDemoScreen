@@ -11,7 +11,10 @@ import com.applicaster.cleengloginplugin.helper.CustomizationHelper
 import com.applicaster.cleengloginplugin.helper.IAPManager
 import com.applicaster.cleengloginplugin.models.Subscription
 import com.applicaster.cleengloginplugin.remote.WebService
+import com.applicaster.util.OSUtil
+import kotlinx.android.synthetic.main.bottom_bar.*
 import kotlinx.android.synthetic.main.subscription_activity.*
+import kotlinx.android.synthetic.main.subscription_item.view.*
 
 class SubscriptionsActivity: BaseActivity() {
 
@@ -39,57 +42,40 @@ class SubscriptionsActivity: BaseActivity() {
     override fun customize() {
         super.customize()
         CustomizationHelper.updateTextView(this, R.id.title, SUBSCRIPTION_TITLE)
+        CustomizationHelper.updateTextView(this, R.id.sign_up_action_text, SIGN_IN_LABEL_TEXT)
+        CustomizationHelper.updateTextView(this, R.id.sign_up_text, ALREADY_HAVE_ACCOUNT_HINT)
+        CustomizationHelper.updateTextView(this, R.id.bottom_bar_title, LOGIN_LEGAL)
+
+        updateViews()
+    }
+
+    fun updateViews() {
+        bottom_bar_action_text.visibility = View.GONE;
     }
 
     private fun presentSubscriptions() {
         for (subscription in CleengManager.availableSubscriptions) {
             subscriptionsContainer.addView(this.getSubscriptionView(subscription))
+            subscriptionsContainer.addView(this.getSubscriptionView(subscription))
+            subscriptionsContainer.addView(this.getSubscriptionView(subscription))
+
         }
     }
 
     private fun getSubscriptionView(subscription: Subscription): View {
         val subscriptionView = this.layoutInflater.inflate(R.layout.subscription_item, null)
+        CustomizationHelper.updateTextView(this, R.id.item_title, subscription.title)
+        CustomizationHelper.updateTextView(this, R.id.item_description,  subscription.description)
+        CustomizationHelper.updateTextView(this, R.id.item_price, "SUBSCRIBE FOR $" +subscription.price.toString())
+        subscriptionView.item_title.text = subscription.title
+        subscriptionView.item_description.text = subscription.description
+        subscriptionView.item_price.text = "SUBSCRIBE FOR $" +subscription.price.toString()
+        subscriptionView.purchaseButton.radius = OSUtil.convertDPToPixels(20).toFloat();
+        subscriptionView.purchaseButton.setOnClickListener {
 
-//        this.customizeView(subscriptionView,
-//                BaseActivity.ViewCustomization(
-//                        bgImage = "cleeng_login_subscription_component"))
-
-//        this.customizeView(subscriptionView.badgeTextView,
-//                ViewCustomization(
-//                        bgImage = "cleeng_login_promotion_icon"))
-//
-//        this.customizeView(subscriptionView.titleTextView,
-//                ViewCustomization(
-//                        textFont = "CleengLoginSubscriptionTitle"))
-//
-//        this.customizeView(subscriptionView.descriptionTextView,
-//                ViewCustomization(
-//                        textFont = "CleengLoginSubsriptionDetailsText"))
-//
-//        this.customizeView(subscriptionView.purchaseButton,
-//                ViewCustomization(
-//                        bgImage = "cleeng_login_subscribe_button",
-//                        textFont = "CleengLoginSubscriptionText"))
-//
-//        this.customizeForClosedDescriptionContainer(subscriptionView)
-//
-//        subscriptionView.textContainer.titleTextView.text = subscription.title
-//        subscriptionView.textContainer.descriptionTextView.text = subscription.description
-//        subscriptionView.purchaseButton.text = "SUBSCRIBE FOR $" +subscription.price.toString()
-//
-//        this.customizeBottomPanel(
-//                ViewCustomization(
-//                        bgColor = "cleeng_login_bottom_legal_background_color"),
-//                ViewCustomization(
-//                        textFont = "CleengLoginLegalText",
-//                        localization = "cleeng_login_account"),
-//                ViewCustomization())
-//
-//        subscriptionView.purchaseButton.setOnClickListener {
-//
-//            val iapManager = IAPManager(this)
-//            iapManager.init(subscription.androidProductId)
-//        }
+            val iapManager = IAPManager(this)
+            iapManager.init(subscription.androidProductId)
+        }
 
         return subscriptionView
 

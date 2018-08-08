@@ -21,4 +21,7 @@
     <color name="cleeng_login_alert_description">#ff2a2a2a</color>
     <color name="cleeng_login_confirm_button_text">#fff48025</color>
     <color name="cleeng_login_subsription_details_text">#ff2a2a2a</color>
+    <color name="cleeng_login_subscribe_button">#fff48025</color>
+    <color name="cleeng_login_subscription_component">#80e3e3e3</color>
+
 </resources>

@@ -7,16 +7,12 @@
         android:allowBackup="false"
         >
 
-        <activity android:name=".views.LoginActivity">
+        <activity android:name=".views.LoginActivity"/>
+        <activity android:name=".views.SubscriptionsActivity"/>
+        <activity android:name=".views.RestoreActivity"/>
+        <activity android:name=".views.SignUpActivity"/>
+        <activity android:name=".views.ResetPasswordActivity"/>
 
-        </activity>
-        <activity android:name=".views.SubscriptionsActivity">
-
-        </activity>
-
-        <activity android:name=".views.SignUpActivity">
-
-        </activity>
     </application>
 
 </manifest>

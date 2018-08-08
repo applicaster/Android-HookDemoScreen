@@ -10,20 +10,21 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_begin="56dp" />
+        app:layout_constraintGuide_begin="@dimen/login_horizontal_space" />
 
     <android.support.constraint.Guideline
         android:id="@+id/end_guideline"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_end="56dp" />
+        app:layout_constraintGuide_end="@dimen/login_horizontal_space" />
 
     <ImageView
         android:id="@+id/background_image"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:scaleType="centerCrop"
+        android:scaleType="fitXY"
+        android:src="@drawable/cleeng_login_background_image_smartphone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -32,8 +33,8 @@
 
     <include layout="@layout/toolbar_template" />
 
-    <TextView
-        android:id="@+id/title"
+    <com.applicaster.util.ui.CustomTextView
+        android:id="@+id/restore_title"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
@@ -43,58 +44,34 @@
         app:layout_constraintTop_toBottomOf="@id/toolbar"
         tools:text="Restore Your Account" />
 
-    <TextView
-        android:id="@+id/description"
+    <com.applicaster.util.ui.CustomTextView
+        android:id="@+id/restore_description"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="36dp"
         android:gravity="center"
         app:layout_constraintEnd_toEndOf="@id/end_guideline"
         app:layout_constraintStart_toStartOf="@id/start_guideline"
-        app:layout_constraintTop_toBottomOf="@id/title"
+        app:layout_constraintTop_toBottomOf="@id/restore_title"
         tools:text="Please create a user and password to restore your purchase" />
 
-    <EditText
-        android:id="@+id/input_email"
+    <include
+        android:id="@+id/user_input"
+        layout="@layout/user_input"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="45dp"
-        android:hint="E-mail"
-        android:inputType="textEmailAddress"
+        android:layout_marginTop="16dp"
         app:layout_constraintEnd_toEndOf="@id/end_guideline"
         app:layout_constraintStart_toStartOf="@id/start_guideline"
-        app:layout_constraintTop_toBottomOf="@id/description" />
+        app:layout_constraintTop_toBottomOf="@id/restore_description" />
 
-    <EditText
-        android:id="@+id/input_password"
+    <include
+        android:id="@+id/restore_bottom_bar_container"
+        layout="@layout/bottom_bar"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:hint="Password"
-        android:inputType="textPassword"
-        app:layout_constraintEnd_toEndOf="@id/end_guideline"
-        app:layout_constraintStart_toStartOf="@id/start_guideline"
-        app:layout_constraintTop_toBottomOf="@id/input_email" />
-
-    <TextView
-        android:id="@+id/forgot_password"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        app:layout_constraintEnd_toEndOf="@id/end_guideline"
-        app:layout_constraintStart_toStartOf="@id/start_guideline"
-        app:layout_constraintTop_toBottomOf="@id/input_password"
-        tools:text="Forgot password?" />
-
-    <Button
-        android:id="@+id/sign_in"
-        android:layout_width="0dp"
-        android:layout_height="45dp"
-        android:layout_marginTop="20dp"
-        android:text="SIGN IN"
-        app:layout_constraintEnd_toEndOf="@id/end_guideline"
-        app:layout_constraintStart_toStartOf="@id/start_guideline"
-        app:layout_constraintTop_toBottomOf="@id/forgot_password"
-        tools:background="@color/red"
-        tools:textColor="@color/white" />
+        android:layout_height="@dimen/bottom_bar_height"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </android.support.constraint.ConstraintLayout>
