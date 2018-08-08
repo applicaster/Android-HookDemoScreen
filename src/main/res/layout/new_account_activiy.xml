@@ -56,14 +56,14 @@
         app:layout_constraintEnd_toEndOf="@id/end_guideline"
         app:layout_constraintStart_toStartOf="@id/start_guideline"
         app:layout_constraintTop_toBottomOf="@id/app_logo"
-         />
+        tools:text="Enter Your Details" />
 
     <include
         android:id="@+id/user_input"
         layout="@layout/user_input"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="24dp"
         app:layout_constraintEnd_toEndOf="@id/end_guideline"
         app:layout_constraintStart_toStartOf="@id/start_guideline"
         app:layout_constraintTop_toBottomOf="@id/enter_details" />
@@ -79,17 +79,17 @@
 
 
     <include
-        android:id="@+id/sign_up_hint"
+        android:id="@+id/sign_in_hint"
         layout="@layout/account_sign_text_with_action"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="18dp"
         app:layout_constraintEnd_toEndOf="@id/end_guideline"
         app:layout_constraintStart_toStartOf="@id/start_guideline"
-        app:layout_constraintBottom_toTopOf="@id/bottom_bar_container" />
+        app:layout_constraintBottom_toTopOf="@id/bottom_bar_container_new_account" />
 
     <include
-        android:id="@+id/bottom_bar_container"
+        android:id="@+id/bottom_bar_container_new_account"
         layout="@layout/bottom_bar"
         android:layout_width="0dp"
         android:layout_height="@dimen/bottom_bar_height"

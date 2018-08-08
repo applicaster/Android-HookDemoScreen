@@ -8,7 +8,7 @@
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toTopOf="parent"
-    tools:showIn="@layout/login_activity">
+    >
 
     <ImageView
         android:id="@+id/toolbar_back_button"
@@ -24,6 +24,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="end|center_vertical"
         tools:ignore="contentDescription"
+        android:visibility="gone"
         tools:src="@drawable/close" />
 
 </FrameLayout>

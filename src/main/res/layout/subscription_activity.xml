@@ -10,21 +10,20 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_begin="@dimen/login_horizontal_space" />
+        app:layout_constraintGuide_begin="@dimen/subscription_horizontal_space" />
 
     <android.support.constraint.Guideline
         android:id="@+id/end_guideline"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_end="@dimen/login_horizontal_space" />
+        app:layout_constraintGuide_end="@dimen/subscription_horizontal_space" />
 
     <ImageView
         android:id="@+id/background_image"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:scaleType="fitXY"
-        android:src="@drawable/cleeng_login_background_image_smartphone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -35,67 +34,57 @@
         android:id="@+id/toolbar"
         layout="@layout/toolbar_template" />
 
-    <ImageView
-        android:id="@+id/app_logo"
-        android:layout_width="wrap_content"
-        android:layout_height="54dp"
-        android:scaleType="fitXY"
-        android:src="@drawable/cleeng_login_logo"
+    <com.applicaster.util.ui.CustomTextView
+        android:id="@+id/title"
+        style="CleengLoginSubscriptionTitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="@id/end_guideline"
         app:layout_constraintStart_toStartOf="@id/start_guideline"
         app:layout_constraintTop_toBottomOf="@id/toolbar"
-        tools:ignore="contentDescription" />
-
+        tools:text="Enter Your Details" />
 
     <com.applicaster.util.ui.CustomTextView
-        android:id="@+id/enter_details"
-        style="CleengLoginDecriptionText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="34dp"
-        app:layout_constraintEnd_toEndOf="@id/end_guideline"
-        app:layout_constraintStart_toStartOf="@id/start_guideline"
-        app:layout_constraintTop_toBottomOf="@id/app_logo"
-         />
-
-    <include
-        android:id="@+id/user_input"
-        layout="@layout/user_input"
+        android:id="@+id/sign_in"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="13dp"
+        android:textColor="@color/white"
         app:layout_constraintEnd_toEndOf="@id/end_guideline"
         app:layout_constraintStart_toStartOf="@id/start_guideline"
-        app:layout_constraintTop_toBottomOf="@id/enter_details" />
+        app:layout_constraintTop_toBottomOf="@+id/title"
+        tools:text="Already have an account? Sign In" />
 
-    <include
-        layout="@layout/additional_auth"
+    <ScrollView
+        android:id="@+id/subscriptionsScrollView"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_marginTop="20dp"
+        android:scrollbars="none"
         app:layout_constraintEnd_toEndOf="@id/end_guideline"
         app:layout_constraintStart_toStartOf="@id/start_guideline"
-        app:layout_constraintTop_toBottomOf="@+id/user_input" />
+        app:layout_constraintBottom_toTopOf="@+id/bottom_bar"
+        app:layout_constraintTop_toBottomOf="@+id/sign_in">
+
+        <LinearLayout
+            android:id="@+id/subscriptionsContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:showDividers="middle">
+
+        </LinearLayout>
+
+    </ScrollView>
 
 
     <include
-        android:id="@+id/sign_up_hint"
-        layout="@layout/account_sign_text_with_action"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="18dp"
-        app:layout_constraintEnd_toEndOf="@id/end_guideline"
-        app:layout_constraintStart_toStartOf="@id/start_guideline"
-        app:layout_constraintBottom_toTopOf="@id/bottom_bar_container" />
-
-    <include
-        android:id="@+id/bottom_bar_container"
+        android:id="@+id/bottom_bar"
         layout="@layout/bottom_bar"
         android:layout_width="0dp"
         android:layout_height="@dimen/bottom_bar_height"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
-
 
 </android.support.constraint.ConstraintLayout>
