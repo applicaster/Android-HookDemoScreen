@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import android.view.ViewGroup
 import com.applicaster.cleengloginplugin.*
 import com.applicaster.cleengloginplugin.R
 import com.applicaster.cleengloginplugin.helper.CleengManager
@@ -55,18 +56,12 @@ class SubscriptionsActivity: BaseActivity() {
 
     private fun presentSubscriptions() {
         for (subscription in CleengManager.availableSubscriptions) {
-            subscriptionsContainer.addView(this.getSubscriptionView(subscription))
-            subscriptionsContainer.addView(this.getSubscriptionView(subscription))
-            subscriptionsContainer.addView(this.getSubscriptionView(subscription))
-
+            subscriptionsContainer.addView(this.getSubscriptionView(subscription,subscriptionsContainer))
         }
     }
 
-    private fun getSubscriptionView(subscription: Subscription): View {
-        val subscriptionView = this.layoutInflater.inflate(R.layout.subscription_item, null)
-        CustomizationHelper.updateTextView(this, R.id.item_title, subscription.title)
-        CustomizationHelper.updateTextView(this, R.id.item_description,  subscription.description)
-        CustomizationHelper.updateTextView(this, R.id.item_price, "SUBSCRIBE FOR $" +subscription.price.toString())
+    private fun getSubscriptionView(subscription: Subscription, container: ViewGroup): View {
+        val subscriptionView = this.layoutInflater.inflate(R.layout.subscription_item, container, false)
         subscriptionView.item_title.text = subscription.title
         subscriptionView.item_description.text = subscription.description
         subscriptionView.item_price.text = "SUBSCRIBE FOR $" +subscription.price.toString()

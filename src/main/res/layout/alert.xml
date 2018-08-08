@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#23000000">
+
+    <RelativeLayout
+        android:id="@+id/alertContainer"
+        android:layout_width="260dp"
+        android:layout_height="357dp"
+        android:layout_centerInParent="true"
+        android:background="#ff2b61a1">
+
+        <TextView
+            android:id="@+id/titleTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            android:layout_marginTop="76dp"
+            android:gravity="center"
+            style="CleengLoginAlertTitle"/>
+
+        <TextView
+            android:id="@+id/subtitleTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/titleTextView"
+            android:textAlignment="center"
+            android:gravity="center"
+            android:layout_marginTop="39dp"
+            style="CleengLoginAlertDescription"/>
+
+        <Button
+            android:id="@+id/closeButton"
+            android:layout_width="237dp"
+            android:layout_height="43dp"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="12dp"
+            style="CleengLoginConfirmButtonText"/>
+
+    </RelativeLayout>
+
+</RelativeLayout>
