@@ -60,7 +60,7 @@ class SignUpActivity : BaseActivity() {
             facebook_button.visibility = View.GONE;
             google_button.visibility = View.GONE;
         }
-        forgot_password.visibility = View.GONE;
+        forgot_password.visibility = View.INVISIBLE;
     }
 
     companion object {

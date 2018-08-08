@@ -19,13 +19,18 @@ const val SIGN_UP_LABEL_TEXT = "cleeng_login_sign_up";
 const val RESET_PASSWORD_ACTION_TEXT = "cleeng_login_reset_password_action";
 const val ALREADY_HAVE_ACCOUNT_HINT = "cleeng_login_already_have_account";
 const val SIGN_IN_LABEL_TEXT = "cleeng_login_sign_in";
+
 const val RESTORE_TITLE = "cleeng_login_restore_title";
 const val RESTORE_DESCRIPTION = "cleeng_login_restore_description";
 const val RESTORE_BUTTON = "cleeng_login_restore_button";
 const val RESTORE_HELP_TEXT = "cleeng_login_trouble_restore";
 const val RESTORE_HELP_ACTION = "cleeng_login_help";
 
-
+const val RESET_PASSWORD_TITLE = "cleeng_login_reset_password_title";
+const val RESET_PASSWORD_DESCRIPTION = "cleeng_login_reset_password_details";
+const val RESET_BUTTON = "cleeng_login_reset_password_action_button";
+const val RESET_HELP_TEXT = "cleeng_login_reset_password_action_details";
+const val RESET_HELP_ACTION = "cleeng_login_reset_password_action";
 //errors
 const val LOGIN_INTERNAL_ERROR_TITLE = "cleeng_login_error_internal_title";
 const val LOGIN_INTERNAL_ERROR_MESSAGE = "cleeng_login_error_internal_message";

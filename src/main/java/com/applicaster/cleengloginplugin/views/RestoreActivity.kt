@@ -52,7 +52,7 @@ class RestoreActivity : BaseActivity() {
         }
 
         forgot_password.setOnClickListener{
-            //go to reset password
+            ResetPasswordActivity.launchResetActivity(this)
         }
     }
 
