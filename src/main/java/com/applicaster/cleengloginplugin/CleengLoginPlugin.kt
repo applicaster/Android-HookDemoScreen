@@ -22,8 +22,7 @@ class CleengLoginPlugin :  BaseLoginContract(), ApplicationLoaderHookUpI {
             }
             //need to call onHookFinished in case that user press on back in the login activity
             LoginManager.registerToEvent(context, LoginManager.RequestType.LOGIN, loginManagerBroadcastReceiver)
-//            LoginActivity.launchLogin(context);
-            SubscriptionsActivity.launchSubscriptionsActivity(context);
+            LoginActivity.launchLogin(context);
 
         } else {
             listener.onHookFinished()
