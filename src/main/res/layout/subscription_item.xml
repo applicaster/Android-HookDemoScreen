@@ -1,6 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:card_view="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/cleeng_login_subscription_component"
+    android:paddingBottom="18dp">
 
+    <com.applicaster.util.ui.CustomTextView
+        android:id="@+id/item_title"
+        style="CleengLoginSubscriptionTitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="18dp"
+        android:gravity="center"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.applicaster.util.ui.CustomTextView
+        android:id="@+id/item_description"
+        style="CleengLoginSubscriptionTitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:gravity="center"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/item_title" />
+
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/purchaseButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="11dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:cardBackgroundColor="@color/cleeng_login_subscribe_button"
+        app:layout_constraintTop_toBottomOf="@+id/item_description">
+
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="10dp">
+
+            <com.applicaster.util.ui.CustomTextView
+                android:id="@+id/item_price"
+                style="CleengLoginSubscriptionTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center" />
+        </FrameLayout>
+    </android.support.v7.widget.CardView>
 </android.support.constraint.ConstraintLayout>

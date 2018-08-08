@@ -33,6 +33,8 @@ const val RESET_HELP_ACTION = "cleeng_login_reset_password_action";
 
 const val SUBSCRIPTION_TITLE = "cleeng_login_subscription_title";
 const val LOGIN_LEGAL = "cleeng_login_legal";
+const val SUBSCRIPTION1 = "cleeng_login_subscription";
+const val SUBSCRIPTION_DETAILS = "cleeng_login_subscription_details";
 
 //errors
 const val LOGIN_INTERNAL_ERROR_TITLE = "cleeng_login_error_internal_title";

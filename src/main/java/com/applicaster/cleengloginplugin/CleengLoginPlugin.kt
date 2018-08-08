@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import com.applicaster.cleengloginplugin.helper.PluginConfigurationHelper
 import com.applicaster.cleengloginplugin.views.LoginActivity
+import com.applicaster.cleengloginplugin.views.SubscriptionsActivity
 import com.applicaster.plugin_manager.hook.ApplicationLoaderHookUpI
 import com.applicaster.plugin_manager.hook.HookListener
 import com.applicaster.plugin_manager.login.BaseLoginContract
@@ -21,7 +22,9 @@ class CleengLoginPlugin :  BaseLoginContract(), ApplicationLoaderHookUpI {
             }
             //need to call onHookFinished in case that user press on back in the login activity
             LoginManager.registerToEvent(context, LoginManager.RequestType.LOGIN, loginManagerBroadcastReceiver)
-            LoginActivity.launchLogin(context);
+//            LoginActivity.launchLogin(context);
+            SubscriptionsActivity.launchSubscriptionsActivity(context);
+
         } else {
             listener.onHookFinished()
         }
