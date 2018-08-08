@@ -8,9 +8,9 @@ import com.applicaster.cleengloginplugin.*
 import com.applicaster.cleengloginplugin.R
 import com.applicaster.cleengloginplugin.helper.CleengManager
 import com.applicaster.cleengloginplugin.helper.CustomizationHelper
-import com.applicaster.cleengloginplugin.helper.IAPManager
 import com.applicaster.cleengloginplugin.models.Subscription
 import com.applicaster.cleengloginplugin.remote.WebService
+import kotlinx.android.synthetic.main.bottom_bar.*
 import kotlinx.android.synthetic.main.subscription_activity.*
 
 class SubscriptionsActivity: BaseActivity() {
@@ -39,6 +39,15 @@ class SubscriptionsActivity: BaseActivity() {
     override fun customize() {
         super.customize()
         CustomizationHelper.updateTextView(this, R.id.title, SUBSCRIPTION_TITLE)
+        CustomizationHelper.updateTextView(this, R.id.sign_up_action_text, SIGN_IN_LABEL_TEXT)
+        CustomizationHelper.updateTextView(this, R.id.sign_up_text, ALREADY_HAVE_ACCOUNT_HINT)
+        CustomizationHelper.updateTextView(this, R.id.bottom_bar_title, LOGIN_LEGAL)
+
+        updateViews()
+    }
+
+    fun updateViews() {
+        bottom_bar_action_text.visibility = View.GONE;
     }
 
     private fun presentSubscriptions() {

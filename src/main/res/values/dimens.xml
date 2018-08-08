@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <dimen name="subscription_horizontal_space">56dp</dimen>
+    <dimen name="subscription_horizontal_space">27dp</dimen>
     <dimen name="login_horizontal_space">56dp</dimen>
     <dimen name="action_button_height">45dp</dimen>
     <dimen name="bottom_bar_height">70dp</dimen>

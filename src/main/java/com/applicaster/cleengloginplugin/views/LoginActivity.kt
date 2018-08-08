@@ -69,10 +69,10 @@ class LoginActivity : BaseActivity() {
     }
 
     fun updateViews() {
-        if( !StringUtil.booleanValue(PluginConfigurationHelper.getConfigurationValue(FACEBOOK_LOGIN_AVAILABLE) as String)){
-            facebook_button.visibility = GONE;
-            google_button.visibility = GONE;
-        }
+            if( !StringUtil.booleanValue(PluginConfigurationHelper.getConfigurationValue(FACEBOOK_LOGIN_AVAILABLE) as String)){
+                facebook_button.visibility = GONE;
+                google_button.visibility = GONE;
+            }
     }
 
     companion object {

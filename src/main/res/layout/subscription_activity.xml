@@ -44,16 +44,15 @@
         app:layout_constraintTop_toBottomOf="@id/toolbar"
         tools:text="Enter Your Details" />
 
-    <com.applicaster.util.ui.CustomTextView
-        android:id="@+id/sign_in"
+    <include
+        android:id="@+id/subscription_sign_up_hint"
+        layout="@layout/account_sign_text_with_action"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="13dp"
-        android:textColor="@color/white"
+        android:layout_marginTop="14dp"
         app:layout_constraintEnd_toEndOf="@id/end_guideline"
         app:layout_constraintStart_toStartOf="@id/start_guideline"
-        app:layout_constraintTop_toBottomOf="@+id/title"
-        tools:text="Already have an account? Sign In" />
+        app:layout_constraintTop_toBottomOf="@id/title" />
 
     <ScrollView
         android:id="@+id/subscriptionsScrollView"
@@ -64,7 +63,7 @@
         app:layout_constraintEnd_toEndOf="@id/end_guideline"
         app:layout_constraintStart_toStartOf="@id/start_guideline"
         app:layout_constraintBottom_toTopOf="@+id/bottom_bar"
-        app:layout_constraintTop_toBottomOf="@+id/sign_in">
+        app:layout_constraintTop_toBottomOf="@+id/subscription_sign_up_hint">
 
         <LinearLayout
             android:id="@+id/subscriptionsContainer"
