@@ -1,7 +1,6 @@
 package com.applicaster.cleengloginplugin.helper
 
 import android.app.Activity
-import android.content.Context
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
@@ -51,6 +50,15 @@ class CustomizationHelper{
             if(button != null ){
                 button.setText(textValue)
             }
+        }
+
+        @JvmStatic
+        fun updateBgColor(activity: Activity, id: Int, key: String) {
+            val view = activity.findViewById(id) as View? ?: return
+            val bgDrawableRedId = OSUtil.getDrawableResourceIdentifier(key)
+                if (bgDrawableRedId != 0) {
+                    view.setBackgroundResource(bgDrawableRedId)
+                }
         }
 
     }
