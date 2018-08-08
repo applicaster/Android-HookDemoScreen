@@ -57,16 +57,11 @@ class SubscriptionsActivity: BaseActivity() {
     private fun presentSubscriptions() {
         for (subscription in CleengManager.availableSubscriptions) {
             subscriptionsContainer.addView(this.getSubscriptionView(subscription,subscriptionsContainer))
-            subscriptionsContainer.addView(this.getSubscriptionView(subscription,subscriptionsContainer))
-            subscriptionsContainer.addView(this.getSubscriptionView(subscription,subscriptionsContainer))
         }
     }
 
     private fun getSubscriptionView(subscription: Subscription, container: ViewGroup): View {
         val subscriptionView = this.layoutInflater.inflate(R.layout.subscription_item, container, false)
-        CustomizationHelper.updateTextView(this, R.id.item_title, subscription.title)
-        CustomizationHelper.updateTextView(this, R.id.item_description,  subscription.description)
-        CustomizationHelper.updateTextView(this, R.id.item_price, "SUBSCRIBE FOR $" +subscription.price.toString())
         subscriptionView.item_title.text = subscription.title
         subscriptionView.item_description.text = subscription.description
         subscriptionView.item_price.text = "SUBSCRIBE FOR $" +subscription.price.toString()
