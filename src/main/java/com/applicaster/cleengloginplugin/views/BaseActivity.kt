@@ -13,6 +13,7 @@ import com.applicaster.cleengloginplugin.helper.CustomizationHelper
 import com.applicaster.cleengloginplugin.models.User
 import com.applicaster.cleengloginplugin.remote.WebService
 import com.applicaster.model.APUser
+import com.applicaster.plugin_manager.login.LoginManager
 import com.applicaster.util.FacebookUtil
 import com.applicaster.util.asynctask.AsyncTaskListener
 import org.json.JSONObject
@@ -40,7 +41,10 @@ abstract class BaseActivity : AppCompatActivity() {
         val backButton = navigationBarContainer.findViewById<ImageView>(R.id.toolbar_back_button)
         if (backButton != null) {
             CustomizationHelper.updateImageView(backButton,"cleeng_login_back_button" );
-            backButton.setOnClickListener { this.finish() }
+            backButton.setOnClickListener {
+                LoginManager.notifyEvent(this,LoginManager.RequestType.CLOSED,false);
+                this.finish()
+            }
         }
     }
 
@@ -134,6 +138,11 @@ abstract class BaseActivity : AppCompatActivity() {
         })
 
         return user
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        LoginManager.notifyEvent(this,LoginManager.RequestType.CLOSED,false);
     }
 
 }
