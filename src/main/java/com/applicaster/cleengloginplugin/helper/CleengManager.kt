@@ -187,6 +187,9 @@ object CleengManager {
         return  CleengUtil.isTokenValid(user?.token);
     }
 
+    fun logout() {
+        setUser(null);
+    }
 
 
 }

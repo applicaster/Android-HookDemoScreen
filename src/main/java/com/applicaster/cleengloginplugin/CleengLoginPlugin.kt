@@ -46,7 +46,7 @@ class CleengLoginPlugin :  BaseLoginContract(), ApplicationLoaderHookUpI {
     }
 
     override fun logout(context: Context?, additionalParams: MutableMap<Any?, Any?>?) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        CleengManager.logout();
     }
 
     override fun login(context: Context?, additionalParams: MutableMap<Any?, Any?>?) {
