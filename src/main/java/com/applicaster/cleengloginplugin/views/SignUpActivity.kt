@@ -37,6 +37,7 @@ class SignUpActivity : BaseActivity() {
         CustomizationHelper.updateEditTextView(this, R.id.input_password, DEFAULT_2, true);
         CustomizationHelper.updateTextView(this, R.id.forgot_password, RESET_PASSWORD_ACTION_TEXT)
         CustomizationHelper.updateButtonViewText(this, R.id.action_button, SIGN_UP_BUTTON)
+        CustomizationHelper.updateButtonStyle(this, R.id.action_button, "CleengLoginSignUpButtonText")
 
         updateViews();
 

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="CleengLoginSignInButtonText"></style>
+    <style name="CleengLoginActionDescriptionText"></style>
+    <style name="CleengLoginDecriptionText"></style>
+    <style name="CleengLoginActionText"></style>
+
+
+</resources>

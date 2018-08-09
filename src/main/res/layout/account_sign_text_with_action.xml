@@ -8,13 +8,13 @@
 
     <com.applicaster.util.ui.CustomTextView
         android:id="@+id/sign_up_text"
-        style="cleeng_login_action_description_text"
+        style="@style/CleengLoginActionDescriptionText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
     <com.applicaster.util.ui.CustomTextView
         android:id="@+id/sign_up_action_text"
-        style="cleeng_login_action_text"
+        style="@style/CleengLoginActionText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 

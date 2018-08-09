@@ -6,6 +6,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
+import com.applicaster.cleengloginplugin.views.SignUpActivity
 import com.applicaster.util.OSUtil
 import com.applicaster.util.StringUtil
 
@@ -43,6 +44,7 @@ class CustomizationHelper{
             }
         }
 
+        @JvmStatic
         fun updateButtonViewText(activity: Activity, id: Int, key: String) {
             val button = activity.findViewById(id) as Button? ?: return ;
             var textValue = PluginConfigurationHelper.getConfigurationValue(key);
@@ -59,6 +61,15 @@ class CustomizationHelper{
                 if (bgDrawableRedId != 0) {
                     view.setBackgroundResource(bgDrawableRedId)
                 }
+        }
+
+        @JvmStatic
+        fun updateButtonStyle(activity: Activity, id: Int, key: String) {
+            val view = activity.findViewById(id) as Button? ?: return
+            val bgDrawableRedId = OSUtil.getStylableResourceIdentifier(key)
+            if (bgDrawableRedId != 0) {
+                view.setTextAppearance(activity,bgDrawableRedId)
+            }
         }
 
     }
