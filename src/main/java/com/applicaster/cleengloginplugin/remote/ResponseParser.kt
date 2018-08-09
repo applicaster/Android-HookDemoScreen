@@ -1,6 +1,7 @@
 package com.applicaster.cleengloginplugin.remote
 
 import android.util.Log
+import com.applicaster.cleengloginplugin.models.Offer
 import com.applicaster.cleengloginplugin.models.Subscription
 import com.applicaster.util.StringUtil
 import org.json.JSONArray
@@ -11,9 +12,8 @@ class ResponseParser {
     var status = WebService.Status.Unknown
 
     var token: String? = null
-    var jwts: ArrayList<String>? = null
     var availableSubscriptions: ArrayList<Subscription>? = null
-    var ongoingSubscriptionIds: ArrayList<String>? = null
+    var offers: ArrayList<Offer> = ArrayList()
 
     fun handleLoginResponse(status: WebService.Status, data: String?) {
         this.status = status
@@ -26,7 +26,7 @@ class ResponseParser {
                 val jsonToken = json.getJSONObject(i)
                 if (StringUtil.isEmpty(jsonToken.getString("offerId"))) {
                     this.token = jsonToken.getString("token")
-                } else this.parseOngoingSubscriptions(jsonToken.getString("offerId"))
+                } else this.parseOngoingSubscriptions(jsonToken)
             }
 
         } else {
@@ -42,17 +42,11 @@ class ResponseParser {
         }
     }
 
-    private fun parseOngoingSubscriptions(data: String?) {
-        var parseData = try { JSONObject(data) } catch (e: Exception) { return }
-
-        val ongoingSubscriptionIds = ArrayList<String>()
-        ongoingSubscriptionIds.add(parseData.getString("offerId"))
-
-        val jwts = ArrayList<String>()
-        jwts.add(parseData.getString("token"))
-
-        this.ongoingSubscriptionIds = ongoingSubscriptionIds
-        this.jwts = jwts
+    private fun parseOngoingSubscriptions(data: JSONObject) {
+        var offerId: String = data.getString("offerId")
+        var token: String =  data.getString("token")
+        var authId: String = data.getString("authId")
+        offers.add(Offer(offerId,token,authId))
     }
 
     private fun parseAvailableSubscriptions(data: String?) {

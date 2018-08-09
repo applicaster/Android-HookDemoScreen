@@ -12,8 +12,10 @@ object CleengManager {
 
     private val webService = WebService()
 
+    //save all availableSubscription
     val availableSubscriptions = emptyList<Subscription>().toMutableList()
 
+    //save current user cached with the user offers.
     var currentUser: User? = null
     var ongoingSubscriptions = emptyList<Subscription>().toMutableList()
 
@@ -43,8 +45,7 @@ object CleengManager {
             responseParser.handleLoginResponse(status, response)
 
             if (responseParser.status == WebService.Status.Success) {
-                this.handleUpdatedSubscriptionsState(responseParser.ongoingSubscriptionIds)
-                this.currentUser = User(user.email, "", user.facebookId, responseParser.token)
+                setUser(User(user.email, "", user.facebookId, responseParser.token,responseParser.offers));
             }
 
             callback(status, response)
@@ -72,11 +73,10 @@ object CleengManager {
             responseParser.handleLoginResponse(status, response)
 
             if (responseParser.status == WebService.Status.Success) {
-                this.handleUpdatedSubscriptionsState(responseParser.ongoingSubscriptionIds)
-                this.currentUser = User(user.email, "", user.facebookId, responseParser.token)
+                this.currentUser = User(user.email, "", user.facebookId, responseParser.token,responseParser.offers)
             }
 
-            callback(status,response)
+            callback(status, response)
         }
     }
 
@@ -122,25 +122,25 @@ object CleengManager {
         }
     }
 
-    fun restoreSubscriptions(user: User, context: Context, callback: (WebService.Status, String?) -> Unit) {
-        this.login(user, context) { status: WebService.Status, response: String? ->
-            if (status == WebService.Status.Success) {
-                // perform restore purchases, wait for callback
-                //TODO getInventory!
-                val subscription = Subscription(
-                        "",
-                        "",
-                        0.0,
-                        "create the cleeng offer id from the known info",
-                        "product id")
-
-                this.subscribe(subscription, context, callback)
-            }
-            else {
-                callback(status, response)
-            }
-        }
-    }
+//    fun restoreSubscriptions(user: User, context: Context, callback: (WebService.Status, String?) -> Unit) {
+//        this.login(user, context) { status: WebService.Status, response: String? ->
+//            if (status == WebService.Status.Success) {
+//                // perform restore purchases, wait for callback
+//                //TODO getInventory!
+//                val subscription = Subscription(
+//                        "",
+//                        "",
+//                        0.0,
+//                        "create the cleeng offer id from the known info",
+//                        "product id")
+//
+//                this.subscribe(subscription, context, callback)
+//            }
+//            else {
+//                callback(status, response)
+//            }
+//        }
+//    }
 
     fun isOngoingSubscription(subscription: Subscription): Boolean {
         return this.ongoingSubscriptions.contains(subscription)
@@ -160,4 +160,33 @@ object CleengManager {
 
         this.ongoingSubscriptions = this.ongoingSubscriptions.distinct().toMutableList()
     }
+
+    fun userHasActiveOffer(): Boolean {
+        for (offer in currentUser?.userOffers ?: return false) {
+            if(offer.valid()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    fun setUser(user: User?){
+        this.currentUser = user
+        CleengUtil.setUser(user)
+    }
+
+    private fun getUser(): User? {
+        if( currentUser != null ) return currentUser;
+        this.currentUser = CleengUtil.getUser();
+        return  currentUser;
+    }
+
+    fun userHasValidToken(): Boolean {
+        var user = getUser()
+        if(user == null) return false
+        return  CleengUtil.isTokenValid(user?.token);
+    }
+
+
+
 }

@@ -2,6 +2,7 @@ package com.applicaster.cleengloginplugin
 
 import android.content.Context
 import android.content.Intent
+import com.applicaster.cleengloginplugin.helper.CleengManager
 import com.applicaster.cleengloginplugin.helper.PluginConfigurationHelper
 import com.applicaster.cleengloginplugin.views.LoginActivity
 import com.applicaster.cleengloginplugin.views.SubscriptionsActivity
@@ -16,7 +17,7 @@ class CleengLoginPlugin :  BaseLoginContract(), ApplicationLoaderHookUpI {
 
     override fun executeOnStartup(context: Context, listener: HookListener) {
         val showOnAppLaunch = StringUtil.booleanValue(this.pluginParams[START_ON_LAUNCH] as String)
-        if (showOnAppLaunch || true) {
+        if ((showOnAppLaunch || true) && CleengManager.userHasValidToken()) {
             val loginManagerBroadcastReceiver = LoginManager.LoginContractBroadcasterReceiver() {
                 listener.onHookFinished()
             }

@@ -43,9 +43,18 @@ abstract class BaseActivity : AppCompatActivity() {
         if (backButton != null) {
             CustomizationHelper.updateImageView(backButton,"cleeng_login_back_button" );
             backButton.setOnClickListener {
-                LoginManager.notifyEvent(this,LoginManager.RequestType.CLOSED,false);
+                closeLoginPluginFromHook();
                 this.finish()
             }
+        }
+    }
+
+    /***
+     * When login launched from Hook we should notify that login is closed in order to continue the into flow by calling hookFinish
+     */
+    private fun closeLoginPluginFromHook() {
+        if(this is LoginActivity) {
+            LoginManager.notifyEvent(this, LoginManager.RequestType.CLOSED, false);
         }
     }
 
@@ -97,7 +106,7 @@ abstract class BaseActivity : AppCompatActivity() {
                 email.toString(),
                 password.toString(),
                 null,
-                null)
+                null, null)
     }
 
     protected fun fetchUserData(): User? {
@@ -112,7 +121,7 @@ abstract class BaseActivity : AppCompatActivity() {
                         result.email,
                         null,
                         result.id,
-                        null)
+                        null,null)
 
             }
 
@@ -126,7 +135,7 @@ abstract class BaseActivity : AppCompatActivity() {
 
     override fun onBackPressed() {
         super.onBackPressed()
-        LoginManager.notifyEvent(this,LoginManager.RequestType.CLOSED,false);
+        closeLoginPluginFromHook();
     }
 
 }

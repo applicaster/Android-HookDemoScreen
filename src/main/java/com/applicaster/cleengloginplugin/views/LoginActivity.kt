@@ -9,7 +9,9 @@ import com.applicaster.cleengloginplugin.R
 import com.applicaster.cleengloginplugin.helper.CleengManager
 import com.applicaster.cleengloginplugin.helper.CustomizationHelper
 import com.applicaster.cleengloginplugin.helper.PluginConfigurationHelper
+import com.applicaster.cleengloginplugin.models.User
 import com.applicaster.cleengloginplugin.remote.WebService
+import com.applicaster.plugin_manager.login.LoginManager
 import com.applicaster.util.FacebookUtil
 import com.applicaster.util.StringUtil
 import com.applicaster.util.facebook.listeners.FBAuthoriziationListener
@@ -41,15 +43,11 @@ class LoginActivity : BaseActivity() {
             val user = this.getUserFromInput() ?: return@setOnClickListener
 
             this.showLoading()
-            CleengManager.login(user, this) { status: WebService.Status, response: String? ->
+            CleengManager.login(user, this) { status: WebService.Status, response: String?  ->
                 this.dismissLoading()
 
                 if (status == WebService.Status.Success) {
-                    //notify that login finished
-                    //need to save token?????
-//                    LoginManager.notifyEvent(this,LoginManager.RequestType.LOGIN,true);
-                    SubscriptionsActivity.launchSubscriptionsActivity(this)
-                    this.finish()
+                    loginSuccessful();
                 } else {
                     this.showError(status, response)
                 }
@@ -58,12 +56,10 @@ class LoginActivity : BaseActivity() {
 
         sign_up_hint.setOnClickListener {
             SignUpActivity.launchSignUpActivity(this);
-            this.finish()
         }
 
         bottom_bar_container.setOnClickListener{
             RestoreActivity.launchRestoreActivity(this)
-            this.finish()
         }
 
         forgot_password.setOnClickListener{
@@ -90,12 +86,11 @@ class LoginActivity : BaseActivity() {
                             val user = fetchUserData()
                             if (user != null) {
                                 showLoading()
-                                CleengManager.login(user, this@LoginActivity) { status: WebService.Status, response: String? ->
+                                CleengManager.login(user, this@LoginActivity) { status: WebService.Status, response: String?  ->
                                     dismissLoading()
 
                                     if (status == WebService.Status.Success) {
-                                        SubscriptionsActivity.launchSubscriptionsActivity(this@LoginActivity)
-                                        finish()
+                                       loginSuccessful();
                                     } else {
                                         showError(status, response)
                                     }
@@ -109,6 +104,14 @@ class LoginActivity : BaseActivity() {
                     })
                 }
             }
+    }
+
+    private fun loginSuccessful() {
+        if(CleengManager.userHasActiveOffer()) {
+                LoginManager.notifyEvent(this,LoginManager.RequestType.LOGIN, true);
+        }else{
+            SubscriptionsActivity.launchSubscriptionsActivity(this)
+        }
     }
 
     companion object {
