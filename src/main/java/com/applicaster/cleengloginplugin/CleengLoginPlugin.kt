@@ -42,8 +42,7 @@ class CleengLoginPlugin :  BaseLoginContract(), ApplicationLoaderHookUpI {
     }
 
     override fun isTokenValid(): Boolean {
-        //val fbToken = FacebookUtil.isTokenValid(CustomFBPermissions.getInstance())
-        return super.isTokenValid()
+        return CleengManager.userHasValidToken();
     }
 
     override fun logout(context: Context?, additionalParams: MutableMap<Any?, Any?>?) {
