@@ -10,6 +10,8 @@ import com.applicaster.cleengloginplugin.helper.CleengManager
 import com.applicaster.cleengloginplugin.helper.CustomizationHelper
 import com.applicaster.cleengloginplugin.helper.PluginConfigurationHelper
 import com.applicaster.cleengloginplugin.remote.WebService
+import com.applicaster.model.APModel
+import com.applicaster.plugin_manager.playersmanager.Playable
 import com.applicaster.util.FacebookUtil
 import com.applicaster.util.StringUtil
 import com.applicaster.util.facebook.listeners.FBAuthoriziationListener
@@ -48,7 +50,7 @@ class LoginActivity : BaseActivity() {
                     //notify that login finished
                     //need to save token?????
 //                    LoginManager.notifyEvent(this,LoginManager.RequestType.LOGIN,true);
-                    SubscriptionsActivity.launchSubscriptionsActivity(this)
+                    SubscriptionsActivity.launchSubscriptionsActivity(this, playable)
                     this.finish()
                 } else {
                     this.showError(status, response)
@@ -57,7 +59,7 @@ class LoginActivity : BaseActivity() {
         }
 
         sign_up_hint.setOnClickListener {
-            SignUpActivity.launchSignUpActivity(this);
+            SignUpActivity.launchSignUpActivity(this, playable);
             this.finish()
         }
 
@@ -94,7 +96,7 @@ class LoginActivity : BaseActivity() {
                                     dismissLoading()
 
                                     if (status == WebService.Status.Success) {
-                                        SubscriptionsActivity.launchSubscriptionsActivity(this@LoginActivity)
+                                        SubscriptionsActivity.launchSubscriptionsActivity(this@LoginActivity, playable)
                                         finish()
                                     } else {
                                         showError(status, response)
@@ -112,8 +114,12 @@ class LoginActivity : BaseActivity() {
     }
 
     companion object {
-        fun launchLogin(context: Context) {
-            context.startActivity(Intent(context, LoginActivity::class.java))
+        fun launchLogin(context: Context, playable: Playable?) {
+            val intent = Intent(context,LoginActivity::class.java)
+            if (playable != null) {
+                intent.putExtra("playable", playable)
+            }
+            context.startActivity(intent)
         }
     }
 }

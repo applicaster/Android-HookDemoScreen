@@ -9,6 +9,10 @@ const val DEFAULT_1 = "cleeng_login_default1";
 const val DEFAULT_2 = "cleeng_login_default2";
 const val SIGN_UP_BUTTON = "cleeng_login_sign_up_button";
 const val SIGN_IN_BUTTON = "cleeng_login_sign_in_button";
+const val LOGIN_FIRST_SCREEN="cleeng_login_first_screen"
+
+const val PLAYABLE="playable"
+
 
 const val ACTION_ALTERNATIVE = "cleeng_login_action_alternative";
 const val FACEBOOK_BUTTON_TEXT = "cleeng_login_facebook_button_text";

@@ -1,10 +1,11 @@
 package com.applicaster.cleengloginplugin
 
 import android.content.Context
-import android.content.Intent
 import com.applicaster.cleengloginplugin.helper.PluginConfigurationHelper
 import com.applicaster.cleengloginplugin.views.LoginActivity
+import com.applicaster.cleengloginplugin.views.SignUpActivity
 import com.applicaster.cleengloginplugin.views.SubscriptionsActivity
+import com.applicaster.model.APModel
 import com.applicaster.plugin_manager.hook.ApplicationLoaderHookUpI
 import com.applicaster.plugin_manager.hook.HookListener
 import com.applicaster.plugin_manager.login.BaseLoginContract
@@ -23,7 +24,7 @@ class CleengLoginPlugin :  BaseLoginContract(), ApplicationLoaderHookUpI {
             //need to call onHookFinished in case that user press on back in the login activity
             LoginManager.registerToEvent(context, LoginManager.RequestType.LOGIN, loginManagerBroadcastReceiver)
             LoginManager.registerToEvent(context,LoginManager.RequestType.CLOSED,loginManagerBroadcastReceiver)
-            LoginActivity.launchLogin(context);
+            openFirstScreen(context, null)
 
         } else {
             listener.onHookFinished()
@@ -31,11 +32,22 @@ class CleengLoginPlugin :  BaseLoginContract(), ApplicationLoaderHookUpI {
     }
 
     override fun login(context: Context, playable: Playable?, additionalParams: MutableMap<Any?, Any?>?) {
-        context.startActivity(Intent(context, LoginActivity::class.java))
+
+        var authIds: Array<String>
+        if (playable != null && playable is APModel) {
+            authIds = playable.authorization_providers_ids
+        }
+
+        openFirstScreen(context, playable)
     }
 
     override fun isItemLocked(model: Any?): Boolean {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        TODO("not implemented") //isItemComply?
+    }
+
+    override fun isTokenValid(): Boolean {
+        //val fbToken = FacebookUtil.isTokenValid(CustomFBPermissions.getInstance())
+        return super.isTokenValid()
     }
 
     override fun logout(context: Context?, additionalParams: MutableMap<Any?, Any?>?) {
@@ -47,9 +59,18 @@ class CleengLoginPlugin :  BaseLoginContract(), ApplicationLoaderHookUpI {
     }
 
 
-
     override fun setPluginConfigurationParams(params: MutableMap<Any?, Any?>?) {
         super.setPluginConfigurationParams(params)
-        PluginConfigurationHelper.setConfigurationMap(params as Map<String, String>);
+        PluginConfigurationHelper.setConfigurationMap(params as Map<String, String>)
+    }
+
+    private fun openFirstScreen(context: Context, playable: Playable?) {
+        val firstScreenValue = this.pluginParams[LOGIN_FIRST_SCREEN]
+        when (firstScreenValue) {
+            "subscription" -> SubscriptionsActivity.launchSubscriptionsActivity(context, playable)
+            "login" -> LoginActivity.launchLogin(context, playable)
+            "sign up" -> SignUpActivity.launchSignUpActivity(context, playable)
+            else -> LoginActivity.launchLogin(context, playable)
+        }
     }
 }

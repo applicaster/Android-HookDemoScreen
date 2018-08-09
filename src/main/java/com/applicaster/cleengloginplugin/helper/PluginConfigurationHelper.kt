@@ -10,4 +10,5 @@ object PluginConfigurationHelper {
     public fun getConfigurationValue(key: String): String? {
             return this.plguinConfiguration?.get(key)
             }
+
 }
