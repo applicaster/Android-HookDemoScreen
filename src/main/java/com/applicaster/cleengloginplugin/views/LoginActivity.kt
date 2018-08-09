@@ -116,8 +116,8 @@ class LoginActivity : BaseActivity() {
                 LoginManager.notifyEvent(this,LoginManager.RequestType.LOGIN, true);
         }else{
             SubscriptionsActivity.launchSubscriptionsActivity(this, playable)
-            finish()
         }
+        finish()
     }
 
     companion object {
