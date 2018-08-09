@@ -1,6 +1,7 @@
 package com.applicaster.cleengloginplugin.helper
 
 import android.util.Base64
+import com.applicaster.cleengloginplugin.models.Offer
 import com.applicaster.cleengloginplugin.models.User
 import com.applicaster.util.PreferenceUtil
 import com.applicaster.util.StringUtil
@@ -37,8 +38,19 @@ class CleengUtil{
             var userJson = PreferenceUtil.getInstance().getStringPref("USER", "");
             if ("null".equals(userJson) || StringUtil.isEmpty(userJson)) return null;
             var user = JSONObject(userJson)
+            var userOfferJson = user.getJSONArray("userOffers")
+            var offers: ArrayList<Offer> = ArrayList()            //save the 'empty' token.
+            for (i in 0 until userOfferJson.length()) {
+                val jsonOffer = userOfferJson.getJSONObject(i)
+                offers.add(Offer(jsonOffer.getString("offerID"), jsonOffer.getString("token"), jsonOffer.getString("authId")))
+            }
 
-            return User(user.getString("email"),null, user.getString("facebookId"), user.getString("token"), null)
+            var fbID = "";
+            if(user.has("facebookId")){
+                fbID = user.getString("facebookId");
+            }
+
+            return User(user.getString("email"),null,fbID , user.getString("token"), offers)
         }
 
         @JvmStatic
