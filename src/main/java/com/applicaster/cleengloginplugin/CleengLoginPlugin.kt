@@ -18,7 +18,7 @@ class CleengLoginPlugin :  BaseLoginContract(), ApplicationLoaderHookUpI {
 
     override fun executeOnStartup(context: Context, listener: HookListener) {
         val showOnAppLaunch = StringUtil.booleanValue(this.pluginParams[START_ON_LAUNCH] as String)
-        if ((showOnAppLaunch || true) && !CleengManager.userHasValidToken()) {
+        if (showOnAppLaunch && !CleengManager.userHasValidToken()) {
             val loginManagerBroadcastReceiver = LoginManager.LoginContractBroadcasterReceiver() {
                 listener.onHookFinished()
             }
