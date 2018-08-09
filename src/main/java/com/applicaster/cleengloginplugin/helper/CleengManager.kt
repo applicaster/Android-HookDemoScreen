@@ -73,7 +73,7 @@ object CleengManager {
             responseParser.handleLoginResponse(status, response)
 
             if (responseParser.status == WebService.Status.Success) {
-                this.currentUser = User(user.email, "", user.facebookId, responseParser.token,responseParser.offers)
+                setUser(User(user.email, "", user.facebookId, responseParser.token,responseParser.offers));
             }
 
             callback(status, response)
