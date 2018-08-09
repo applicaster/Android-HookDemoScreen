@@ -53,7 +53,7 @@ class CustomizationHelper{
         }
 
         @JvmStatic
-        fun updateBgColor(activity: Activity, id: Int, key: String) {
+        fun updateBgResource(activity: Activity, id: Int, key: String) {
             val view = activity.findViewById(id) as View? ?: return
             val bgDrawableRedId = OSUtil.getDrawableResourceIdentifier(key)
                 if (bgDrawableRedId != 0) {
