@@ -29,7 +29,6 @@ class SubscriptionsActivity: BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        fromStartUp = intent.getBooleanExtra(SUBSCIPTION_FROM_START_UP, false);
 
         if (CleengManager.availableSubscriptions.count() == 0) {
             CleengManager.fetchAvailableSubscriptions(this) { status: WebService.Status, response: String? ->
@@ -58,6 +57,8 @@ class SubscriptionsActivity: BaseActivity() {
 
     fun updateViews() {
         bottom_bar_action_text.visibility = View.GONE;
+        fromStartUp = intent.getBooleanExtra(SUBSCIPTION_FROM_START_UP, false);
+
         if(fromStartUp){
             subscription_sign_up_hint.visibility = View.GONE
         }
