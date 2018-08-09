@@ -33,9 +33,9 @@ class AlertDialog(private val baseActivity: BaseActivity,
         subtitleView.text = PluginConfigurationHelper.getConfigurationValue(subtitle)
 
         closeButton.text = PluginConfigurationHelper.getConfigurationValue("cleeng_login_confirm_button")
-        val btnBgColor = OSUtil.getColorResourceIdentifier("cleeng_login_confirm_button")
-        if (btnBgColor != 0)
-            closeButton.setBackgroundColor(btnBgColor)
+        val btnBgResource = OSUtil.getDrawableResourceIdentifier("cleeng_login_confirm_button")
+        if (btnBgResource != 0)
+            closeButton.setBackgroundResource(btnBgResource)
 
         closeButton.setOnClickListener {
             this.dismiss()

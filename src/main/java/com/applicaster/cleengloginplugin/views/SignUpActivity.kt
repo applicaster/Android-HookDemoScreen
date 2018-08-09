@@ -3,15 +3,18 @@ package com.applicaster.cleengloginplugin.views
 import android.content.Context
 import android.content.Intent
 import android.view.View
+import android.widget.Button
 import com.applicaster.cleengloginplugin.*;
 import com.applicaster.cleengloginplugin.R
 import com.applicaster.cleengloginplugin.helper.CleengManager
 import com.applicaster.cleengloginplugin.helper.CustomizationHelper
 import com.applicaster.cleengloginplugin.helper.PluginConfigurationHelper
 import com.applicaster.cleengloginplugin.remote.WebService
+import com.applicaster.util.FacebookUtil
 import com.applicaster.util.StringUtil
+import com.applicaster.util.facebook.listeners.FBAuthoriziationListener
+import com.applicaster.util.facebook.permissions.APPermissionsType
 import kotlinx.android.synthetic.main.additional_auth.*
-import kotlinx.android.synthetic.main.login_activity.*
 import kotlinx.android.synthetic.main.new_account_activiy.*
 import kotlinx.android.synthetic.main.user_input.*
 
@@ -57,8 +60,41 @@ class SignUpActivity : BaseActivity() {
 
     fun updateViews() {
         if( !StringUtil.booleanValue(PluginConfigurationHelper.getConfigurationValue(FACEBOOK_LOGIN_AVAILABLE) as String)){
-            facebook_button.visibility = View.GONE;
-            google_button.visibility = View.GONE;
+            facebook_button.visibility = View.GONE
+            google_button.visibility = View.GONE
+        } else {
+            CustomizationHelper.updateBgResource(this,R.id.facebook_button,"cleeng_login_facebook_button")
+            CustomizationHelper.updateButtonViewText(this, R.id.fb_btn, "cleeng_login_facebook_button")
+//            facebook_btn.setTextAppearance(OSUtil.getStyleResourceIdentifier("CleengLoginFacebookButtonText"))
+            CustomizationHelper.updateBgResource(this,R.id.google_button,"cleeng_login_facebook_button")
+            facebook_button.findViewById<Button>(R.id.fb_btn).setOnClickListener {
+                FacebookUtil.updateTokenIfNeeded(this, APPermissionsType.Custom, object : FBAuthoriziationListener {
+
+                    override fun onError(error: Exception) {
+                        //We could show a message error in case we would like it
+                    }
+
+                    override fun onSuccess() {
+                        val user = fetchUserData()
+                        if (user != null) {
+                            showLoading()
+                            CleengManager.register(user, this@SignUpActivity) { status: WebService.Status, response: String? ->
+                                dismissLoading()
+
+                                if (status == WebService.Status.Success) {
+                                    SubscriptionsActivity.launchSubscriptionsActivity(this@SignUpActivity)
+                                    finish()
+                                } else {
+                                    showError(status, response)
+                                }
+                            }
+                        }
+                    }
+
+                    override fun onCancel() {
+                    }
+                })
+            }
         }
         forgot_password.visibility = View.INVISIBLE;
     }
