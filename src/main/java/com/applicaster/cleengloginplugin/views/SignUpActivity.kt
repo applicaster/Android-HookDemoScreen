@@ -43,7 +43,13 @@ class SignUpActivity : BaseActivity() {
             this.showLoading()
             CleengManager.register(user, this) { status: WebService.Status, response: String? ->
                 this.dismissLoading()
-                //continue flow
+
+                if (status == WebService.Status.Success) {
+                    SubscriptionsActivity.launchSubscriptionsActivity(this@SignUpActivity)
+                    this.finish()
+                } else {
+                    this.showError(status, response)
+                }
             }
         }
 
