@@ -62,7 +62,7 @@ class CleengLoginPlugin :  BaseLoginContract(), ApplicationLoaderHookUpI {
     private fun openFirstScreen(context: Context, playable: Playable?) {
         val firstScreenValue = this.pluginParams[LOGIN_FIRST_SCREEN]
         when (firstScreenValue) {
-            "subscription" -> SubscriptionsActivity.launchSubscriptionsActivity(context, playable)
+            "subscription" -> SubscriptionsActivity.launchSubscriptionsActivity(context, playable, true)
             "login" -> LoginActivity.launchLogin(context, playable)
             "sign up" -> SignUpActivity.launchSignUpActivity(context, playable)
             else -> LoginActivity.launchLogin(context, playable)

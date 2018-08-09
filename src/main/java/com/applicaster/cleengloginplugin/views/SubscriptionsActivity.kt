@@ -21,12 +21,16 @@ import kotlinx.android.synthetic.main.subscription_item.view.*
 
 class SubscriptionsActivity: BaseActivity() {
 
+     var fromStartUp: Boolean = false;
+
     override fun getContentViewResId(): Int {
         return R.layout.subscription_activity;
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        fromStartUp = intent.getBooleanExtra(SUBSCIPTION_FROM_START_UP, false);
+
         if (CleengManager.availableSubscriptions.count() == 0) {
             CleengManager.fetchAvailableSubscriptions(this) { status: WebService.Status, response: String? ->
                 this.dismissLoading()
@@ -54,6 +58,9 @@ class SubscriptionsActivity: BaseActivity() {
 
     fun updateViews() {
         bottom_bar_action_text.visibility = View.GONE;
+        if(fromStartUp){
+            subscription_sign_up_hint.visibility = View.GONE
+        }
     }
 
     private fun presentSubscriptions() {
@@ -80,12 +87,20 @@ class SubscriptionsActivity: BaseActivity() {
 
 
     companion object {
-        fun launchSubscriptionsActivity(context: Context, playable: Playable?) {
+
+        val SUBSCIPTION_FROM_START_UP ="from_Start_up"
+
+        fun launchSubscriptionsActivity(context: Context, fromStartUp: Boolean) {
+            this.launchSubscriptionsActivity(context,null,fromStartUp)
+        }
+
+        fun launchSubscriptionsActivity(context: Context, playable: Playable?, fromStartUp: Boolean = false) {
             val intent = Intent(context,SubscriptionsActivity::class.java)
             if (playable != null && playable is APModel) {
                 intent.putExtra("authIds", playable.authorization_providers_ids)
                 intent.putExtra(PLAYABLE, playable)
             }
+            intent.putExtra(SUBSCIPTION_FROM_START_UP,fromStartUp);
             context.startActivity(intent)
         }
     }
