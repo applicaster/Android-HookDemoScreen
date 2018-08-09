@@ -7,6 +7,8 @@ import com.applicaster.cleengloginplugin.models.User
 import com.applicaster.cleengloginplugin.remote.Params
 import com.applicaster.cleengloginplugin.remote.ResponseParser
 import com.applicaster.cleengloginplugin.remote.WebService
+import com.applicaster.model.APModel
+import com.applicaster.util.StringUtil
 
 object CleengManager {
 
@@ -189,6 +191,37 @@ object CleengManager {
 
     fun logout() {
         setUser(null);
+    }
+
+    /***
+     * compare the item auth id with the user offers, return
+     * true if user have offer.authId that equal to the item auth id.
+     * otherwise return false.
+     */
+    fun isItemLocked(model: Any?): Boolean {
+        if(model is APModel) {
+            for (i in 0 until model.authorization_providers_ids.size) {
+                var provider_id = model.authorization_providers_ids[i]
+                var isComply = isUserOffersComply(provider_id);
+                if(isComply){
+                    return true;
+                }
+            }
+        }
+        return false
+    }
+
+    private fun isUserOffersComply(provider_id: String?): Boolean {
+        var offers = getUser()?.userOffers;
+        if(offers != null ){
+            for (i in 0 until offers.size) {
+                var offer = offers[i];
+                if(StringUtil.isNotEmpty(offer.authId) && offer.authId.equals(provider_id)){
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
 

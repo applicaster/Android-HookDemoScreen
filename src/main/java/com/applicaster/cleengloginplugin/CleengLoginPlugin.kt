@@ -28,6 +28,7 @@ class CleengLoginPlugin :  BaseLoginContract(), ApplicationLoaderHookUpI {
             openFirstScreen(context, null)
 
         } else {
+//            SubscriptionsActivity.launchSubscriptionsActivity(context, null, true)
             listener.onHookFinished()
         }
     }
@@ -37,7 +38,7 @@ class CleengLoginPlugin :  BaseLoginContract(), ApplicationLoaderHookUpI {
     }
 
     override fun isItemLocked(model: Any?): Boolean {
-        TODO("not implemented") //isItemComply?
+        return CleengManager.isItemLocked(model);
     }
 
     override fun isTokenValid(): Boolean {
@@ -60,7 +61,7 @@ class CleengLoginPlugin :  BaseLoginContract(), ApplicationLoaderHookUpI {
     }
 
     private fun openFirstScreen(context: Context, playable: Playable?) {
-        val firstScreenValue = this.pluginParams[LOGIN_FIRST_SCREEN]
+        var firstScreenValue = this.pluginParams[LOGIN_FIRST_SCREEN]
         when (firstScreenValue) {
             "subscription" -> SubscriptionsActivity.launchSubscriptionsActivity(context, playable, true)
             "login" -> LoginActivity.launchLogin(context, playable)
