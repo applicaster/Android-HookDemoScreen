@@ -59,7 +59,7 @@ class SubscriptionsActivity: BaseActivity() {
         bottom_bar_action_text.visibility = View.GONE;
         fromStartUp = intent.getBooleanExtra(SUBSCIPTION_FROM_START_UP, false);
 
-        if(fromStartUp){
+        if(!fromStartUp){
             subscription_sign_up_hint.visibility = View.GONE
         }
     }
