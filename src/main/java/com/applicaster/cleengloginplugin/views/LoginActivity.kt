@@ -12,6 +12,8 @@ import com.applicaster.cleengloginplugin.helper.PluginConfigurationHelper
 import com.applicaster.cleengloginplugin.models.User
 import com.applicaster.cleengloginplugin.remote.WebService
 import com.applicaster.plugin_manager.login.LoginManager
+import com.applicaster.model.APModel
+import com.applicaster.plugin_manager.playersmanager.Playable
 import com.applicaster.util.FacebookUtil
 import com.applicaster.util.StringUtil
 import com.applicaster.util.facebook.listeners.FBAuthoriziationListener
@@ -47,7 +49,7 @@ class LoginActivity : BaseActivity() {
                 this.dismissLoading()
 
                 if (status == WebService.Status.Success) {
-                    loginSuccessful();
+                    loginSuccessful()
                 } else {
                     this.showError(status, response)
                 }
@@ -55,7 +57,9 @@ class LoginActivity : BaseActivity() {
         }
 
         sign_up_hint.setOnClickListener {
-            SignUpActivity.launchSignUpActivity(this);
+            SignUpActivity.launchSignUpActivity(this, playable)
+            this.finish()
+
         }
 
         bottom_bar_container.setOnClickListener{
@@ -90,7 +94,8 @@ class LoginActivity : BaseActivity() {
                                     dismissLoading()
 
                                     if (status == WebService.Status.Success) {
-                                       loginSuccessful();
+                                       loginSuccessful()
+
                                     } else {
                                         showError(status, response)
                                     }
@@ -110,13 +115,18 @@ class LoginActivity : BaseActivity() {
         if(CleengManager.userHasActiveOffer()) {
                 LoginManager.notifyEvent(this,LoginManager.RequestType.LOGIN, true);
         }else{
-            SubscriptionsActivity.launchSubscriptionsActivity(this)
+            SubscriptionsActivity.launchSubscriptionsActivity(this, playable)
+            finish()
         }
     }
 
     companion object {
-        fun launchLogin(context: Context) {
-            context.startActivity(Intent(context, LoginActivity::class.java))
+        fun launchLogin(context: Context, playable: Playable?) {
+            val intent = Intent(context,LoginActivity::class.java)
+            if (playable != null) {
+                intent.putExtra(PLAYABLE, playable)
+            }
+            context.startActivity(intent)
         }
     }
 }

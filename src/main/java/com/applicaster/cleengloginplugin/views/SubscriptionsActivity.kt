@@ -12,6 +12,8 @@ import com.applicaster.cleengloginplugin.helper.CustomizationHelper
 import com.applicaster.cleengloginplugin.helper.IAPManager
 import com.applicaster.cleengloginplugin.models.Subscription
 import com.applicaster.cleengloginplugin.remote.WebService
+import com.applicaster.model.APModel
+import com.applicaster.plugin_manager.playersmanager.Playable
 import com.applicaster.util.OSUtil
 import kotlinx.android.synthetic.main.bottom_bar.*
 import kotlinx.android.synthetic.main.subscription_activity.*
@@ -65,7 +67,7 @@ class SubscriptionsActivity: BaseActivity() {
         subscriptionView.item_title.text = subscription.title
         subscriptionView.item_description.text = subscription.description
         subscriptionView.item_price.text = "SUBSCRIBE FOR $" +subscription.price.toString()
-        subscriptionView.purchaseButton.radius = OSUtil.convertDPToPixels(20).toFloat();
+        subscriptionView.purchaseButton.radius = OSUtil.convertDPToPixels(20).toFloat()
         subscriptionView.purchaseButton.setOnClickListener {
 
             val iapManager = IAPManager(this)
@@ -78,8 +80,13 @@ class SubscriptionsActivity: BaseActivity() {
 
 
     companion object {
-        fun launchSubscriptionsActivity(context: Context) {
-            context.startActivity(Intent(context, SubscriptionsActivity::class.java))
+        fun launchSubscriptionsActivity(context: Context, playable: Playable?) {
+            val intent = Intent(context,SubscriptionsActivity::class.java)
+            if (playable != null && playable is APModel) {
+                intent.putExtra("authIds", playable.authorization_providers_ids)
+                intent.putExtra(PLAYABLE, playable)
+            }
+            context.startActivity(intent)
         }
     }
 }

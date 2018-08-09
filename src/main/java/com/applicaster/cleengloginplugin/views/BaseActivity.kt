@@ -1,11 +1,8 @@
 package com.applicaster.cleengloginplugin.views
 
-import android.app.AlertDialog
-import android.app.ProgressDialog
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.View
-import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
 import com.applicaster.cleengloginplugin.*
@@ -13,8 +10,10 @@ import com.applicaster.cleengloginplugin.R
 import com.applicaster.cleengloginplugin.helper.CustomizationHelper
 import com.applicaster.cleengloginplugin.models.User
 import com.applicaster.cleengloginplugin.remote.WebService
+import com.applicaster.model.APModel
 import com.applicaster.model.APUser
 import com.applicaster.plugin_manager.login.LoginManager
+import com.applicaster.plugin_manager.playersmanager.Playable
 import com.applicaster.util.FacebookUtil
 import com.applicaster.util.asynctask.AsyncTaskListener
 import org.json.JSONObject
@@ -22,10 +21,14 @@ import java.util.*
 
 abstract class BaseActivity : AppCompatActivity() {
 
+    var playable: Playable? = null
+
     abstract fun getContentViewResId(): Int
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        playable = intent.getSerializableExtra(PLAYABLE) as Playable?
 
         this.setContentView(this.getContentViewResId())
         this.customize()

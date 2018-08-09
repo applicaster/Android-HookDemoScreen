@@ -2,6 +2,7 @@ package com.applicaster.cleengloginplugin.views
 
 import android.content.Context
 import android.content.Intent
+import android.os.Bundle
 import android.view.View
 import android.widget.Button
 import com.applicaster.cleengloginplugin.*;
@@ -10,6 +11,8 @@ import com.applicaster.cleengloginplugin.helper.CleengManager
 import com.applicaster.cleengloginplugin.helper.CustomizationHelper
 import com.applicaster.cleengloginplugin.helper.PluginConfigurationHelper
 import com.applicaster.cleengloginplugin.remote.WebService
+import com.applicaster.model.APModel
+import com.applicaster.plugin_manager.playersmanager.Playable
 import com.applicaster.util.FacebookUtil
 import com.applicaster.util.StringUtil
 import com.applicaster.util.facebook.listeners.FBAuthoriziationListener
@@ -45,7 +48,7 @@ class SignUpActivity : BaseActivity() {
                 this.dismissLoading()
 
                 if (status == WebService.Status.Success) {
-                    SubscriptionsActivity.launchSubscriptionsActivity(this@SignUpActivity)
+                    SubscriptionsActivity.launchSubscriptionsActivity(this@SignUpActivity, playable)
                     this.finish()
                 } else {
                     this.showError(status, response)
@@ -54,7 +57,7 @@ class SignUpActivity : BaseActivity() {
         }
 
         sign_in_hint.setOnClickListener{
-            LoginActivity.launchLogin(this);
+            LoginActivity.launchLogin(this, playable);
             this.finish()
         }
 
@@ -88,7 +91,7 @@ class SignUpActivity : BaseActivity() {
                                 dismissLoading()
 
                                 if (status == WebService.Status.Success) {
-                                    SubscriptionsActivity.launchSubscriptionsActivity(this@SignUpActivity)
+                                    SubscriptionsActivity.launchSubscriptionsActivity(this@SignUpActivity, playable)
                                     finish()
                                 } else {
                                     showError(status, response)
@@ -106,8 +109,13 @@ class SignUpActivity : BaseActivity() {
     }
 
     companion object {
-        fun launchSignUpActivity(context: Context) {
-            context.startActivity(Intent(context, SignUpActivity::class.java))
+        fun launchSignUpActivity(context: Context, playable: Playable?) {
+            val intent = Intent(context,SignUpActivity::class.java)
+            if (playable != null && playable is APModel) {
+                intent.putExtra("authIds", playable.authorization_providers_ids)
+                intent.putExtra(PLAYABLE, playable)
+            }
+            context.startActivity(intent)
         }
     }
 }

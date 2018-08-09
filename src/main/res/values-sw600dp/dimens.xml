@@ -3,7 +3,7 @@
 
 
     <dimen name="subscription_horizontal_space">27dp</dimen>
-    <dimen name="login_horizontal_space">350dp</dimen>
+    <dimen name="login_horizontal_space">486dp</dimen>
     <dimen name="action_button_height">55dp</dimen>
     <dimen name="bottom_bar_height">80dp</dimen>
 
