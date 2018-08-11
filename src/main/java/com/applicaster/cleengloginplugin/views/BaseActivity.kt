@@ -56,7 +56,7 @@ abstract class BaseActivity : AppCompatActivity() {
      * When login launched from Hook we should notify that login is closed in order to continue the into flow by calling hookFinish
      */
     private fun closeLoginPluginFromHook() {
-        LoginManager.notifyEvent(this, LoginManager.RequestType.CLOSED, false);
+        //LoginManager.notifyEvent(this, LoginManager.RequestType.CLOSED, false);
     }
 
 

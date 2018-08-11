@@ -24,7 +24,7 @@ class CleengLoginPlugin :  BaseLoginContract(), ApplicationLoaderHookUpI {
             }
             //need to call onHookFinished in case that user press on back in the login activity
             LoginManager.registerToEvent(context, LoginManager.RequestType.LOGIN, loginManagerBroadcastReceiver)
-            LoginManager.registerToEvent(context,LoginManager.RequestType.CLOSED,loginManagerBroadcastReceiver)
+            //LoginManager.registerToEvent(context,LoginManager.RequestType.CLOSED,loginManagerBroadcastReceiver)
             openFirstScreen(context, null)
 
         } else {
