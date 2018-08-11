@@ -112,7 +112,7 @@ class LoginActivity : BaseActivity() {
     }
 
     private fun loginSuccessful() {
-        if(CleengManager.userHasActiveOffer()) {
+        if(CleengManager.userHasActiveOffer() && isPlayableSupported()) {
                 LoginManager.notifyEvent(this,LoginManager.RequestType.LOGIN, true);
         }else{
             SubscriptionsActivity.launchSubscriptionsActivity(this, playable)

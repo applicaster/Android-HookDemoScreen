@@ -7,6 +7,7 @@ import android.widget.EditText
 import android.widget.ImageView
 import com.applicaster.cleengloginplugin.*
 import com.applicaster.cleengloginplugin.R
+import com.applicaster.cleengloginplugin.helper.CleengManager
 import com.applicaster.cleengloginplugin.helper.CustomizationHelper
 import com.applicaster.cleengloginplugin.models.User
 import com.applicaster.cleengloginplugin.remote.WebService
@@ -66,6 +67,14 @@ abstract class BaseActivity : AppCompatActivity() {
     fun showLoading() {
     }
 
+    /**
+     * check if login launched with playable item, if yes and the user have offer that comply the playable
+     * return true, else return false.
+     */
+    fun isPlayableSupported(): Boolean {
+        if(playable == null) return true;
+        return CleengManager.isItemLocked(playable)
+    }
 
     fun showError(status: WebService.Status, response: String?) {
         var internalResponse = JSONObject(response)
