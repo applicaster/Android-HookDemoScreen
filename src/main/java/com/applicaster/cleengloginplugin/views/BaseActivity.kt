@@ -17,12 +17,14 @@ import com.applicaster.plugin_manager.login.LoginManager
 import com.applicaster.plugin_manager.playersmanager.Playable
 import com.applicaster.util.FacebookUtil
 import com.applicaster.util.asynctask.AsyncTaskListener
+import kotlinx.android.synthetic.main.login_activity.*
 import org.json.JSONObject
 import java.util.*
 
 abstract class BaseActivity : AppCompatActivity() {
 
     var playable: Playable? = null
+    private lateinit var progressBar: View
 
     abstract fun getContentViewResId(): Int
 
@@ -32,6 +34,7 @@ abstract class BaseActivity : AppCompatActivity() {
         playable = intent.getSerializableExtra(PLAYABLE) as Playable?
 
         this.setContentView(this.getContentViewResId())
+        progressBar = findViewById(R.id.progress_bar)
         this.customize()
     }
 
@@ -57,14 +60,18 @@ abstract class BaseActivity : AppCompatActivity() {
      * When login launched from Hook we should notify that login is closed in order to continue the into flow by calling hookFinish
      */
     private fun closeLoginPluginFromHook() {
-        //LoginManager.notifyEvent(this, LoginManager.RequestType.CLOSED, false);
+        LoginManager.notifyEvent(this, LoginManager.RequestType.CLOSED, false);
     }
 
 
     fun dismissLoading() {
+        progressBar.visibility = View.GONE
     }
 
     fun showLoading() {
+        if(progress_bar != null){
+            progressBar.visibility = View.VISIBLE
+        }
     }
 
     /**
