@@ -7,14 +7,14 @@ import com.applicaster.cleengloginplugin.models.Subscription
 import com.applicaster.cleengloginplugin.remote.Params
 import com.applicaster.cleengloginplugin.remote.WebService
 
-class SubscriptionLoaderHelper constructor(var context: Context,var subscription: Subscription,var maxTimeForRequestInSecond: Int,var interval: Int ) {
+class SubscriptionLoaderHelper constructor(var context: Context, var userToken: String, var subscription: Subscription,var maxTimeForRequestInSecond: Int,var interval: Int ) {
     private val webService = WebService()
     var handler = Handler()
 
 
     fun load(intervalInSeccond: Int = 0){
         handler.postDelayed({
-            subscribe(subscription, context){ status: WebService.Status, response: String? ->
+            subscribe(userToken, subscription, context){ status: WebService.Status, response: String? ->
                 if (status != WebService.Status.Success) {
                     if(maxTimeForRequestInSecond > 0) {
                         maxTimeForRequestInSecond -= intervalInSeccond;
