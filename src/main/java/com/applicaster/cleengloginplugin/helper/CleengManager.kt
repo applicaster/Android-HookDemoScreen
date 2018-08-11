@@ -19,7 +19,6 @@ object CleengManager {
 
     //save current user cached with the user offers.
     var currentUser: User? = null
-    var ongoingSubscriptions = emptyList<Subscription>().toMutableList()
 
     fun register(user: User, context: Context, callback: (WebService.Status, String?) -> Unit) {
         if (user.email == null) {
@@ -99,69 +98,6 @@ object CleengManager {
         }
     }
 
-    fun subscribe(subscription: Subscription, context: Context, callback: (WebService.Status, String?) -> Unit) {
-        var purchaseHandler: PurchaseHandler
-        //present IAP, wait for callback
-
-        val params = Params()
-        params["offerId"] = ""
-        params["token"] = ""
-
-        params["productId"] = ""
-        params["purchaseToken"] = ""
-        params["packageName"] = ""
-        params["orderId"] = ""
-        params["purchaseState"] = ""
-        params["purchaseTime"] = ""
-        params["developerPayload"] = ""
-
-        this.webService.performApiRequest(WebService.ApiRequest.SyncPurchases, params, context) { status: WebService.Status, response: String? ->
-            if (status == WebService.Status.Success) {
-                this.handleUpdatedSubscriptionsState(listOf(subscription.id))
-            }
-
-            callback(status, response)
-        }
-    }
-
-//    fun restoreSubscriptions(user: User, context: Context, callback: (WebService.Status, String?) -> Unit) {
-//        this.login(user, context) { status: WebService.Status, response: String? ->
-//            if (status == WebService.Status.Success) {
-//                // perform restore purchases, wait for callback
-//                //TODO getInventory!
-//                val subscription = Subscription(
-//                        "",
-//                        "",
-//                        0.0,
-//                        "create the cleeng offer id from the known info",
-//                        "product id")
-//
-//                this.subscribe(subscription, context, callback)
-//            }
-//            else {
-//                callback(status, response)
-//            }
-//        }
-//    }
-
-    fun isOngoingSubscription(subscription: Subscription): Boolean {
-        return this.ongoingSubscriptions.contains(subscription)
-    }
-
-    private fun handleUpdatedSubscriptionsState(ongoingSubscriptionIds: List<String>?) {
-        this.ongoingSubscriptions.clear()
-
-        for (subscriptionId in ongoingSubscriptionIds ?: return) {
-            for (availableSubscription in this.availableSubscriptions) {
-                if (availableSubscription.id == subscriptionId) {
-                    this.ongoingSubscriptions.add(availableSubscription)
-                    break
-                }
-            }
-        }
-
-        this.ongoingSubscriptions = this.ongoingSubscriptions.distinct().toMutableList()
-    }
 
     fun userHasActiveOffer(): Boolean {
         for (offer in currentUser?.userOffers ?: return false) {
