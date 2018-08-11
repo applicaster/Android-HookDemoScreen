@@ -28,13 +28,24 @@ class CleengLoginPlugin :  BaseLoginContract(), ApplicationLoaderHookUpI {
             openFirstScreen(context, null)
 
         } else {
-//            SubscriptionsActivity.launchSubscriptionsActivity(context, null, true)
             listener.onHookFinished()
         }
     }
 
     override fun login(context: Context, playable: Playable?, additionalParams: MutableMap<Any?, Any?>?) {
-        openFirstScreen(context, playable)
+
+        if(!isItemLocked(playable)){
+            //if item not locked continue to play
+            //this should be handled in the player plugin if we in this line then the player should check if
+            //item is locked before call the login method.
+        }
+        if(CleengManager.userHasValidToken()) {
+                //if user has valid token open subscription screen (user already logged in)
+                SubscriptionsActivity.launchSubscriptionsActivity(context, playable, true)
+        }
+        else {
+              openFirstScreen(context, playable)
+        }
     }
 
     override fun isItemLocked(model: Any?): Boolean {
