@@ -200,6 +200,7 @@ object CleengManager {
      */
     fun isItemLocked(model: Any?): Boolean {
         if(model is APModel) {
+            if(model.authorization_providers_ids.size == null || model.authorization_providers_ids.size == 0) return  true;
             for (i in 0 until model.authorization_providers_ids.size) {
                 var provider_id = model.authorization_providers_ids[i]
                 var isComply = isUserOffersComply(provider_id);
