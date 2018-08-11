@@ -67,7 +67,7 @@ dependencies {
         implementation 'com.applicaster:applicaster-android-sdk:2.32.19'
     }
 
-    implementation 'com.android.support:appcompat-v7'
+    implementation 'com.android.support:appcompat-v7:23.0.1'
     implementation 'com.android.support.constraint:constraint-layout:1.1.0'
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     api 'com.scottyab:secure-preferences-lib:0.1.4'
