@@ -37,7 +37,6 @@
         android:id="@+id/restore_title"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        style="@style/CleengLoginTitle"
         android:layout_marginTop="12dp"
         android:gravity="center"
         app:layout_constraintEnd_toEndOf="parent"

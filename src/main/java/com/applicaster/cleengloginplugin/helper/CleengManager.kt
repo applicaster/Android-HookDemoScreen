@@ -2,6 +2,7 @@ package com.applicaster.cleengloginplugin.helper
 
 import android.content.Context
 import com.applicaster.billing.utils.PurchaseHandler
+import com.applicaster.cleengloginplugin.models.PurchaseItem
 import com.applicaster.cleengloginplugin.models.Subscription
 import com.applicaster.cleengloginplugin.models.User
 import com.applicaster.cleengloginplugin.remote.Params
@@ -95,6 +96,32 @@ object CleengManager {
             }
 
             callback(status, response)
+        }
+    }
+
+    fun subscribe(userToken: String, authID: String, purchaseItem: PurchaseItem, context: Context, subscribeCallback: (WebService.Status, String?) -> Unit) {
+
+        val params = Params()
+        params["authId"] = authID
+        params["token"] = userToken //the empty token
+
+        params["productId"] = purchaseItem.sku
+        params["purchaseToken"] = purchaseItem.token
+        params["packageName"] = purchaseItem.packageName
+        params["orderId"] = purchaseItem.orderId
+        params["purchaseState"] = purchaseItem.purchaseState.toString()
+        params["purchaseTime"] = purchaseItem.purchaseTime.toString()
+        params["developerPayload"] = purchaseItem.developerPayload
+
+        this.webService.performApiRequest(WebService.ApiRequest.SyncPurchases, params, context) { status: WebService.Status, response: String? ->
+            if (status == WebService.Status.Success) {
+                //do we need to add the new offer to the user object?
+                //do we need to add user again/ and get it with the new offer that user have?
+
+                //we can load the subscriptions again through CleenManager
+            }else {
+                subscribeCallback(status, response)
+            }
         }
     }
 

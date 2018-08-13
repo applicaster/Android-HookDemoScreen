@@ -2,17 +2,11 @@ package com.applicaster.cleengloginplugin.views
 
 import android.content.Context
 import android.content.Intent
-import android.view.View
 import com.applicaster.cleengloginplugin.*;
 import com.applicaster.cleengloginplugin.R
 import com.applicaster.cleengloginplugin.helper.CleengManager
 import com.applicaster.cleengloginplugin.helper.CustomizationHelper
-import com.applicaster.cleengloginplugin.helper.PluginConfigurationHelper
 import com.applicaster.cleengloginplugin.remote.WebService
-import com.applicaster.util.StringUtil
-import kotlinx.android.synthetic.main.additional_auth.*
-import kotlinx.android.synthetic.main.login_activity.*
-import kotlinx.android.synthetic.main.new_account_activiy.*
 import kotlinx.android.synthetic.main.restore_activity.*
 import kotlinx.android.synthetic.main.user_input.*
 
@@ -30,8 +24,8 @@ class RestoreActivity : BaseActivity() {
         CustomizationHelper.updateTextView(this, R.id.bottom_bar_action_text, RESTORE_HELP_ACTION)
         CustomizationHelper.updateTextView(this, R.id.bottom_bar_title, RESTORE_HELP_TEXT)
 
-        CustomizationHelper.updateEditTextView(this, R.id.input_email, DEFAULT_1, true);
-        CustomizationHelper.updateEditTextView(this, R.id.input_password, DEFAULT_2, true);
+        CustomizationHelper.updateEditTextView(this, R.id.input_email, EMAIL_PLACEHOLDER, true);
+        CustomizationHelper.updateEditTextView(this, R.id.input_password, PASSWORD_PLACEHOLDER, true);
         CustomizationHelper.updateTextView(this, R.id.forgot_password, RESET_PASSWORD_ACTION_TEXT)
         CustomizationHelper.updateButtonViewText(this, R.id.action_button, RESTORE_BUTTON)
         CustomizationHelper.updateButtonStyle(this, R.id.action_button, "CleengLoginRestoreButtonText")

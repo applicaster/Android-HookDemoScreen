@@ -2,7 +2,6 @@ package com.applicaster.cleengloginplugin.views
 
 import android.content.Context
 import android.content.Intent
-import android.os.Bundle
 import android.view.View
 import android.widget.Button
 import com.applicaster.cleengloginplugin.*;
@@ -33,8 +32,8 @@ class SignUpActivity : BaseActivity() {
         CustomizationHelper.updateTextView(this, R.id.sign_up_action_text, SIGN_IN_LABEL_TEXT)
         CustomizationHelper.updateTextView(this, R.id.sign_up_text, ALREADY_HAVE_ACCOUNT_HINT)
 
-        CustomizationHelper.updateEditTextView(this, R.id.input_email, DEFAULT_1, true);
-        CustomizationHelper.updateEditTextView(this, R.id.input_password, DEFAULT_2, true);
+        CustomizationHelper.updateEditTextView(this, R.id.input_email, EMAIL_PLACEHOLDER, true);
+        CustomizationHelper.updateEditTextView(this, R.id.input_password, PASSWORD_PLACEHOLDER, true);
         CustomizationHelper.updateTextView(this, R.id.forgot_password, RESET_PASSWORD_ACTION_TEXT)
         CustomizationHelper.updateButtonViewText(this, R.id.action_button, SIGN_UP_BUTTON)
         CustomizationHelper.updateButtonStyle(this, R.id.action_button, "CleengLoginSignUpButtonText")

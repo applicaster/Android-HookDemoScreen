@@ -11,14 +11,14 @@ class SubscriptionLoaderHelper constructor(var context: Context, var userToken: 
     var handler = Handler()
 
 
-    fun load(intervalInSeccond: Int = 0){
+    fun load(intervalInSeccond: Int = 0) {
         handler.postDelayed({
-            subscribe(userToken, authID,  purchaseItem, context){ status: WebService.Status, response: String? ->
+            CleengManager.subscribe(userToken, authID, purchaseItem, context) { status: WebService.Status, response: String? ->
                 if (status != WebService.Status.Success) {
-                    if(maxTimeForRequestInSecond > 0) {
+                    if (maxTimeForRequestInSecond > 0) {
                         maxTimeForRequestInSecond -= intervalInSeccond;
                         load(interval);
-                    }else{
+                    } else {
                         callback(status, response)
                     }
                 }
@@ -26,37 +26,5 @@ class SubscriptionLoaderHelper constructor(var context: Context, var userToken: 
             }
         }, intervalInSeccond.toLong())
     }
-
-
-
-
-    fun subscribe(userToken: String, authID: String, purchaseItem: PurchaseItem, context: Context, subscribeCallback: (WebService.Status, String?) -> Unit) {
-
-        val params = Params()
-        params["authId"] = authID
-        params["token"] = userToken //the empty token
-
-        params["productId"] = purchaseItem.sku
-        params["purchaseToken"] = purchaseItem.token
-        params["packageName"] = purchaseItem.packageName
-        params["orderId"] = purchaseItem.orderId
-        params["purchaseState"] = purchaseItem.purchaseState.toString()
-        params["purchaseTime"] = purchaseItem.purchaseTime.toString()
-        params["developerPayload"] = purchaseItem.developerPayload
-
-        this.webService.performApiRequest(WebService.ApiRequest.SyncPurchases, params, context) { status: WebService.Status, response: String? ->
-            if (status == WebService.Status.Success) {
-                //do we need to add the new offer to the user object?
-                //do we need to add user again/ and get it with the new offer that user have?
-
-                //we can load the subscriptions again through CleenManager
-            }else {
-                subscribeCallback(status, response)
-            }
-        }
-    }
-
-
-
 
 }

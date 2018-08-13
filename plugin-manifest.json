@@ -27,16 +27,6 @@
       "tooltip_text": "The Cleeng publisher id"
     },
     {
-      "type": "text",
-      "key": "cleeng_login_offer_ids_for_item_id",
-      "tooltip_text": "Dictionary to map item id to offers available for it"
-    },
-    {
-      "type": "text",
-      "key": "cleeng_login_offer_id_to_auth_provider_id",
-      "tooltip_text": "Dictionary to map offer id to its token"
-    },
-    {
       "type": "checkbox",
       "key": "cleeng_login_start_on_app_launch",
       "tooltip_text": "Flag to indicate if to present the plugin on app launch"
@@ -78,12 +68,12 @@
     },
     {
       "type": "text",
-      "key": "cleeng_login_default1",
+      "key": "cleeng_login_email_placeholder_text",
       "tooltip_text": "Text for Email text field placeholder. For example: Email"
     },
     {
       "type": "text",
-      "key": "cleeng_login_default2",
+      "key": "cleeng_login_password_placeholder_text",
       "tooltip_text": "Text for Password text field placeholder. For example: Password"
     },
     {
