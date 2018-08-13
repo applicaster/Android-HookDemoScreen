@@ -28,7 +28,7 @@ class ResetPasswordActivity : BaseActivity() {
         CustomizationHelper.updateTextView(this, R.id.bottom_bar_action_text, RESET_HELP_ACTION)
         CustomizationHelper.updateTextView(this, R.id.bottom_bar_title, RESET_HELP_TEXT)
 
-        CustomizationHelper.updateEditTextView(this, R.id.input_email, DEFAULT_1, true);
+        CustomizationHelper.updateEditTextView(this, R.id.input_email, EMAIL_PLACEHOLDER, true);
         CustomizationHelper.updateButtonViewText(this, R.id.action_button, RESET_BUTTON)
 
         updateViews();
