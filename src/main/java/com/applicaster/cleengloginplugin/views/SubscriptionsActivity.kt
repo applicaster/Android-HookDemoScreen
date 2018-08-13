@@ -13,6 +13,7 @@ import com.applicaster.cleengloginplugin.helper.IAPManager
 import com.applicaster.cleengloginplugin.models.Subscription
 import com.applicaster.cleengloginplugin.remote.WebService
 import com.applicaster.model.APModel
+import com.applicaster.plugin_manager.login.LoginManager
 import com.applicaster.plugin_manager.playersmanager.Playable
 import com.applicaster.util.OSUtil
 import kotlinx.android.synthetic.main.bottom_bar.*
@@ -21,7 +22,14 @@ import kotlinx.android.synthetic.main.subscription_item.view.*
 
 class SubscriptionsActivity: BaseActivity() {
 
-     var fromStartUp: Boolean = false;
+    var fromStartUp: Boolean = false;
+    val iapManager = IAPManager(this) { status: WebService.Status, response: String? ->
+        if (status == WebService.Status.Success) {
+            LoginManager.notifyEvent(this, LoginManager.RequestType.LOGIN, true)
+        } else {
+            this.showError(status, response)
+        }
+    }
 
     override fun getContentViewResId(): Int {
         return R.layout.subscription_activity;
@@ -78,14 +86,17 @@ class SubscriptionsActivity: BaseActivity() {
         subscriptionView.purchaseButton.radius = OSUtil.convertDPToPixels(20).toFloat()
         subscriptionView.purchaseButton.setOnClickListener {
 
-            val iapManager = IAPManager(this)
-            iapManager.init(subscription.androidProductId)
+            iapManager.init(subscription.androidProductId, subscription.authID)
         }
 
         return subscriptionView
 
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        iapManager.handleActivityResult(requestCode, resultCode, data)
+    }
 
     companion object {
 

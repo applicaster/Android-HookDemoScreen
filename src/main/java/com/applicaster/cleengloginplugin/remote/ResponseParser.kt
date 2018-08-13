@@ -62,7 +62,9 @@ class ResponseParser {
                     jsonSubscription.optString("description"),
                     jsonSubscription.optDouble("price"),
                     jsonSubscription.optString("id"),
-                    jsonSubscription.optString("androidProductId")))
+                    jsonSubscription.optString("androidProductId"),
+                    jsonSubscription.optString("authId")
+            ))
         }
 
         this.availableSubscriptions = availableSubscriptions

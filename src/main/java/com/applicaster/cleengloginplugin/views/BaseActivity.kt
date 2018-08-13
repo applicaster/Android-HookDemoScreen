@@ -1,5 +1,6 @@
 package com.applicaster.cleengloginplugin.views
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.View
@@ -154,5 +155,6 @@ abstract class BaseActivity : AppCompatActivity() {
         super.onBackPressed()
         closeLoginPluginFromHook();
     }
+
 
 }
