@@ -1,6 +1,8 @@
 package com.applicaster.cleengloginplugin.helper
 
 import android.content.Context
+import com.applicaster.atom.model.APAtomEntry
+import com.applicaster.atom.model.APAtomFeed
 import com.applicaster.billing.utils.PurchaseHandler
 import com.applicaster.cleengloginplugin.models.PurchaseItem
 import com.applicaster.cleengloginplugin.models.Subscription
@@ -82,10 +84,15 @@ object CleengManager {
         }
     }
 
-    fun fetchAvailableSubscriptions(context: Context, callback: (WebService.Status, String?) -> Unit) {
+    fun fetchAvailableSubscriptions(context: Context, params: Params?, callback: (WebService.Status, String?) -> Unit) {
         this.availableSubscriptions.clear()
 
-        this.webService.performApiRequest(WebService.ApiRequest.Subscriptions, null, context) { status: WebService.Status, response: String? ->
+        var finalParams = params ?: Params()
+        if(currentUser != null && StringUtil.isNotEmpty(currentUser!!.token)) {
+            finalParams["token"] = currentUser!!.token!!
+        }
+
+        this.webService.performApiRequest(WebService.ApiRequest.Subscriptions, finalParams, context) { status: WebService.Status, response: String? ->
             val responseParser = ResponseParser()
             responseParser.handleAvailableSubscriptionsResponse(status, response)
 
@@ -129,10 +136,10 @@ object CleengManager {
     fun userHasActiveOffer(): Boolean {
         for (offer in currentUser?.userOffers ?: return false) {
             if(offer.valid()) {
-                return true;
+                return true
             }
         }
-        return false;
+        return false
     }
 
     fun setUser(user: User?){
@@ -163,7 +170,8 @@ object CleengManager {
      */
     fun isItemLocked(model: Any?): Boolean {
         if(model is APModel) {
-            if(model.authorization_providers_ids.size == null || model.authorization_providers_ids.size == 0) return  true;
+            if (model.authorization_providers_ids == null || model.authorization_providers_ids.isEmpty())
+                return true
             for (i in 0 until model.authorization_providers_ids.size) {
                 var provider_id = model.authorization_providers_ids[i]
                 var isComply = isUserOffersComply(provider_id);
@@ -186,6 +194,16 @@ object CleengManager {
             }
         }
         return false;
+    }
+
+    fun getAuthIds(playable: Any?): Array<out String>? {
+        if (playable is APModel) {
+            return playable.authorization_providers_ids
+        } else if (playable is APAtomEntry) {
+            return playable.getExtension("authorization_providers_ids", Array<String>::class.java)
+        }
+
+        return null
     }
 
 

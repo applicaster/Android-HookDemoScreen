@@ -1,6 +1,8 @@
 package com.applicaster.cleengloginplugin.helper
 
 import android.app.Activity
+import android.content.Context
+import android.os.Build
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
@@ -21,13 +23,15 @@ class CustomizationHelper{
         }
 
         @JvmStatic
-        fun updateTextView(activity : Activity, id: Int , key : String ) {
-            val textView = activity.findViewById(id) as TextView? ?: return ;
-            var textValue = PluginConfigurationHelper.getConfigurationValue(key);
+        fun updateTextView(activity : Activity, id: Int , key : String , style: String?) {
+            val textView = activity.findViewById(id) as TextView? ?: return
+            var textValue = PluginConfigurationHelper.getConfigurationValue(key)
             textValue = if (StringUtil.isNotEmpty(textValue))  textValue else key
-            if(textView != null ){
-                textView.setText(textValue );
-            }
+            textView.text = textValue
+
+            if(style != null)
+                updateTextStyle(activity, textView, style)
+
         }
 
         @JvmStatic
@@ -69,6 +73,18 @@ class CustomizationHelper{
             val bgDrawableRedId = OSUtil.getStylableResourceIdentifier(key)
             if (bgDrawableRedId != 0) {
                 view.setTextAppearance(activity,bgDrawableRedId)
+            }
+        }
+
+        @JvmStatic
+        fun updateTextStyle(context: Context, view: TextView, key: String) {
+            val styleRedId = OSUtil.getStyleResourceIdentifier(key)
+            if (styleRedId != 0) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    view.setTextAppearance(styleRedId)
+                } else {
+                    view.setTextAppearance(context, styleRedId)
+                }
             }
         }
 
