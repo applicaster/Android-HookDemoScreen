@@ -9,7 +9,6 @@
 
     <com.applicaster.util.ui.CustomTextView
         android:id="@+id/item_title"
-        style="CleengLoginSubscriptionTitle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="18dp"

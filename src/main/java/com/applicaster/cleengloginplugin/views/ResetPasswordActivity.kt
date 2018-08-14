@@ -4,14 +4,8 @@ import android.content.Context
 import android.content.Intent
 import android.view.View
 import com.applicaster.cleengloginplugin.*;
-import com.applicaster.cleengloginplugin.helper.CleengManager
 import com.applicaster.cleengloginplugin.helper.CustomizationHelper
-import com.applicaster.cleengloginplugin.helper.PluginConfigurationHelper
-import com.applicaster.cleengloginplugin.remote.WebService
-import com.applicaster.util.StringUtil
-import kotlinx.android.synthetic.main.additional_auth.*
 import kotlinx.android.synthetic.main.reset_password_activity.*
-import kotlinx.android.synthetic.main.restore_activity.*
 import kotlinx.android.synthetic.main.user_input.*
 
 class ResetPasswordActivity : BaseActivity() {
@@ -23,12 +17,12 @@ class ResetPasswordActivity : BaseActivity() {
     override fun customize() {
         super.customize()
 
-        CustomizationHelper.updateTextView(this, R.id.title, RESET_PASSWORD_TITLE)
-        CustomizationHelper.updateTextView(this, R.id.description, RESET_PASSWORD_DESCRIPTION)
-        CustomizationHelper.updateTextView(this, R.id.bottom_bar_action_text, RESET_HELP_ACTION)
-        CustomizationHelper.updateTextView(this, R.id.bottom_bar_title, RESET_HELP_TEXT)
+        CustomizationHelper.updateTextView(this, R.id.title, RESET_PASSWORD_TITLE, "CleengLoginTitle")
+        CustomizationHelper.updateTextView(this, R.id.description, RESET_PASSWORD_DESCRIPTION, "CleengLoginDecriptionText")
+        CustomizationHelper.updateTextView(this, R.id.bottom_bar_action_text, RESET_HELP_ACTION,"CleengLoginActionText")
+        CustomizationHelper.updateTextView(this, R.id.bottom_bar_title, RESET_HELP_TEXT,"CleengLoginActionDescriptionText")
 
-        CustomizationHelper.updateEditTextView(this, R.id.input_email, EMAIL_PLACEHOLDER, true);
+        CustomizationHelper.updateEditTextView(this, R.id.input_email, EMAIL_PLACEHOLDER, true)
         CustomizationHelper.updateButtonViewText(this, R.id.action_button, RESET_BUTTON)
 
         updateViews();

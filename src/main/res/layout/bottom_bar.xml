@@ -18,7 +18,6 @@
 
     <com.applicaster.util.ui.CustomTextView
         android:id="@+id/bottom_bar_action_text"
-        style="@style/CleengLoginActionText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Click Restore" />

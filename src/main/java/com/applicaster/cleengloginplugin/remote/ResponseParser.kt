@@ -55,16 +55,18 @@ class ResponseParser {
         val json = try { JSONArray(data) } catch (e: Exception) { return }
 
         for (i in 0 until json.length()) {
-            val jsonSubscription = json.getJSONObject(i)
+            var jsonSubscription = json.getJSONObject(i)
 
-            availableSubscriptions.add(Subscription(
-                    jsonSubscription.optString("title"),
-                    jsonSubscription.optString("description"),
-                    jsonSubscription.optDouble("price"),
-                    jsonSubscription.optString("id"),
-                    jsonSubscription.optString("androidProductId"),
-                    jsonSubscription.optString("authId")
-            ))
+            if(jsonSubscription.optBoolean("active")) {
+                availableSubscriptions.add(Subscription(
+                        jsonSubscription.optString("title"),
+                        jsonSubscription.optString("description"),
+                        jsonSubscription.optDouble("price"),
+                        jsonSubscription.optString("id"),
+                        jsonSubscription.optString("androidProductId"),
+                        jsonSubscription.optString("authId")
+                ))
+            }
         }
 
         this.availableSubscriptions = availableSubscriptions

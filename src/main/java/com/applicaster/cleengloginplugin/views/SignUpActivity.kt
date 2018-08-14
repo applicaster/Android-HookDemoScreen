@@ -28,13 +28,13 @@ class SignUpActivity : BaseActivity() {
 
     override fun customize() {
         super.customize()
-        CustomizationHelper.updateTextView(this, R.id.enter_details, NEW_ACCOUNT_TITLE)
-        CustomizationHelper.updateTextView(this, R.id.sign_up_action_text, SIGN_IN_LABEL_TEXT)
-        CustomizationHelper.updateTextView(this, R.id.sign_up_text, ALREADY_HAVE_ACCOUNT_HINT)
+        CustomizationHelper.updateTextView(this, R.id.enter_details, NEW_ACCOUNT_TITLE, "CleengLoginDecriptionText")
+        CustomizationHelper.updateTextView(this, R.id.sign_up_action_text, SIGN_IN_LABEL_TEXT, "CleengLoginActionText")
+        CustomizationHelper.updateTextView(this, R.id.sign_up_text, ALREADY_HAVE_ACCOUNT_HINT, "CleengLoginActionDescriptionText")
 
         CustomizationHelper.updateEditTextView(this, R.id.input_email, EMAIL_PLACEHOLDER, true);
         CustomizationHelper.updateEditTextView(this, R.id.input_password, PASSWORD_PLACEHOLDER, true);
-        CustomizationHelper.updateTextView(this, R.id.forgot_password, RESET_PASSWORD_ACTION_TEXT)
+        CustomizationHelper.updateTextView(this, R.id.forgot_password, RESET_PASSWORD_ACTION_TEXT, "CleengLoginActionDescriptionText")
         CustomizationHelper.updateButtonViewText(this, R.id.action_button, SIGN_UP_BUTTON)
         CustomizationHelper.updateButtonStyle(this, R.id.action_button, "CleengLoginSignUpButtonText")
 
