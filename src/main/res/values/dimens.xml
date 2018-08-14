@@ -9,4 +9,7 @@
     <dimen name="logo_height">54dp</dimen>
     <dimen name="logo_width">194dp</dimen>
 
+    <dimen name="tool_bar_icon_width">38dp</dimen>
+    <dimen name="tool_bar_height">44dp</dimen>
+
 </resources>
