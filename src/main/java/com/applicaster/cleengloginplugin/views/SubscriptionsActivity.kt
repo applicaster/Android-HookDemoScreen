@@ -40,7 +40,8 @@ class SubscriptionsActivity: BaseActivity() {
         super.onCreate(savedInstanceState)
 
         if (CleengManager.availableSubscriptions.count() == 0) {
-            CleengManager.fetchAvailableSubscriptions(this) { status: WebService.Status, response: String? ->
+            var params = Params()
+            CleengManager.fetchAvailableSubscriptions(this, params) { status: WebService.Status, response: String? ->
                 this.dismissLoading()
 
                 if (status == WebService.Status.Success) {
