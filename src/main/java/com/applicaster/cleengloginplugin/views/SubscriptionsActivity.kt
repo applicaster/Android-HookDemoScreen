@@ -11,6 +11,7 @@ import com.applicaster.cleengloginplugin.helper.CleengManager
 import com.applicaster.cleengloginplugin.helper.CustomizationHelper
 import com.applicaster.cleengloginplugin.helper.IAPManager
 import com.applicaster.cleengloginplugin.models.Subscription
+import com.applicaster.cleengloginplugin.remote.Params
 import com.applicaster.cleengloginplugin.remote.WebService
 import com.applicaster.model.APModel
 import com.applicaster.plugin_manager.login.LoginManager
@@ -20,10 +21,14 @@ import com.applicaster.util.StringUtil
 import kotlinx.android.synthetic.main.bottom_bar.*
 import kotlinx.android.synthetic.main.subscription_activity.*
 import kotlinx.android.synthetic.main.subscription_item.view.*
+import org.json.JSONArray
 
 class SubscriptionsActivity: BaseActivity() {
 
-    var fromStartUp: Boolean = false;
+    private var fromStartUp: Boolean = false
+    private var mPlayable: Playable? = null
+
+
     val iapManager = IAPManager(this) { status: WebService.Status, response: String? ->
         if (status == WebService.Status.Success) {
             LoginManager.notifyEvent(this, LoginManager.RequestType.LOGIN, true)
@@ -39,8 +44,23 @@ class SubscriptionsActivity: BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        if (CleengManager.availableSubscriptions.count() == 0) {
-            var params = Params()
+        if(intent != null) {
+            mPlayable = intent.getSerializableExtra(PLAYABLE) as Playable?
+        }
+
+        val params = Params()
+        if (mPlayable != null) {
+            var authIds = CleengManager.getAuthIds(mPlayable)
+            if(mPlayable != null && authIds != null && !authIds.isEmpty()) {
+                var jsonObject = JSONArray()
+                for (i in 0 until authIds.size) {
+                    jsonObject.put(authIds[i])
+                }
+                params["offers"] = jsonObject.toString()
+                params["byAuthId"] = "true"
+            }
+        }
+        if (CleengManager.availableSubscriptions.count() == 0 || playable != null) {
             CleengManager.fetchAvailableSubscriptions(this, params) { status: WebService.Status, response: String? ->
                 this.dismissLoading()
 
@@ -66,8 +86,8 @@ class SubscriptionsActivity: BaseActivity() {
     }
 
     fun updateViews() {
-        bottom_bar_action_text.visibility = View.GONE;
-        fromStartUp = intent.getBooleanExtra(SUBSCIPTION_FROM_START_UP, false);
+        bottom_bar_action_text.visibility = View.GONE
+        fromStartUp = intent.getBooleanExtra(SUBSCIPTION_FROM_START_UP, false)
 
         if(!fromStartUp){
             subscription_sign_up_hint.visibility = View.GONE
@@ -87,6 +107,8 @@ class SubscriptionsActivity: BaseActivity() {
         if (StringUtil.isNotEmpty(subscription.description)) {
             subscriptionView.item_description.text = subscription.description
             CustomizationHelper.updateTextStyle(this, subscriptionView.item_description, "CleengLoginSubscriptionTitle")
+        } else {
+            subscriptionView.item_description.visibility = View.GONE
         }
         subscriptionView.item_price.text = "SUBSCRIBE FOR $" +subscription.price.toString()
         subscriptionView.purchaseButton.radius = OSUtil.convertDPToPixels(20).toFloat()
@@ -107,10 +129,6 @@ class SubscriptionsActivity: BaseActivity() {
     companion object {
 
         val SUBSCIPTION_FROM_START_UP ="from_Start_up"
-
-        fun launchSubscriptionsActivity(context: Context, fromStartUp: Boolean) {
-            this.launchSubscriptionsActivity(context,null,fromStartUp)
-        }
 
         fun launchSubscriptionsActivity(context: Context, playable: Playable?, fromStartUp: Boolean = false) {
             val intent = Intent(context,SubscriptionsActivity::class.java)
