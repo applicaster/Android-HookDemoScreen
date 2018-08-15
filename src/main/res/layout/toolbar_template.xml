@@ -15,7 +15,7 @@
 
     <ImageView
         android:id="@+id/toolbar_close_button"
-        android:layout_width="38dp"
+        android:layout_width="@dimen/tool_bar_icon_width"
         android:layout_height="wrap_content"
         tools:ignore="contentDescription"
         android:layout_alignParentEnd="true" />

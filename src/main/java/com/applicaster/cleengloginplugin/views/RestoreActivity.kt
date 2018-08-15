@@ -2,15 +2,24 @@ package com.applicaster.cleengloginplugin.views
 
 import android.content.Context
 import android.content.Intent
+import android.util.Log
+import com.applicaster.billing.v3.handlers.APQueryInventoryFinishedHandler
+import com.applicaster.billing.v3.util.Purchase
 import com.applicaster.cleengloginplugin.*;
 import com.applicaster.cleengloginplugin.R
 import com.applicaster.cleengloginplugin.helper.CleengManager
 import com.applicaster.cleengloginplugin.helper.CustomizationHelper
+import com.applicaster.cleengloginplugin.helper.IAPManager
+import com.applicaster.cleengloginplugin.helper.SubscriptionLoaderHelper
 import com.applicaster.cleengloginplugin.remote.WebService
+import com.applicaster.plugin_manager.login.LoginManager
 import kotlinx.android.synthetic.main.restore_activity.*
 import kotlinx.android.synthetic.main.user_input.*
 
 class RestoreActivity : BaseActivity() {
+
+    private val iapManager = IAPManager(this) { status: WebService.Status, response: String? ->
+    }
 
     override fun getContentViewResId(): Int {
         return R.layout.restore_activity;
@@ -34,10 +43,10 @@ class RestoreActivity : BaseActivity() {
             val user = this.getUserFromInput() ?: return@setOnClickListener
 
             this.showLoading()
-            //should we register???? from restore, how can i restore the acount?
             CleengManager.register(user, this) { status: WebService.Status, response: String? ->
                 this.dismissLoading()
-                //continue flow
+
+                iapManager.getInventory(null , handler)
             }
         }
 
@@ -57,4 +66,21 @@ class RestoreActivity : BaseActivity() {
             context.startActivity(Intent(context, RestoreActivity::class.java))
         }
     }
+
+    private val handler = object :APQueryInventoryFinishedHandler {
+        override fun onInventoryQueryFailed() {
+            Log.e("HEKP", "onInventoryQueryFailed!!")
+        }
+
+        override fun onUnconsumedPurchaseFound(purchase: Purchase?): Boolean {
+            iapManager.loadSubscriptions(purchase,null)
+            return false
+        }
+
+        override fun onInventoryEmpty() {
+            Log.e("HEKP", "EMPTY!!")
+        }
+
+    }
+
 }

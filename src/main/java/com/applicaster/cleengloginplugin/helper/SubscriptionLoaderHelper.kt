@@ -5,8 +5,9 @@ import android.os.Handler
 import com.applicaster.cleengloginplugin.models.PurchaseItem
 import com.applicaster.cleengloginplugin.remote.Params
 import com.applicaster.cleengloginplugin.remote.WebService
+import com.applicaster.util.StringUtil
 
-class SubscriptionLoaderHelper constructor(var context: Context, var userToken: String, var authID: String, var purchaseItem: PurchaseItem, var maxTimeForRequestInSecond: Int, var interval: Int,var  callback: (WebService.Status, String?) -> Unit ) {
+class SubscriptionLoaderHelper constructor(var context: Context, var userToken: String, var authID: String?, var purchaseItem: PurchaseItem, var maxTimeForRequestInSecond: Int, var interval: Int,var  callback: (WebService.Status, String?) -> Unit ) {
     var handler = Handler()
 
 
@@ -14,8 +15,10 @@ class SubscriptionLoaderHelper constructor(var context: Context, var userToken: 
         handler.postDelayed({
             var params = Params()
             params["token"] = userToken
-            params["byAuthId"] = "1"
-            params["authIds"] = "[$authID]"
+            if (authID != null && StringUtil.isNotEmpty(authID)) {
+                params["byAuthId"] = "1"
+                params["authIds"] = "[$authID]"
+            }
 
             CleengManager.fetchAvailableSubscriptions(context, params) { status: WebService.Status, response: String? ->
                 if (status != WebService.Status.Success) {

@@ -18,7 +18,7 @@ class IAPManager(private val mContext: Context,var  callback: (WebService.Status
 
     private val TAG = APBillingUtil::class.java.simpleName
 
-    val USER_CANCELED = -1005;
+    val USER_CANCELED = -1005
 
     enum class Action {
         startPurchase,
@@ -41,7 +41,7 @@ class IAPManager(private val mContext: Context,var  callback: (WebService.Status
         })
     }
 
-    fun getInventory(productIds: List<String>, handler: APQueryInventoryFinishedHandler) {
+    fun getInventory(productIds: List<String>?, handler: APQueryInventoryFinishedHandler) {
         mHelper!!.queryInventoryAsync(true, productIds, IabHelper.QueryInventoryFinishedListener { result, inventory ->
             if (result.isFailure) {
                 handler.onInventoryQueryFailed()
@@ -93,7 +93,7 @@ class IAPManager(private val mContext: Context,var  callback: (WebService.Status
         })
     }
 
-    private fun loadSubscriptions(info: Purchase? , authID: String) {
+    public fun loadSubscriptions(info: Purchase? , authID: String?) {
         if (info != null && StringUtil.isNotEmpty(CleengManager.currentUser?.token)) {
 
             subscriptionHelper = SubscriptionLoaderHelper(mContext, CleengManager.currentUser?.token!!, authID, PurchaseItem(info.token, info.sku, info.signature, info.purchaseTime, info.purchaseState,

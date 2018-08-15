@@ -51,13 +51,13 @@ abstract class BaseActivity : AppCompatActivity() {
         if (backButton != null) {
             CustomizationHelper.updateImageView(backButton,"cleeng_login_back_button" )
             backButton.setOnClickListener {
-                closeLoginPluginFromHook();
+                closeLoginPluginFromHook()
                 this.finish()
             }
         }
         val closeButton = navigationBarContainer.findViewById<ImageView>(R.id.toolbar_close_button)
         if (closeButton != null) {
-            CustomizationHelper.updateImageView(backButton,"cleeng_login_close_button" )
+            CustomizationHelper.updateImageView(closeButton,"cleeng_login_close_button" )
             closeButton.setOnClickListener {
                 closeLoginPluginFromHook()
                 this.finish()
