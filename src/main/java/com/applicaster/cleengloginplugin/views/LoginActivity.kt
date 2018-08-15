@@ -28,6 +28,7 @@ class LoginActivity : BaseActivity() {
 
     override fun customize() {
         super.customize()
+        CustomizationHelper.updateImageView(this, R.id.app_logo, "cleeng_login_logo")
         CustomizationHelper.updateTextView(this, R.id.enter_details, LOGIN_DETAILS, "CleengLoginDecriptionText")
         CustomizationHelper.updateTextView(this, R.id.sign_up_action_text, SIGN_UP_LABEL_TEXT, "CleengLoginActionText")
         CustomizationHelper.updateTextView(this, R.id.sign_up_text, NO_ACCOUNT_HINT, "CleengLoginActionDescriptionText")

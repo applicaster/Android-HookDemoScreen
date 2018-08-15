@@ -23,6 +23,15 @@ class CustomizationHelper{
         }
 
         @JvmStatic
+        fun updateImageView(activity : Activity, id: Int , key : String) {
+            val imageView = activity.findViewById(id) as ImageView? ?: return
+            val iconDrawableRedId = OSUtil.getDrawableResourceIdentifier(key)
+            if(iconDrawableRedId != 0){
+                imageView.setImageResource(iconDrawableRedId)
+            }
+        }
+
+        @JvmStatic
         fun updateTextView(activity : Activity, id: Int , key : String , style: String?) {
             val textView = activity.findViewById(id) as TextView? ?: return
             var textValue = PluginConfigurationHelper.getConfigurationValue(key)

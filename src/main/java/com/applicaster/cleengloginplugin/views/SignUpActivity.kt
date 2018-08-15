@@ -28,6 +28,7 @@ class SignUpActivity : BaseActivity() {
 
     override fun customize() {
         super.customize()
+        CustomizationHelper.updateImageView(this, R.id.app_logo, "cleeng_login_logo")
         CustomizationHelper.updateTextView(this, R.id.enter_details, NEW_ACCOUNT_TITLE, "CleengLoginDecriptionText")
         CustomizationHelper.updateTextView(this, R.id.sign_up_action_text, SIGN_IN_LABEL_TEXT, "CleengLoginActionText")
         CustomizationHelper.updateTextView(this, R.id.sign_up_text, ALREADY_HAVE_ACCOUNT_HINT, "CleengLoginActionDescriptionText")
@@ -38,7 +39,7 @@ class SignUpActivity : BaseActivity() {
         CustomizationHelper.updateButtonViewText(this, R.id.action_button, SIGN_UP_BUTTON)
         CustomizationHelper.updateButtonStyle(this, R.id.action_button, "CleengLoginSignUpButtonText")
 
-        updateViews();
+        updateViews()
 
         action_button.setOnClickListener {
             val user = this.getUserFromInput() ?: return@setOnClickListener

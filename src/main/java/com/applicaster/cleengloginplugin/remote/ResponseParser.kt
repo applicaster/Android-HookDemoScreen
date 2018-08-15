@@ -57,16 +57,15 @@ class ResponseParser {
         for (i in 0 until json.length()) {
             var jsonSubscription = json.getJSONObject(i)
 
-            if(jsonSubscription.optBoolean("active")) {
-                availableSubscriptions.add(Subscription(
-                        jsonSubscription.optString("title"),
-                        jsonSubscription.optString("description"),
-                        jsonSubscription.optDouble("price"),
-                        jsonSubscription.optString("id"),
-                        jsonSubscription.optString("androidProductId"),
-                        jsonSubscription.optString("authId")
-                ))
-            }
+            availableSubscriptions.add(Subscription(
+                    jsonSubscription.optString("title"),
+                    jsonSubscription.optString("description"),
+                    jsonSubscription.optDouble("price"),
+                    jsonSubscription.optString("id"),
+                    jsonSubscription.optString("androidProductId"),
+                    jsonSubscription.optString("authId")
+            ))
+
         }
 
         this.availableSubscriptions = availableSubscriptions

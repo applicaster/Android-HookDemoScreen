@@ -11,7 +11,6 @@
 
     <com.applicaster.util.ui.CustomTextView
         android:id="@+id/bottom_bar_title"
-        style="@style/CleengLoginActionDescriptionText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="if you already have an account" />
