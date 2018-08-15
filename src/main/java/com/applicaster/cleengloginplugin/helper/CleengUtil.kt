@@ -13,8 +13,8 @@ import java.nio.charset.Charset
 class CleengUtil{
     companion object {
         @JvmStatic
-        fun isTokenValid(jwtToke: String?): Boolean {
-            var tokenEncoded = (jwtToke?.split(".") as List<String>)[1]
+        fun isTokenValid(jwtToken: String?): Boolean {
+            var tokenEncoded = (jwtToken?.split(".") as List<String>)[1]
             val dataDec = Base64.decode(tokenEncoded, Base64.DEFAULT)
             try {
                 var decodedString = String(dataDec, Charset.forName("UTF-8"))
@@ -35,8 +35,9 @@ class CleengUtil{
 
         @JvmStatic
         fun getUser(): User? {
-            var userJson = PreferenceUtil.getInstance().getStringPref("USER", "");
-            if ("null".equals(userJson) || StringUtil.isEmpty(userJson)) return null;
+            var userJson = PreferenceUtil.getInstance().getStringPref("USER", "")
+            if ("null".equals(userJson) || StringUtil.isEmpty(userJson))
+                return null
             var user = JSONObject(userJson)
             var userOfferJson = user.getJSONArray("userOffers")
             var offers: ArrayList<Offer> = ArrayList()            //save the 'empty' token.
@@ -47,7 +48,7 @@ class CleengUtil{
 
             var fbID = "";
             if(user.has("facebookId")){
-                fbID = user.getString("facebookId");
+                fbID = user.getString("facebookId")
             }
 
             return User(user.getString("email"),null,fbID , user.getString("token"), offers)

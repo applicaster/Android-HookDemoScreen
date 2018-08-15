@@ -2,8 +2,6 @@ package com.applicaster.cleengloginplugin.helper
 
 import android.content.Context
 import com.applicaster.atom.model.APAtomEntry
-import com.applicaster.atom.model.APAtomFeed
-import com.applicaster.billing.utils.PurchaseHandler
 import com.applicaster.cleengloginplugin.models.PurchaseItem
 import com.applicaster.cleengloginplugin.models.Subscription
 import com.applicaster.cleengloginplugin.models.User
