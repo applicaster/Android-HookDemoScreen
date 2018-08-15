@@ -17,7 +17,7 @@ class SubscriptionLoaderHelper constructor(var context: Context, var userToken: 
             params["token"] = userToken
             if (authID != null && StringUtil.isNotEmpty(authID)) {
                 params["byAuthId"] = "1"
-                params["authIds"] = "[$authID]"
+                params["authIds"] = authID!!
             }
 
             CleengManager.fetchAvailableSubscriptions(context, params) { status: WebService.Status, response: String? ->

@@ -29,7 +29,7 @@ class SubscriptionsActivity: BaseActivity() {
     private var mPlayable: Playable? = null
 
 
-    val iapManager = IAPManager(this) { status: WebService.Status, response: String? ->
+    private val iapManager = IAPManager(this) { status: WebService.Status, response: String? ->
         if (status == WebService.Status.Success) {
             LoginManager.notifyEvent(this, LoginManager.RequestType.LOGIN, true)
         } else {
@@ -52,12 +52,8 @@ class SubscriptionsActivity: BaseActivity() {
         if (mPlayable != null) {
             var authIds = CleengManager.getAuthIds(mPlayable)
             if(mPlayable != null && authIds != null && !authIds.isEmpty()) {
-                var jsonObject = JSONArray()
-                for (i in 0 until authIds.size) {
-                    jsonObject.put(authIds[i])
-                }
-                params["offers"] = jsonObject.toString()
-                params["byAuthId"] = "true"
+                params["offers"] = authIds.joinToString()
+                params["byAuthId"] = "1"
             }
         }
         if (CleengManager.availableSubscriptions.count() == 0 || playable != null) {
@@ -104,12 +100,8 @@ class SubscriptionsActivity: BaseActivity() {
         val subscriptionView = this.layoutInflater.inflate(R.layout.subscription_item, container, false)
         subscriptionView.item_title.text = subscription.title
         CustomizationHelper.updateTextStyle(this, subscriptionView.item_title, "CleengLoginSubscriptionTitle")
-        if (StringUtil.isNotEmpty(subscription.description)) {
-            subscriptionView.item_description.text = subscription.description
-            CustomizationHelper.updateTextStyle(this, subscriptionView.item_description, "CleengLoginSubscriptionTitle")
-        } else {
-            subscriptionView.item_description.visibility = View.GONE
-        }
+        subscriptionView.item_description.text = subscription.description
+        CustomizationHelper.updateTextStyle(this, subscriptionView.item_description, "CleengLoginSubscriptionTitle")
         subscriptionView.item_price.text = "SUBSCRIBE FOR $" +subscription.price.toString()
         subscriptionView.purchaseButton.radius = OSUtil.convertDPToPixels(20).toFloat()
         subscriptionView.purchaseButton.setOnClickListener {
