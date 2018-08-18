@@ -75,7 +75,7 @@ object CleengManager {
             responseParser.handleLoginResponse(status, response)
 
             if (responseParser.status == WebService.Status.Success) {
-                setUser(User(user.email, "", user.facebookId, responseParser.token,responseParser.offers));
+                setUser(User(user.email, "", user.facebookId, responseParser.token,responseParser.offers))
             }
 
             callback(status, response)
@@ -146,9 +146,9 @@ object CleengManager {
     }
 
     private fun getUser(): User? {
-        if( currentUser != null ) return currentUser;
-        this.currentUser = CleengUtil.getUser();
-        return  currentUser;
+        if( currentUser != null ) return currentUser
+        this.currentUser = CleengUtil.getUser()
+        return currentUser
     }
 
     fun userHasValidToken(): Boolean {
@@ -169,12 +169,12 @@ object CleengManager {
     fun isItemLocked(model: Any?): Boolean {
         if(model is APModel) {
             if (model.authorization_providers_ids == null || model.authorization_providers_ids.isEmpty())
-                return true
+                return false
             for (i in 0 until model.authorization_providers_ids.size) {
                 var provider_id = model.authorization_providers_ids[i]
-                var isComply = isUserOffersComply(provider_id);
+                var isComply = isUserOffersComply(provider_id)
                 if(isComply){
-                    return true;
+                    return true
                 }
             }
         }
@@ -182,16 +182,16 @@ object CleengManager {
     }
 
     private fun isUserOffersComply(provider_id: String?): Boolean {
-        var offers = getUser()?.userOffers;
-        if(offers != null ){
+        var offers = getUser()?.userOffers
+        if(offers != null && offers.isNotEmpty()){
             for (i in 0 until offers.size) {
-                var offer = offers[i];
+                var offer = offers[i]
                 if(StringUtil.isNotEmpty(offer.authId) && offer.authId.equals(provider_id)){
-                    return true;
+                    return true
                 }
             }
         }
-        return false;
+        return false
     }
 
     fun getAuthIds(playable: Any?): Array<out String>? {

@@ -2,6 +2,7 @@
 <resources>
 
     <dimen name="subscription_horizontal_space">27dp</dimen>
+    <dimen name="subscription_item_button_space">72dp</dimen>
     <dimen name="login_horizontal_space">56dp</dimen>
     <dimen name="action_button_height">45dp</dimen>
     <dimen name="bottom_bar_height">70dp</dimen>
@@ -11,5 +12,9 @@
 
     <dimen name="tool_bar_icon_width">38dp</dimen>
     <dimen name="tool_bar_height">44dp</dimen>
+
+    <dimen name="subscription_badge_width">59dp</dimen>
+    <dimen name="subscription_badge_height">30dp</dimen>
+
 
 </resources>

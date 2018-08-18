@@ -4,6 +4,5 @@ class User(val email: String?,
            val password: String?,
            val facebookId: String?,
            var token: String?,
-           var userOffers: ArrayList<Offer>?) {
+           var userOffers: ArrayList<Offer>?)
 
-}
