@@ -45,6 +45,7 @@
 
     <com.applicaster.util.ui.CustomTextView
         android:id="@+id/restore_description"
+        style="@style/CleengLoginDecriptionText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="36dp"
@@ -63,6 +64,15 @@
         app:layout_constraintEnd_toEndOf="@id/end_guideline"
         app:layout_constraintStart_toStartOf="@id/start_guideline"
         app:layout_constraintTop_toBottomOf="@id/restore_description" />
+
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="@id/end_guideline"
+        app:layout_constraintStart_toStartOf="@id/start_guideline"
+        app:layout_constraintTop_toBottomOf="@+id/user_input" />
 
     <include
         android:id="@+id/restore_bottom_bar_container"
