@@ -167,18 +167,22 @@ object CleengManager {
      * otherwise return false.
      */
     fun isItemLocked(model: Any?): Boolean {
-        if(model is APModel) {
-            if (model.authorization_providers_ids == null || model.authorization_providers_ids.isEmpty())
+
+        // If model is not an APModel, item is not locked by default
+        if (model !is APModel)
+            return false
+
+        if (model.authorization_providers_ids == null || model.authorization_providers_ids.isEmpty())
+            return false
+
+        for (i in 0 until model.authorization_providers_ids.size) {
+            val providerId = model.authorization_providers_ids[i]
+            if (isUserOffersComply(providerId)) {
                 return false
-            for (i in 0 until model.authorization_providers_ids.size) {
-                var provider_id = model.authorization_providers_ids[i]
-                var isComply = isUserOffersComply(provider_id)
-                if(isComply){
-                    return true
-                }
             }
         }
-        return false
+
+        return true
     }
 
     private fun isUserOffersComply(provider_id: String?): Boolean {
