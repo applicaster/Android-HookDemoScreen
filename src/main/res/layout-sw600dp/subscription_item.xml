@@ -4,7 +4,7 @@
     android:layout_width="0dp"
     android:layout_weight="1"
     android:layout_height="wrap_content"
-    android:background="@color/cleeng_login_subscription_component"
+    android:background="#80e3e3e3"
     android:paddingBottom="33dp">
 
     <com.applicaster.util.ui.CustomTextView

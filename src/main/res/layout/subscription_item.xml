@@ -4,7 +4,7 @@
     xmlns:card_view="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/cleeng_login_subscription_component"
+    android:background="#80e3e3e3"
     android:paddingBottom="18dp">
 
     <com.applicaster.util.ui.CustomTextView
