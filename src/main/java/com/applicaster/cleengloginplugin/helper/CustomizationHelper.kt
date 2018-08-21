@@ -74,6 +74,15 @@ class CustomizationHelper{
         }
 
         @JvmStatic
+        fun updateBgColor(activity: Activity, id: Int, key: String) {
+            val view = activity.findViewById(id) as View? ?: return
+            val bgColorId = OSUtil.getColorResourceIdentifier(key)
+            if (bgColorId != 0) {
+                view.setBackgroundColor(bgColorId)
+            }
+        }
+
+        @JvmStatic
         fun updateButtonStyle(activity: Activity, id: Int, key: String) {
             val view = activity.findViewById(id) as Button? ?: return
             val bgDrawableRedId = OSUtil.getStylableResourceIdentifier(key)
