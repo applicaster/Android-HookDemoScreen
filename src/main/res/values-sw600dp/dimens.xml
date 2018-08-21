@@ -13,7 +13,7 @@
     <dimen name="tool_bar_icon_width">48dp</dimen>
     <dimen name="tool_bar_height">46dp</dimen>
 
-    <dimen name="subscription_badge_width">89dp</dimen>
+    <dimen name="subscription_badge_width">85dp</dimen>
     <dimen name="subscription_badge_height">34.4dp</dimen>
 
 </resources>

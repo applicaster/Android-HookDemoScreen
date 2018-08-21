@@ -26,7 +26,7 @@ class IAPManager(private val mContext: Context, var  callback: (WebService.Statu
     }
 
     private var mHelper: IabHelper? = null
-    private var subscriptionHelper: SubscriptionLoaderHelper? = null;
+    private var subscriptionHelper: SubscriptionLoaderHelper? = null
 
     fun init(productId: String, authID: String) {
         mHelper = APBillingUtil.initBillingHelper(mContext, object : APIabSetupFinishedHandler {
@@ -78,19 +78,16 @@ class IAPManager(private val mContext: Context, var  callback: (WebService.Statu
                     if(info != null && StringUtil.isNotEmpty(CleengManager.currentUser?.token)) {
                         CleengManager.subscribe(CleengManager.currentUser?.token!!, authID, PurchaseItem(info.token, info.sku, info.signature, info.purchaseTime, info.purchaseState,
                                 info.packageName, info.originalJson, info.orderId, info.itemType, info.developerPayload), mContext) { status: WebService.Status, response: String? ->
-                            val responseParser = ResponseParser()
-                            responseParser.handleLoginResponse(status, response)
-
-                            if (responseParser.status == WebService.Status.Success) {
+                            if (status == WebService.Status.Success) {
                                 loadSubscriptions(info, authID)
                             } else {
+                                // try again
                                 CleengManager.subscribe(CleengManager.currentUser?.token!!, authID, PurchaseItem(info.token, info.sku, info.signature, info.purchaseTime, info.purchaseState,
                                         info.packageName, info.originalJson, info.orderId, info.itemType, info.developerPayload), mContext) { status: WebService.Status, response: String? ->
-                                    val responseParser = ResponseParser()
-                                    responseParser.handleLoginResponse(status, response)
-                                    if (responseParser.status == WebService.Status.Success) {
+                                    if (status == WebService.Status.Success) {
                                         loadSubscriptions(info, authID)
                                     } else {
+                                        callback(status, response)
                                     }
                                 }
                             }

@@ -1,6 +1,7 @@
 package com.applicaster.cleengloginplugin.remote
 
 import android.util.Log
+import com.applicaster.cleengloginplugin.helper.CleengUtil
 import com.applicaster.cleengloginplugin.models.Offer
 import com.applicaster.cleengloginplugin.models.Subscription
 import com.applicaster.util.StringUtil
@@ -57,17 +58,24 @@ class ResponseParser {
         for (i in 0 until json.length()) {
             var jsonSubscription = json.getJSONObject(i)
 
-            availableSubscriptions.add(Subscription(
+            var subscription = Subscription(
                     jsonSubscription.optString("title"),
                     jsonSubscription.optString("description"),
                     jsonSubscription.optDouble("price"),
                     jsonSubscription.optString("id"),
                     jsonSubscription.optString("androidProductId"),
-                    jsonSubscription.optString("authId")
-            ))
+                    jsonSubscription.optString("authId"))
 
+            availableSubscriptions.add(subscription)
+
+            if (jsonSubscription.optBoolean("accessGranted"))
+                this.parseAccessGranted(subscription)
         }
 
         this.availableSubscriptions = availableSubscriptions
+    }
+
+    private fun parseAccessGranted(subscription : Subscription) {
+        CleengUtil.addSubscriptionToUser(subscription)
     }
 }

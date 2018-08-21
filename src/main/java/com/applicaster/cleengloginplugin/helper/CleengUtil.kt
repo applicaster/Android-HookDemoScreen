@@ -2,6 +2,7 @@ package com.applicaster.cleengloginplugin.helper
 
 import android.util.Base64
 import com.applicaster.cleengloginplugin.models.Offer
+import com.applicaster.cleengloginplugin.models.Subscription
 import com.applicaster.cleengloginplugin.models.User
 import com.applicaster.util.PreferenceUtil
 import com.applicaster.util.StringUtil
@@ -51,13 +52,23 @@ class CleengUtil{
                 fbID = user.getString("facebookId")
             }
 
-            return User(user.getString("email"),null,fbID , user.getString("token"), offers)
+            return User(user.getString("email"), null, fbID, user.getString("token"), offers, null)
         }
 
         @JvmStatic
         fun setUser(user: User?) {
             var userJson = SerializationUtils.toJson(user,User ::class.java)
-            PreferenceUtil.getInstance().setStringPref("USER", userJson);
+            PreferenceUtil.getInstance().setStringPref("USER", userJson)
+        }
+
+        @JvmStatic
+        fun addSubscriptionToUser( subscription: Subscription) {
+            var user = getUser()
+            if (user != null) {
+                val subs = user.owenedSubscriptions ?: ArrayList()
+                subs.add(subscription)
+                user.owenedSubscriptions = subs
+            }
         }
     }
 }

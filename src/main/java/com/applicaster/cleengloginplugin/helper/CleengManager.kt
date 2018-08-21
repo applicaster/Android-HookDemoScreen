@@ -1,15 +1,18 @@
 package com.applicaster.cleengloginplugin.helper
 
 import android.content.Context
+import com.android.volley.Request
 import com.applicaster.atom.model.APAtomEntry
 import com.applicaster.cleengloginplugin.models.PurchaseItem
 import com.applicaster.cleengloginplugin.models.Subscription
 import com.applicaster.cleengloginplugin.models.User
+import com.applicaster.cleengloginplugin.remote.JsonParams
 import com.applicaster.cleengloginplugin.remote.Params
 import com.applicaster.cleengloginplugin.remote.ResponseParser
 import com.applicaster.cleengloginplugin.remote.WebService
 import com.applicaster.model.APModel
 import com.applicaster.util.StringUtil
+import org.json.JSONObject
 
 object CleengManager {
 
@@ -47,7 +50,7 @@ object CleengManager {
             responseParser.handleLoginResponse(status, response)
 
             if (responseParser.status == WebService.Status.Success) {
-                setUser(User(user.email, "", user.facebookId, responseParser.token,responseParser.offers));
+                setUser(User(user.email, "", user.facebookId, responseParser.token, responseParser.offers, null))
             }
 
             callback(status, response)
@@ -75,7 +78,7 @@ object CleengManager {
             responseParser.handleLoginResponse(status, response)
 
             if (responseParser.status == WebService.Status.Success) {
-                setUser(User(user.email, "", user.facebookId, responseParser.token,responseParser.offers))
+                setUser(User(user.email, "", user.facebookId, responseParser.token, responseParser.offers, null))
             }
 
             callback(status, response)
@@ -106,26 +109,26 @@ object CleengManager {
 
     fun subscribe(userToken: String, authID: String, purchaseItem: PurchaseItem, context: Context, subscribeCallback: (WebService.Status, String?) -> Unit) {
 
-        val params = Params()
-        params["authId"] = authID
-        params["token"] = userToken //the empty token
+        val params = JsonParams()
+        params.put("authId" , authID)
+        params.put("token" , userToken) //the empty token
 
-        params["productId"] = purchaseItem.sku
-        params["purchaseToken"] = purchaseItem.token
-        params["packageName"] = purchaseItem.packageName
-        params["orderId"] = purchaseItem.orderId
-        params["purchaseState"] = purchaseItem.purchaseState.toString()
-        params["purchaseTime"] = purchaseItem.purchaseTime.toString()
-        params["developerPayload"] = purchaseItem.developerPayload
+        var receipt = JsonParams()
+        receipt.put("productId", purchaseItem.sku)
+        receipt.put("purchaseToken", purchaseItem.token)
+        receipt.put("packageName", purchaseItem.packageName)
+        receipt.put("orderId", purchaseItem.orderId)
+        receipt.put("purchaseState", purchaseItem.purchaseState.toString())
+        receipt.put("purchaseTime", purchaseItem.purchaseTime.toString())
+        receipt.put("developerPayload", purchaseItem.developerPayload)
 
-        this.webService.performApiRequest(WebService.ApiRequest.SyncPurchases, params, context) { status: WebService.Status, response: String? ->
+        params.put("receipt" , receipt)
+
+        this.webService.performApiJSONRequest(WebService.ApiRequest.SyncPurchases, params, context) { status: WebService.Status, response: String? ->
             if (status == WebService.Status.Success) {
-                //do we need to add the new offer to the user object?
-                //do we need to add user again/ and get it with the new offer that user have?
-
-                //we can load the subscriptions again through CleenManager
-            }else {
                 subscribeCallback(status, response)
+            } else {
+
             }
         }
     }
@@ -152,13 +155,12 @@ object CleengManager {
     }
 
     fun userHasValidToken(): Boolean {
-        var user = getUser()
-        if(user == null) return false
-        return  CleengUtil.isTokenValid(user?.token);
+        var user: User? = getUser() ?: return false
+        return CleengUtil.isTokenValid(user?.token)
     }
 
     fun logout() {
-        setUser(null);
+        setUser(null)
     }
 
     /***

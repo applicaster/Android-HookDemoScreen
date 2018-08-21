@@ -4,14 +4,17 @@ import android.content.Context
 import android.util.Log
 import com.android.volley.Request
 import com.android.volley.Response
+import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import com.applicaster.cleengloginplugin.*
 import com.applicaster.cleengloginplugin.helper.PluginConfigurationHelper
 import com.applicaster.util.StringUtil
+import org.json.JSONObject
 
 
 typealias Params = HashMap<String, String>
+typealias JsonParams = JSONObject
 
 class WebService {
     enum class ApiRequest(val endpoint: String) {
@@ -48,6 +51,28 @@ class WebService {
                     finalParams["publisherId"] = publisherId
                 return finalParams
             }
+
+            override fun getBodyContentType(): String {
+                return "application/x-www-form-urlencoded"
+            }
+        }
+        queue.add(sr)
+    }
+
+    fun performApiJSONRequest(apiRequest: ApiRequest, params: JsonParams?, context: Context, callback: (Status, String?) -> Unit) {
+        val queue = Volley.newRequestQueue(context)
+        val url = this.baseUrl + "/${apiRequest.endpoint}"
+
+        val finalParams = params ?: JsonParams()
+        val publisherId = PluginConfigurationHelper.getConfigurationValue(LOGIN_PUBLISHER_ID)
+        if (publisherId != null && StringUtil.isNotEmpty(publisherId))
+            finalParams.put("publisherId", publisherId)
+
+        val sr = object : JsonObjectRequest(Request.Method.POST, url, params, Response.Listener<JSONObject> { response ->
+            callback(getStatusFromCode(200),response.toString())
+        }, Response.ErrorListener { error ->
+            callback(getStatusFromCode(error.networkResponse.statusCode),String(error.networkResponse.data))
+        }) {
 
             override fun getBodyContentType(): String {
                 return "application/x-www-form-urlencoded"

@@ -1,6 +1,5 @@
 package com.applicaster.cleengloginplugin.views
 
-import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.View
@@ -132,7 +131,7 @@ abstract class BaseActivity : AppCompatActivity() {
                 email.toString(),
                 password.toString(),
                 null,
-                null, null)
+                null, null, null)
     }
 
     protected fun fetchUserData(): User? {
@@ -147,7 +146,7 @@ abstract class BaseActivity : AppCompatActivity() {
                         result.email,
                         null,
                         result.id,
-                        null,null)
+                        null, null, null)
 
             }
 
