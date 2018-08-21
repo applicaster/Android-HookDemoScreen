@@ -34,11 +34,6 @@ class CleengLoginPlugin :  BaseLoginContract(), ApplicationLoaderHookUpI {
 
     override fun login(context: Context, playable: Playable?, additionalParams: MutableMap<Any?, Any?>?) {
 
-        if(!isItemLocked(playable)){
-            //if item not locked continue to play
-            //this should be handled in the player plugin if we in this line then the player should check if
-            //item is locked before call the login method.
-        }
         if(CleengManager.userHasValidToken()) {
                 //if user has valid token open subscription screen (user already logged in)
                 SubscriptionsActivity.launchSubscriptionsActivity(context, playable, true)
@@ -49,19 +44,21 @@ class CleengLoginPlugin :  BaseLoginContract(), ApplicationLoaderHookUpI {
     }
 
     override fun isItemLocked(model: Any?): Boolean {
-        return CleengManager.isItemLocked(model);
+        return CleengManager.isItemLocked(model)
     }
 
     override fun isTokenValid(): Boolean {
-        return CleengManager.userHasValidToken();
+        return CleengManager.userHasValidToken()
     }
 
     override fun logout(context: Context?, additionalParams: MutableMap<Any?, Any?>?) {
-        CleengManager.logout();
+        CleengManager.logout()
     }
 
     override fun login(context: Context?, additionalParams: MutableMap<Any?, Any?>?) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        if (context != null) {
+            openFirstScreen(context, null)
+        }
     }
 
 

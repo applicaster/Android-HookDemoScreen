@@ -1,15 +1,18 @@
 package com.applicaster.cleengloginplugin.helper
 
 import android.content.Context
-import com.applicaster.billing.utils.PurchaseHandler
+import com.android.volley.Request
+import com.applicaster.atom.model.APAtomEntry
 import com.applicaster.cleengloginplugin.models.PurchaseItem
 import com.applicaster.cleengloginplugin.models.Subscription
 import com.applicaster.cleengloginplugin.models.User
+import com.applicaster.cleengloginplugin.remote.JsonParams
 import com.applicaster.cleengloginplugin.remote.Params
 import com.applicaster.cleengloginplugin.remote.ResponseParser
 import com.applicaster.cleengloginplugin.remote.WebService
 import com.applicaster.model.APModel
 import com.applicaster.util.StringUtil
+import org.json.JSONObject
 
 object CleengManager {
 
@@ -47,7 +50,7 @@ object CleengManager {
             responseParser.handleLoginResponse(status, response)
 
             if (responseParser.status == WebService.Status.Success) {
-                setUser(User(user.email, "", user.facebookId, responseParser.token,responseParser.offers));
+                setUser(User(user.email, "", user.facebookId, responseParser.token, responseParser.offers, null))
             }
 
             callback(status, response)
@@ -75,17 +78,22 @@ object CleengManager {
             responseParser.handleLoginResponse(status, response)
 
             if (responseParser.status == WebService.Status.Success) {
-                setUser(User(user.email, "", user.facebookId, responseParser.token,responseParser.offers));
+                setUser(User(user.email, "", user.facebookId, responseParser.token, responseParser.offers, null))
             }
 
             callback(status, response)
         }
     }
 
-    fun fetchAvailableSubscriptions(context: Context, callback: (WebService.Status, String?) -> Unit) {
+    fun fetchAvailableSubscriptions(context: Context, params: Params?, callback: (WebService.Status, String?) -> Unit) {
         this.availableSubscriptions.clear()
 
-        this.webService.performApiRequest(WebService.ApiRequest.Subscriptions, null, context) { status: WebService.Status, response: String? ->
+        var finalParams = params ?: Params()
+        if(currentUser != null && StringUtil.isNotEmpty(currentUser!!.token)) {
+            finalParams["token"] = currentUser!!.token!!
+        }
+
+        this.webService.performApiRequest(WebService.ApiRequest.Subscriptions, finalParams, context) { status: WebService.Status, response: String? ->
             val responseParser = ResponseParser()
             responseParser.handleAvailableSubscriptionsResponse(status, response)
 
@@ -101,26 +109,26 @@ object CleengManager {
 
     fun subscribe(userToken: String, authID: String, purchaseItem: PurchaseItem, context: Context, subscribeCallback: (WebService.Status, String?) -> Unit) {
 
-        val params = Params()
-        params["authId"] = authID
-        params["token"] = userToken //the empty token
+        val params = JsonParams()
+        params.put("authId" , authID)
+        params.put("token" , userToken) //the empty token
 
-        params["productId"] = purchaseItem.sku
-        params["purchaseToken"] = purchaseItem.token
-        params["packageName"] = purchaseItem.packageName
-        params["orderId"] = purchaseItem.orderId
-        params["purchaseState"] = purchaseItem.purchaseState.toString()
-        params["purchaseTime"] = purchaseItem.purchaseTime.toString()
-        params["developerPayload"] = purchaseItem.developerPayload
+        var receipt = JsonParams()
+        receipt.put("productId", purchaseItem.sku)
+        receipt.put("purchaseToken", purchaseItem.token)
+        receipt.put("packageName", purchaseItem.packageName)
+        receipt.put("orderId", purchaseItem.orderId)
+        receipt.put("purchaseState", purchaseItem.purchaseState.toString())
+        receipt.put("purchaseTime", purchaseItem.purchaseTime.toString())
+        receipt.put("developerPayload", purchaseItem.developerPayload)
 
-        this.webService.performApiRequest(WebService.ApiRequest.SyncPurchases, params, context) { status: WebService.Status, response: String? ->
+        params.put("receipt" , receipt)
+
+        this.webService.performApiJSONRequest(WebService.ApiRequest.SyncPurchases, params, context) { status: WebService.Status, response: String? ->
             if (status == WebService.Status.Success) {
-                //do we need to add the new offer to the user object?
-                //do we need to add user again/ and get it with the new offer that user have?
-
-                //we can load the subscriptions again through CleenManager
-            }else {
                 subscribeCallback(status, response)
+            } else {
+
             }
         }
     }
@@ -129,10 +137,10 @@ object CleengManager {
     fun userHasActiveOffer(): Boolean {
         for (offer in currentUser?.userOffers ?: return false) {
             if(offer.valid()) {
-                return true;
+                return true
             }
         }
-        return false;
+        return false
     }
 
     fun setUser(user: User?){
@@ -141,19 +149,18 @@ object CleengManager {
     }
 
     private fun getUser(): User? {
-        if( currentUser != null ) return currentUser;
-        this.currentUser = CleengUtil.getUser();
-        return  currentUser;
+        if( currentUser != null ) return currentUser
+        this.currentUser = CleengUtil.getUser()
+        return currentUser
     }
 
     fun userHasValidToken(): Boolean {
-        var user = getUser()
-        if(user == null) return false
-        return  CleengUtil.isTokenValid(user?.token);
+        var user: User? = getUser() ?: return false
+        return CleengUtil.isTokenValid(user?.token)
     }
 
     fun logout() {
-        setUser(null);
+        setUser(null)
     }
 
     /***
@@ -162,30 +169,45 @@ object CleengManager {
      * otherwise return false.
      */
     fun isItemLocked(model: Any?): Boolean {
-        if(model is APModel) {
-            if(model.authorization_providers_ids.size == null || model.authorization_providers_ids.size == 0) return  true;
-            for (i in 0 until model.authorization_providers_ids.size) {
-                var provider_id = model.authorization_providers_ids[i]
-                var isComply = isUserOffersComply(provider_id);
-                if(isComply){
-                    return true;
+
+        // If model is not an APModel, item is not locked by default
+        if (model !is APModel)
+            return false
+
+        if (model.authorization_providers_ids == null || model.authorization_providers_ids.isEmpty())
+            return false
+
+        for (i in 0 until model.authorization_providers_ids.size) {
+            val providerId = model.authorization_providers_ids[i]
+            if (isUserOffersComply(providerId)) {
+                return false
+            }
+        }
+
+        return true
+    }
+
+    private fun isUserOffersComply(provider_id: String?): Boolean {
+        var offers = getUser()?.userOffers
+        if(offers != null && offers.isNotEmpty()){
+            for (i in 0 until offers.size) {
+                var offer = offers[i]
+                if(StringUtil.isNotEmpty(offer.authId) && offer.authId.equals(provider_id)){
+                    return true
                 }
             }
         }
         return false
     }
 
-    private fun isUserOffersComply(provider_id: String?): Boolean {
-        var offers = getUser()?.userOffers;
-        if(offers != null ){
-            for (i in 0 until offers.size) {
-                var offer = offers[i];
-                if(StringUtil.isNotEmpty(offer.authId) && offer.authId.equals(provider_id)){
-                    return true;
-                }
-            }
+    fun getAuthIds(playable: Any?): Array<out String>? {
+        if (playable is APModel) {
+            return playable.authorization_providers_ids
+        } else if (playable is APAtomEntry) {
+            return playable.getExtension("authorization_providers_ids", Array<String>::class.java)
         }
-        return false;
+
+        return null
     }
 
 

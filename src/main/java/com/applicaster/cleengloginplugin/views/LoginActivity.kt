@@ -28,16 +28,20 @@ class LoginActivity : BaseActivity() {
 
     override fun customize() {
         super.customize()
-        CustomizationHelper.updateTextView(this, R.id.enter_details, LOGIN_DETAILS)
-        CustomizationHelper.updateTextView(this, R.id.sign_up_action_text, SIGN_UP_LABEL_TEXT)
-        CustomizationHelper.updateTextView(this, R.id.sign_up_text, NO_ACCOUNT_HINT)
+        CustomizationHelper.updateImageView(this, R.id.app_logo, "cleeng_login_logo")
+        CustomizationHelper.updateTextView(this, R.id.enter_details, LOGIN_DETAILS, "CleengLoginDecriptionText")
+        CustomizationHelper.updateTextView(this, R.id.sign_up_action_text, SIGN_UP_LABEL_TEXT, "CleengLoginActionText")
+        CustomizationHelper.updateTextView(this, R.id.sign_up_text, NO_ACCOUNT_HINT, "CleengLoginActionDescriptionText")
 
-        CustomizationHelper.updateEditTextView(this, R.id.input_email, EMAIL_PLACEHOLDER, true);
-        CustomizationHelper.updateEditTextView(this, R.id.input_password, PASSWORD_PLACEHOLDER, true);
-        CustomizationHelper.updateTextView(this, R.id.forgot_password, RESET_PASSWORD_ACTION_TEXT)
+
+        CustomizationHelper.updateEditTextView(this, R.id.input_email, EMAIL_PLACEHOLDER, true)
+        CustomizationHelper.updateEditTextView(this, R.id.input_password, PASSWORD_PLACEHOLDER, true)
+        CustomizationHelper.updateTextView(this, R.id.forgot_password, RESET_PASSWORD_ACTION_TEXT, "CleengLoginActionDescriptionText")
         CustomizationHelper.updateButtonViewText(this, R.id.action_button, SIGN_IN_BUTTON)
 
-        updateViews();
+
+
+        updateViews()
 
         action_button.setOnClickListener {
             val user = this.getUserFromInput() ?: return@setOnClickListener
@@ -111,7 +115,7 @@ class LoginActivity : BaseActivity() {
 
     private fun loginSuccessful() {
         if(CleengManager.userHasActiveOffer() && isPlayableSupported()) {
-                LoginManager.notifyEvent(this,LoginManager.RequestType.LOGIN, true);
+                LoginManager.notifyEvent(this,LoginManager.RequestType.LOGIN, true)
         }else{
             SubscriptionsActivity.launchSubscriptionsActivity(this, playable)
         }

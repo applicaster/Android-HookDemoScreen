@@ -1,6 +1,8 @@
 package com.applicaster.cleengloginplugin.helper
 
 import android.app.Activity
+import android.content.Context
+import android.os.Build
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
@@ -21,37 +23,45 @@ class CustomizationHelper{
         }
 
         @JvmStatic
-        fun updateTextView(activity : Activity, id: Int , key : String ) {
-            val textView = activity.findViewById(id) as TextView? ?: return ;
-            var textValue = PluginConfigurationHelper.getConfigurationValue(key);
-            textValue = if (StringUtil.isNotEmpty(textValue))  textValue else key
-            if(textView != null ){
-                textView.setText(textValue );
+        fun updateImageView(activity : Activity, id: Int , key : String) {
+            val imageView = activity.findViewById(id) as ImageView? ?: return
+            val iconDrawableRedId = OSUtil.getDrawableResourceIdentifier(key)
+            if(iconDrawableRedId != 0){
+                imageView.setImageResource(iconDrawableRedId)
             }
+        }
+
+        @JvmStatic
+        fun updateTextView(activity : Activity, id: Int , key : String , style: String?) {
+            val textView = activity.findViewById(id) as TextView? ?: return
+            var textValue = PluginConfigurationHelper.getConfigurationValue(key)
+            textValue = if (StringUtil.isNotEmpty(textValue))  textValue else key
+            textView.text = textValue
+
+            if(style != null)
+                updateTextStyle(activity, textView, style)
+
         }
 
         @JvmStatic
         fun updateEditTextView(activity : Activity, id: Int , key : String , isHint: Boolean) {
-            val editText = activity.findViewById(id) as EditText? ?: return ;
-            var textValue = PluginConfigurationHelper.getConfigurationValue(key);
+            val editText = activity.findViewById(id) as EditText? ?: return
+            var textValue = PluginConfigurationHelper.getConfigurationValue(key)
             textValue = if (StringUtil.isNotEmpty(textValue))  textValue else key
-            if(editText != null ){
-                if(!isHint){
-                    editText.setText(textValue)
-                } else{
-                    editText.setHint(textValue)
-                };
+            if (!isHint) {
+                editText.setText(textValue)
+            } else{
+                editText.hint = textValue
             }
+
         }
 
         @JvmStatic
         fun updateButtonViewText(activity: Activity, id: Int, key: String) {
-            val button = activity.findViewById(id) as Button? ?: return ;
-            var textValue = PluginConfigurationHelper.getConfigurationValue(key);
+            val button = activity.findViewById(id) as Button? ?: return
+            var textValue = PluginConfigurationHelper.getConfigurationValue(key)
             textValue = if (StringUtil.isNotEmpty(textValue))  textValue else key
-            if(button != null ){
-                button.setText(textValue)
-            }
+            button.text = textValue
         }
 
         @JvmStatic
@@ -69,6 +79,18 @@ class CustomizationHelper{
             val bgDrawableRedId = OSUtil.getStylableResourceIdentifier(key)
             if (bgDrawableRedId != 0) {
                 view.setTextAppearance(activity,bgDrawableRedId)
+            }
+        }
+
+        @JvmStatic
+        fun updateTextStyle(context: Context, view: TextView, key: String) {
+            val styleRedId = OSUtil.getStyleResourceIdentifier(key)
+            if (styleRedId != 0) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    view.setTextAppearance(styleRedId)
+                } else {
+                    view.setTextAppearance(context, styleRedId)
+                }
             }
         }
 

@@ -2,6 +2,7 @@ package com.applicaster.cleengloginplugin.helper
 
 import android.util.Base64
 import com.applicaster.cleengloginplugin.models.Offer
+import com.applicaster.cleengloginplugin.models.Subscription
 import com.applicaster.cleengloginplugin.models.User
 import com.applicaster.util.PreferenceUtil
 import com.applicaster.util.StringUtil
@@ -13,8 +14,8 @@ import java.nio.charset.Charset
 class CleengUtil{
     companion object {
         @JvmStatic
-        fun isTokenValid(jwtToke: String?): Boolean {
-            var tokenEncoded = (jwtToke?.split(".") as List<String>)[1]
+        fun isTokenValid(jwtToken: String?): Boolean {
+            var tokenEncoded = (jwtToken?.split(".") as List<String>)[1]
             val dataDec = Base64.decode(tokenEncoded, Base64.DEFAULT)
             try {
                 var decodedString = String(dataDec, Charset.forName("UTF-8"))
@@ -35,8 +36,9 @@ class CleengUtil{
 
         @JvmStatic
         fun getUser(): User? {
-            var userJson = PreferenceUtil.getInstance().getStringPref("USER", "");
-            if ("null".equals(userJson) || StringUtil.isEmpty(userJson)) return null;
+            var userJson = PreferenceUtil.getInstance().getStringPref("USER", "")
+            if ("null".equals(userJson) || StringUtil.isEmpty(userJson))
+                return null
             var user = JSONObject(userJson)
             var userOfferJson = user.getJSONArray("userOffers")
             var offers: ArrayList<Offer> = ArrayList()            //save the 'empty' token.
@@ -47,16 +49,26 @@ class CleengUtil{
 
             var fbID = "";
             if(user.has("facebookId")){
-                fbID = user.getString("facebookId");
+                fbID = user.getString("facebookId")
             }
 
-            return User(user.getString("email"),null,fbID , user.getString("token"), offers)
+            return User(user.getString("email"), null, fbID, user.getString("token"), offers, null)
         }
 
         @JvmStatic
         fun setUser(user: User?) {
             var userJson = SerializationUtils.toJson(user,User ::class.java)
-            PreferenceUtil.getInstance().setStringPref("USER", userJson);
+            PreferenceUtil.getInstance().setStringPref("USER", userJson)
+        }
+
+        @JvmStatic
+        fun addSubscriptionToUser( subscription: Subscription) {
+            var user = getUser()
+            if (user != null) {
+                val subs = user.owenedSubscriptions ?: ArrayList()
+                subs.add(subscription)
+                user.owenedSubscriptions = subs
+            }
         }
     }
 }

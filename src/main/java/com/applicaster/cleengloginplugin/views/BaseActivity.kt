@@ -1,6 +1,5 @@
 package com.applicaster.cleengloginplugin.views
 
-import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.View
@@ -12,7 +11,6 @@ import com.applicaster.cleengloginplugin.helper.CleengManager
 import com.applicaster.cleengloginplugin.helper.CustomizationHelper
 import com.applicaster.cleengloginplugin.models.User
 import com.applicaster.cleengloginplugin.remote.WebService
-import com.applicaster.model.APModel
 import com.applicaster.model.APUser
 import com.applicaster.plugin_manager.login.LoginManager
 import com.applicaster.plugin_manager.playersmanager.Playable
@@ -40,6 +38,7 @@ abstract class BaseActivity : AppCompatActivity() {
     }
 
     open fun customize() {
+        CustomizationHelper.updateBgResource(this,R.id.background_image, "cleeng_login_background_image")
         this.customizeNavigationBar()
     }
 
@@ -49,9 +48,17 @@ abstract class BaseActivity : AppCompatActivity() {
 
         val backButton = navigationBarContainer.findViewById<ImageView>(R.id.toolbar_back_button)
         if (backButton != null) {
-            CustomizationHelper.updateImageView(backButton,"cleeng_login_back_button" );
+            CustomizationHelper.updateImageView(backButton,"cleeng_login_back_button" )
             backButton.setOnClickListener {
-                closeLoginPluginFromHook();
+                closeLoginPluginFromHook()
+                this.finish()
+            }
+        }
+        val closeButton = navigationBarContainer.findViewById<ImageView>(R.id.toolbar_close_button)
+        if (closeButton != null) {
+            CustomizationHelper.updateImageView(closeButton,"cleeng_login_close_button" )
+            closeButton.setOnClickListener {
+                closeLoginPluginFromHook()
                 this.finish()
             }
         }
@@ -124,7 +131,7 @@ abstract class BaseActivity : AppCompatActivity() {
                 email.toString(),
                 password.toString(),
                 null,
-                null, null)
+                null, null, null)
     }
 
     protected fun fetchUserData(): User? {
@@ -139,7 +146,7 @@ abstract class BaseActivity : AppCompatActivity() {
                         result.email,
                         null,
                         result.id,
-                        null,null)
+                        null, null, null)
 
             }
 

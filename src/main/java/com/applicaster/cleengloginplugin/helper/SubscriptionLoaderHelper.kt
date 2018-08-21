@@ -5,18 +5,25 @@ import android.os.Handler
 import com.applicaster.cleengloginplugin.models.PurchaseItem
 import com.applicaster.cleengloginplugin.remote.Params
 import com.applicaster.cleengloginplugin.remote.WebService
+import com.applicaster.util.StringUtil
 
-class SubscriptionLoaderHelper constructor(var context: Context, var userToken: String, var authID: String, var purchaseItem: PurchaseItem, var maxTimeForRequestInSecond: Int, var interval: Int,var  callback: (WebService.Status, String?) -> Unit ) {
-    private val webService = WebService()
+class SubscriptionLoaderHelper constructor(var context: Context, var userToken: String, var authID: String?, var purchaseItem: PurchaseItem, var maxTimeForRequestInSecond: Int, var interval: Int,var  callback: (WebService.Status, String?) -> Unit ) {
     var handler = Handler()
 
 
-    fun load(intervalInSeccond: Int = 0) {
+    fun load(intervalInSecond: Int = 0) {
         handler.postDelayed({
-            CleengManager.subscribe(userToken, authID, purchaseItem, context) { status: WebService.Status, response: String? ->
+            var params = Params()
+            params["token"] = userToken
+            if (authID != null && StringUtil.isNotEmpty(authID)) {
+                params["byAuthId"] = "1"
+                params["authIds"] = authID!!
+            }
+
+            CleengManager.fetchAvailableSubscriptions(context, params) { status: WebService.Status, response: String? ->
                 if (status != WebService.Status.Success) {
                     if (maxTimeForRequestInSecond > 0) {
-                        maxTimeForRequestInSecond -= intervalInSeccond;
+                        maxTimeForRequestInSecond -= intervalInSecond
                         load(interval);
                     } else {
                         callback(status, response)
@@ -24,7 +31,7 @@ class SubscriptionLoaderHelper constructor(var context: Context, var userToken: 
                 }
 
             }
-        }, intervalInSeccond.toLong())
+        }, intervalInSecond.toLong())
     }
 
 }
