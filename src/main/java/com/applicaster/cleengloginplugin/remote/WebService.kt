@@ -21,7 +21,9 @@ class WebService {
         Login("login"),
         Register("register"),
         Subscriptions("subscriptions"),
-        SyncPurchases("subscription")
+        SyncPurchases("subscription"),
+        ResetPassword("passwordReset"),
+        ExtendToken("extendToken")
     }
 
     enum class Status {

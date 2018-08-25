@@ -65,9 +65,9 @@ class CleengUtil{
         fun addSubscriptionToUser( subscription: Subscription) {
             var user = getUser()
             if (user != null) {
-                val subs = user.owenedSubscriptions ?: ArrayList()
+                val subs = user.ownedSubscriptions ?: ArrayList()
                 subs.add(subscription)
-                user.owenedSubscriptions = subs
+                user.ownedSubscriptions = subs
             }
         }
     }

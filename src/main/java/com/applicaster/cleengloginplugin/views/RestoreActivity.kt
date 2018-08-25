@@ -29,15 +29,16 @@ class RestoreActivity : BaseActivity() {
         super.customize()
 
         CustomizationHelper.updateTextView(this, R.id.restore_title, RESTORE_TITLE,"CleengLoginTitle")
-        CustomizationHelper.updateTextView(this, R.id.restore_description, RESTORE_DESCRIPTION,"CleengLoginDecriptionText")
+        CustomizationHelper.updateTextView(this, R.id.restore_description, RESTORE_DESCRIPTION,"CleengLoginDescriptionText")
         CustomizationHelper.updateTextView(this, R.id.bottom_bar_action_text, RESTORE_HELP_ACTION,"CleengLoginActionText")
         CustomizationHelper.updateTextView(this, R.id.bottom_bar_title, RESTORE_HELP_TEXT,"CleengLoginActionDescriptionText")
 
-        CustomizationHelper.updateEditTextView(this, R.id.input_email, EMAIL_PLACEHOLDER, true);
-        CustomizationHelper.updateEditTextView(this, R.id.input_password, PASSWORD_PLACEHOLDER, true);
+        CustomizationHelper.updateEditTextView(this, R.id.input_email, EMAIL_PLACEHOLDER, true)
+        CustomizationHelper.updateEditTextView(this, R.id.input_password, PASSWORD_PLACEHOLDER, true)
         CustomizationHelper.updateTextView(this, R.id.forgot_password, RESET_PASSWORD_ACTION_TEXT, "CleengLoginActionDescriptionText")
-        CustomizationHelper.updateButtonViewText(this, R.id.action_button, RESTORE_BUTTON)
-        CustomizationHelper.updateButtonStyle(this, R.id.action_button, "CleengLoginRestoreButtonText")
+        CustomizationHelper.updateButtonViewText(this, R.id.action_button, RESTORE_BUTTON,"CleengLoginRestoreButtonText")
+        CustomizationHelper.updateBgResource(this,R.id.action_button,"cleeng_login_restore_button")
+
 
         action_button.setOnClickListener {
             val user = this.getUserFromInput() ?: return@setOnClickListener

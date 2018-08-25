@@ -54,14 +54,18 @@ class CustomizationHelper{
                 editText.hint = textValue
             }
 
+            updateTextStyle(activity, editText, "CleengLoginDefaultText")
         }
 
         @JvmStatic
-        fun updateButtonViewText(activity: Activity, id: Int, key: String) {
+        fun updateButtonViewText(activity: Activity, id: Int, key: String, style: String?) {
             val button = activity.findViewById(id) as Button? ?: return
             var textValue = PluginConfigurationHelper.getConfigurationValue(key)
             textValue = if (StringUtil.isNotEmpty(textValue))  textValue else key
             button.text = textValue
+
+            if (style != null)
+                updateTextStyle(activity, button, style)
         }
 
         @JvmStatic
@@ -87,7 +91,7 @@ class CustomizationHelper{
             val view = activity.findViewById(id) as Button? ?: return
             val bgDrawableRedId = OSUtil.getStylableResourceIdentifier(key)
             if (bgDrawableRedId != 0) {
-                view.setTextAppearance(activity,bgDrawableRedId)
+                view.setTextAppearance(activity, bgDrawableRedId)
             }
         }
 

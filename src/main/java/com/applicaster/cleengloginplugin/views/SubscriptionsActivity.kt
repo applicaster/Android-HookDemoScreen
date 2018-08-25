@@ -5,6 +5,8 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.ScrollView
 import com.applicaster.cleengloginplugin.*
 import com.applicaster.cleengloginplugin.R
 import com.applicaster.cleengloginplugin.helper.CleengManager
@@ -17,17 +19,14 @@ import com.applicaster.model.APModel
 import com.applicaster.plugin_manager.login.LoginManager
 import com.applicaster.plugin_manager.playersmanager.Playable
 import com.applicaster.util.OSUtil
-import com.applicaster.util.StringUtil
 import kotlinx.android.synthetic.main.bottom_bar.*
 import kotlinx.android.synthetic.main.subscription_activity.*
 import kotlinx.android.synthetic.main.subscription_item.view.*
-import org.json.JSONArray
 
 class SubscriptionsActivity: BaseActivity() {
 
     private var fromStartUp: Boolean = false
     private var mPlayable: Playable? = null
-
 
     private val iapManager = IAPManager(this) { status: WebService.Status, response: String? ->
         if (status == WebService.Status.Success) {
@@ -76,13 +75,14 @@ class SubscriptionsActivity: BaseActivity() {
         CustomizationHelper.updateTextView(this, R.id.title, SUBSCRIPTION_TITLE,"CleengLoginTitle")
         CustomizationHelper.updateTextView(this, R.id.sign_up_action_text, SIGN_IN_LABEL_TEXT,"CleengLoginActionText")
         CustomizationHelper.updateTextView(this, R.id.sign_up_text, ALREADY_HAVE_ACCOUNT_HINT, "CleengLoginActionDescriptionText")
-        CustomizationHelper.updateTextView(this, R.id.bottom_bar_title, LOGIN_LEGAL,"CleengLoginLegalText")
+        CustomizationHelper.updateTextView(this, R.id.legal_bottom_bar_text, LOGIN_LEGAL,"CleengLoginLegalText")
+
+        //CustomizationHelper.updateBgColor(this, R.id.legal_bottom_bar, "cleeng_login_bottom_legal_background_color")
 
         updateViews()
     }
 
     fun updateViews() {
-        bottom_bar_action_text.visibility = View.GONE
         fromStartUp = intent.getBooleanExtra(SUBSCIPTION_FROM_START_UP, false)
 
         if(!fromStartUp){
@@ -98,13 +98,24 @@ class SubscriptionsActivity: BaseActivity() {
 
     private fun getSubscriptionView(subscription: Subscription, container: ViewGroup): View {
         val subscriptionView = this.layoutInflater.inflate(R.layout.subscription_item, container, false)
-        subscriptionView.item_title.text = subscription.title
-        CustomizationHelper.updateTextStyle(this, subscriptionView.item_title, "CleengLoginSubscriptionTitle")
-        subscriptionView.item_description.text = subscription.description
-        CustomizationHelper.updateTextStyle(this, subscriptionView.item_description, "CleengLoginSubscriptionTitle")
-        subscriptionView.item_price.text = "SUBSCRIBE FOR $" +subscription.price.toString()
-        subscriptionView.purchaseButton.radius = OSUtil.convertDPToPixels(20).toFloat()
-        subscriptionView.purchaseButton.setOnClickListener {
+
+        var subsViewBackground = OSUtil.getDrawableResourceIdentifier("cleeng_login_subscription_component")
+        if (subsViewBackground != 0) {
+            subscriptionView.text_container.setBackgroundResource(subsViewBackground)
+        }
+        var badgeBackground = OSUtil.getDrawableResourceIdentifier("cleeng_login_promotion_icon")
+        if (badgeBackground != 0)
+            subscriptionView.badge_text_view.setBackgroundResource(badgeBackground)
+
+        subscriptionView.title_text_view.text = subscription.title
+        CustomizationHelper.updateTextStyle(this, subscriptionView.title_text_view, "CleengLoginSubscriptionTitle")
+        subscriptionView.description_text_view.text = subscription.description
+        CustomizationHelper.updateTextStyle(this, subscriptionView.description_text_view, "CleengLoginSubscriptionDetailsText")
+        subscriptionView.purchase_button.text = "SUBSCRIBE FOR $" + subscription.price.toString()
+        var purchaseBtnBackground = OSUtil.getDrawableResourceIdentifier("cleeng_login_subscribe_button")
+        if (purchaseBtnBackground != 0)
+            subscriptionView.purchase_button.setBackgroundResource(purchaseBtnBackground)
+        subscriptionView.purchase_button.setOnClickListener {
 
             iapManager.init(subscription.androidProductId, subscription.authID)
         }

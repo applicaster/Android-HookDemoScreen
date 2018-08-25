@@ -5,7 +5,7 @@ class User(val email: String?,
            val facebookId: String?,
            var token: String?,
            var userOffers: ArrayList<Offer>?,
-           var owenedSubscriptions: ArrayList<Subscription>?)
+           var ownedSubscriptions: ArrayList<Subscription>?)
 
 var owenedSubscriptions: ArrayList<Subscription>? = null
 

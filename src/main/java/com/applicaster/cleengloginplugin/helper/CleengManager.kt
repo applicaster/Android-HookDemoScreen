@@ -89,8 +89,8 @@ object CleengManager {
         this.availableSubscriptions.clear()
 
         var finalParams = params ?: Params()
-        if(currentUser != null && StringUtil.isNotEmpty(currentUser!!.token)) {
-            finalParams["token"] = currentUser!!.token!!
+        if(currentUser != null && StringUtil.isNotEmpty(currentUser?.token)) {
+            finalParams["token"] = currentUser?.token!!
         }
 
         this.webService.performApiRequest(WebService.ApiRequest.Subscriptions, finalParams, context) { status: WebService.Status, response: String? ->
@@ -108,7 +108,6 @@ object CleengManager {
     }
 
     fun subscribe(userToken: String, authID: String, purchaseItem: PurchaseItem, context: Context, subscribeCallback: (WebService.Status, String?) -> Unit) {
-
         val params = JsonParams()
         params.put("authId" , authID)
         params.put("token" , userToken) //the empty token
@@ -127,6 +126,33 @@ object CleengManager {
         this.webService.performApiJSONRequest(WebService.ApiRequest.SyncPurchases, params, context) { status: WebService.Status, response: String? ->
             if (status == WebService.Status.Success) {
                 subscribeCallback(status, response)
+            } else {
+
+            }
+        }
+    }
+
+    fun resetPassword(email: String, context: Context, callback: (WebService.Status, String?) -> Unit) {
+        val params = Params()
+        params["email"] = email
+
+        this.webService.performApiRequest(WebService.ApiRequest.ResetPassword, params, context) { status: WebService.Status, response: String? ->
+            if (status == WebService.Status.Success) {
+                callback(status, response)
+            } else {
+
+            }
+        }
+    }
+
+    fun extendToken(user: User, context: Context, callback: (WebService.Status, String?) -> Unit) {
+        val params = Params()
+        if(StringUtil.isNotEmpty(currentUser?.token))
+            params["token"] = user.token!!
+
+        this.webService.performApiRequest(WebService.ApiRequest.ExtendToken, params, context) { status: WebService.Status, response: String? ->
+            if (status == WebService.Status.Success) {
+                callback(status, response)
             } else {
 
             }

@@ -54,28 +54,32 @@
         app:layout_constraintStart_toStartOf="@id/start_guideline"
         app:layout_constraintTop_toBottomOf="@id/title" />
 
-    <ScrollView
+    <HorizontalScrollView
         android:id="@+id/subscriptionsScrollView"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:scrollbars="none"
+        android:layout_centerVertical="true"
+        android:fillViewport="true"
         app:layout_constraintEnd_toEndOf="@id/end_guideline"
         app:layout_constraintStart_toStartOf="@id/start_guideline"
         app:layout_constraintBottom_toTopOf="@+id/bottom_bar"
-        app:layout_constraintTop_toBottomOf="@+id/subscription_sign_up_hint">
+        app:layout_constraintTop_toBottomOf="@+id/subscription_sign_up_hint"
+        android:measureAllChildren="false"
+        android:scrollbars="none" >
 
         <LinearLayout
             android:id="@+id/subscriptionsContainer"
-            android:layout_width="match_parent"
-            android:layout_gravity="center"
-            android:divider="@drawable/blank_divider_horizontal"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:showDividers="middle">
+            android:divider="@drawable/blank_divider_horizontal"
+            android:dividerPadding="20dp"
+            android:showDividers="middle"
+            android:gravity="center_vertical"
+            android:orientation="horizontal" >
 
         </LinearLayout>
 
-    </ScrollView>
+    </HorizontalScrollView>
 
 
     <include

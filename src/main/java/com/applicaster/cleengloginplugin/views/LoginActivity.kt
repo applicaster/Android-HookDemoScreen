@@ -29,7 +29,7 @@ class LoginActivity : BaseActivity() {
     override fun customize() {
         super.customize()
         CustomizationHelper.updateImageView(this, R.id.app_logo, "cleeng_login_logo")
-        CustomizationHelper.updateTextView(this, R.id.enter_details, LOGIN_DETAILS, "CleengLoginDecriptionText")
+        CustomizationHelper.updateTextView(this, R.id.enter_details, LOGIN_DETAILS, "CleengLoginDescriptionText")
         CustomizationHelper.updateTextView(this, R.id.sign_up_action_text, SIGN_UP_LABEL_TEXT, "CleengLoginActionText")
         CustomizationHelper.updateTextView(this, R.id.sign_up_text, NO_ACCOUNT_HINT, "CleengLoginActionDescriptionText")
 
@@ -37,7 +37,8 @@ class LoginActivity : BaseActivity() {
         CustomizationHelper.updateEditTextView(this, R.id.input_email, EMAIL_PLACEHOLDER, true)
         CustomizationHelper.updateEditTextView(this, R.id.input_password, PASSWORD_PLACEHOLDER, true)
         CustomizationHelper.updateTextView(this, R.id.forgot_password, RESET_PASSWORD_ACTION_TEXT, "CleengLoginActionDescriptionText")
-        CustomizationHelper.updateButtonViewText(this, R.id.action_button, SIGN_IN_BUTTON)
+        CustomizationHelper.updateButtonViewText(this, R.id.action_button, SIGN_IN_BUTTON, "CleengLoginSignInButtonText")
+        CustomizationHelper.updateBgResource(this,R.id.action_button,"cleeng_login_sign_in_button")
 
 
 
@@ -78,9 +79,12 @@ class LoginActivity : BaseActivity() {
                 facebook_button.visibility = GONE
                 google_button.visibility = GONE
             } else {
-                CustomizationHelper.updateBgResource(this,R.id.facebook_button,"cleeng_login_facebook_button")
-                CustomizationHelper.updateButtonViewText(this, R.id.fb_btn, "cleeng_login_facebook_button")
                 CustomizationHelper.updateBgResource(this,R.id.google_button,"cleeng_login_facebook_button")
+                val googleBtn = google_button.findViewById(R.id.google_btn) as Button
+                CustomizationHelper.updateTextStyle(this, googleBtn, "FacebookLoginFacebookButtonText")
+
+                CustomizationHelper.updateBgResource(this,R.id.facebook_button,"cleeng_login_facebook_button")
+                CustomizationHelper.updateButtonViewText(this, R.id.fb_btn, "cleeng_login_facebook_button", "FacebookLoginFacebookButtonText")
                 facebook_button.findViewById<Button>(R.id.fb_btn).setOnClickListener {
                     FacebookUtil.updateTokenIfNeeded(this, APPermissionsType.Custom, object : FBAuthoriziationListener {
 
