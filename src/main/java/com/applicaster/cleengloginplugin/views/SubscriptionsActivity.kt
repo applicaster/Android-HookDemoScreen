@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ScrollView
 import com.applicaster.cleengloginplugin.*
-import com.applicaster.cleengloginplugin.R
 import com.applicaster.cleengloginplugin.helper.CleengManager
 import com.applicaster.cleengloginplugin.helper.CustomizationHelper
 import com.applicaster.cleengloginplugin.helper.IAPManager
@@ -43,14 +42,12 @@ class SubscriptionsActivity: BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        if(intent != null) {
-            mPlayable = intent.getSerializableExtra(PLAYABLE) as Playable?
-        }
+        mPlayable = intent.getSerializableExtra(PLAYABLE) as Playable?
 
         val params = Params()
         if (mPlayable != null) {
-            var authIds = CleengManager.getAuthIds(mPlayable)
-            if(mPlayable != null && authIds != null && !authIds.isEmpty()) {
+            val authIds = CleengManager.getAuthIds(mPlayable)
+            if(authIds != null && !authIds.isEmpty()) {
                 params["offers"] = authIds.joinToString()
                 params["byAuthId"] = "1"
             }
@@ -83,7 +80,7 @@ class SubscriptionsActivity: BaseActivity() {
     }
 
     fun updateViews() {
-        fromStartUp = intent.getBooleanExtra(SUBSCIPTION_FROM_START_UP, false)
+        fromStartUp = intent.getBooleanExtra(SUBSCRIPTION_FROM_START_UP, false)
 
         if(!fromStartUp){
             subscription_sign_up_hint.visibility = View.GONE
@@ -122,7 +119,6 @@ class SubscriptionsActivity: BaseActivity() {
         }
 
         return subscriptionView
-
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -132,15 +128,15 @@ class SubscriptionsActivity: BaseActivity() {
 
     companion object {
 
-        val SUBSCIPTION_FROM_START_UP ="from_Start_up"
+        private const val SUBSCRIPTION_FROM_START_UP = "from_Start_up"
 
         fun launchSubscriptionsActivity(context: Context, playable: Playable?, fromStartUp: Boolean = false) {
-            val intent = Intent(context,SubscriptionsActivity::class.java)
-            if (playable != null && playable is APModel) {
+            val intent = Intent(context, SubscriptionsActivity::class.java)
+            if (playable is APModel) {
                 intent.putExtra("authIds", playable.authorization_providers_ids)
                 intent.putExtra(PLAYABLE, playable)
             }
-            intent.putExtra(SUBSCIPTION_FROM_START_UP,fromStartUp);
+            intent.putExtra(SUBSCRIPTION_FROM_START_UP, fromStartUp);
             context.startActivity(intent)
         }
     }

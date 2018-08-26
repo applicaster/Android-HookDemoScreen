@@ -17,6 +17,7 @@ typealias Params = HashMap<String, String>
 typealias JsonParams = JSONObject
 
 class WebService {
+
     enum class ApiRequest(val endpoint: String) {
         Login("login"),
         Register("register"),
@@ -35,7 +36,7 @@ class WebService {
         InternalError
     }
 
-    val baseUrl = "https://applicaster-cleeng-sso.herokuapp.com"
+    private val baseUrl = "https://applicaster-cleeng-sso.herokuapp.com"
 
     fun performApiRequest(apiRequest: ApiRequest, params: Params?, context: Context, callback: (Status, String?) -> Unit) {
         val queue = Volley.newRequestQueue(context)
@@ -70,32 +71,23 @@ class WebService {
         if (publisherId != null && StringUtil.isNotEmpty(publisherId))
             finalParams.put("publisherId", publisherId)
 
-        val sr = object : JsonObjectRequest(Request.Method.POST, url, params, Response.Listener<JSONObject> { response ->
-            callback(getStatusFromCode(200),response.toString())
-        }, Response.ErrorListener { error ->
-            callback(getStatusFromCode(error.networkResponse.statusCode),String(error.networkResponse.data))
-        }) {
+        val sr = JsonObjectRequest(Request.Method.POST, url, params, Response.Listener<JSONObject> {
+            callback(getStatusFromCode(200), it.toString())
+        }, Response.ErrorListener {
+            callback(getStatusFromCode(it.networkResponse.statusCode), String(it.networkResponse.data))
+        })
 
-            override fun getBodyContentType(): String {
-                return "application/x-www-form-urlencoded"
-            }
-        }
         queue.add(sr)
     }
 
-
     private fun getStatusFromCode(code: Int): WebService.Status {
-        var result = WebService.Status.Unknown
 
-        if (code == 200) {
-            result = WebService.Status.Success
-        } else if (code == 400) {
-            result = WebService.Status.InvalidParameters
-        } else if (code == 401) {
-            result = WebService.Status.WrongCredentials
-        } else if (code == 500) {
-            result = WebService.Status.InternalError
+        return when (code) {
+            200 -> WebService.Status.Success
+            400 -> WebService.Status.InvalidParameters
+            401 -> WebService.Status.WrongCredentials
+            500 -> WebService.Status.InternalError
+            else -> WebService.Status.Unknown
         }
-        return result
     }
 }

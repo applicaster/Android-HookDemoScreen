@@ -26,6 +26,7 @@ object CleengManager {
 
     fun register(user: User, context: Context, callback: (WebService.Status, String?) -> Unit) {
         if (user.email == null) {
+            //TODO handle in a better way!
             return
         }
 
@@ -112,7 +113,7 @@ object CleengManager {
         params.put("authId" , authID)
         params.put("token" , userToken) //the empty token
 
-        var receipt = JsonParams()
+        val receipt = JsonParams()
         receipt.put("productId", purchaseItem.sku)
         receipt.put("purchaseToken", purchaseItem.token)
         receipt.put("packageName", purchaseItem.packageName)
@@ -126,8 +127,6 @@ object CleengManager {
         this.webService.performApiJSONRequest(WebService.ApiRequest.SyncPurchases, params, context) { status: WebService.Status, response: String? ->
             if (status == WebService.Status.Success) {
                 subscribeCallback(status, response)
-            } else {
-
             }
         }
     }
@@ -158,7 +157,6 @@ object CleengManager {
             }
         }
     }
-
 
     fun userHasActiveOffer(): Boolean {
         for (offer in currentUser?.userOffers ?: return false) {
@@ -235,6 +233,4 @@ object CleengManager {
 
         return null
     }
-
-
 }

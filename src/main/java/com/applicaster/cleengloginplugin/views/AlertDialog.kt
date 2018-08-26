@@ -4,14 +4,11 @@ import android.app.Dialog
 import android.os.Build
 import android.os.Bundle
 import android.view.Window
-import android.widget.Button
-import android.widget.RelativeLayout
 import android.widget.TextView
 import com.applicaster.cleengloginplugin.R
 import com.applicaster.cleengloginplugin.helper.PluginConfigurationHelper
 import com.applicaster.util.OSUtil
-
-
+import kotlinx.android.synthetic.main.alert.*
 
 class AlertDialog(private val baseActivity: BaseActivity,
                   private val title: String,
@@ -26,24 +23,20 @@ class AlertDialog(private val baseActivity: BaseActivity,
         this.setCancelable(false)
         this.setContentView(R.layout.alert)
 
-        val alertContainer = this.findViewById(R.id.alertContainer) as RelativeLayout
-
         val alertBgResource = OSUtil.getColorResourceIdentifier("cleeng_login_alert_component")
         if (alertBgResource != 0)
             alertContainer.setBackgroundResource(alertBgResource)
 
-        val titleView = this.findViewById(R.id.titleTextView) as TextView
-        setAlertTextStyle (titleView , "CleengLoginAlertTitle")
-        titleView.text = PluginConfigurationHelper.getConfigurationValue(title)
+        setAlertTextStyle (titleTextView , "CleengLoginAlertTitle")
+        titleTextView.text = PluginConfigurationHelper.getConfigurationValue(title)
 
-        val subtitleView = this.findViewById(R.id.subtitleTextView) as TextView
-        setAlertTextStyle (subtitleView , "CleengLoginAlertDescription")
-        subtitleView.text = PluginConfigurationHelper.getConfigurationValue(subtitle)
+        setAlertTextStyle (subtitleTextView, "CleengLoginAlertDescription")
+        subtitleTextView.text = PluginConfigurationHelper.getConfigurationValue(subtitle)
 
-        val closeButton = this.findViewById(R.id.closeButton) as Button
         val btnBgResource = OSUtil.getDrawableResourceIdentifier("cleeng_login_confirm_button")
         if (btnBgResource != 0)
             closeButton.setBackgroundResource(btnBgResource)
+
         closeButton.text = PluginConfigurationHelper.getConfigurationValue("cleeng_login_confirm_button")
         val closeBtnTextStyle = OSUtil.getStyleResourceIdentifier("CleengLoginConfirmButtonText")
         if (closeBtnTextStyle != 0) {

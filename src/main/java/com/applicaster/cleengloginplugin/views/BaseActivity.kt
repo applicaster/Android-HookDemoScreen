@@ -92,12 +92,13 @@ abstract class BaseActivity : AppCompatActivity() {
     }
 
     fun showError(status: WebService.Status, response: String?) {
-        var internalResponse = JSONObject(response)
+        val internalResponse = JSONObject(response)
+        val errorCode = if(internalResponse.has("code")) internalResponse.get("code") else -1
+
         val localizationKeys = when (status) {
             WebService.Status.Unknown -> Arrays.asList(LOGIN_INTERNAL_ERROR_TITLE, LOGIN_INTERNAL_ERROR_MESSAGE)
-
             WebService.Status.WrongCredentials -> Arrays.asList(LOGIN_CREDENTAIL_ERROR_TITLE, LOGIN_CREDENTAIL_ERROR_MESSAGE)
-            WebService.Status.InternalError -> when (internalResponse.get("code")) {
+            WebService.Status.InternalError -> when (errorCode) {
                 3 -> Arrays.asList(LOGIN_CREDENTAIL_ERROR_TITLE, "Invalid publisher token")
                 5 -> Arrays.asList(LOGIN_CREDENTAIL_ERROR_TITLE, "Access denied")
                 10 -> Arrays.asList("cleeng_login_error_invalid_email_credentials_title", "cleeng_login_error_invalid_email_credentials_message")
@@ -105,9 +106,7 @@ abstract class BaseActivity : AppCompatActivity() {
                 12 -> Arrays.asList("cleeng_login_error_expired_title", "cleeng_login_error_expired_message")
                 13 -> Arrays.asList("cleeng_login_error_existing_user_credentials_title", "cleeng_login_error_existing_user_credentials_message")
                 15 -> Arrays.asList("cleeng_login_error_invalid_credentials_title", "cleeng_login_error_invalid_credentials_message")
-                else -> {
-                    Arrays.asList("cleeng_login_error_internal_title", "cleeng_login_error_internal_message")
-                }
+                else -> Arrays.asList("cleeng_login_error_internal_title", "cleeng_login_error_internal_message")
             }
             else -> return
         }
@@ -162,6 +161,4 @@ abstract class BaseActivity : AppCompatActivity() {
         super.onBackPressed()
         closeLoginPluginFromHook();
     }
-
-
 }

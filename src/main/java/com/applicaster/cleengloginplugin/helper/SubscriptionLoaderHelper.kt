@@ -1,37 +1,35 @@
 package com.applicaster.cleengloginplugin.helper
 
 import android.content.Context
-import android.os.Handler
-import com.applicaster.cleengloginplugin.models.PurchaseItem
+import android.util.Log
 import com.applicaster.cleengloginplugin.remote.Params
 import com.applicaster.cleengloginplugin.remote.WebService
 import com.applicaster.util.StringUtil
+import rx.Observable
+import java.util.concurrent.TimeUnit
 
-class SubscriptionLoaderHelper constructor(var context: Context, var userToken: String, var authID: String?, var purchaseItem: PurchaseItem, var maxTimeForRequestInSecond: Int, var interval: Int,var  callback: (WebService.Status, String?) -> Unit ) {
-    var handler = Handler()
+class SubscriptionLoaderHelper constructor(val context: Context, val userToken: String, val authID: String, val maxTimeForRequestInSecond: Long, val interval: Long, val callback: (WebService.Status, String?) -> Unit) {
 
+    fun load() {
 
-    fun load(intervalInSecond: Int = 0) {
-        handler.postDelayed({
-            var params = Params()
-            params["token"] = userToken
-            if (authID != null && StringUtil.isNotEmpty(authID)) {
-                params["byAuthId"] = "1"
-                params["authIds"] = authID!!
-            }
+        val params = Params()
+        params["token"] = userToken
+        if (StringUtil.isNotEmpty(authID)) {
+            params["byAuthId"] = "1"
+            params["offers"] = authID
+        }
 
-            CleengManager.fetchAvailableSubscriptions(context, params) { status: WebService.Status, response: String? ->
-                if (status != WebService.Status.Success) {
-                    if (maxTimeForRequestInSecond > 0) {
-                        maxTimeForRequestInSecond -= intervalInSecond
-                        load(interval);
-                    } else {
+        Observable.interval(interval, TimeUnit.SECONDS)
+                .takeUntil {
+                    val timeElapsed = (it + 1) * interval
+                    return@takeUntil timeElapsed >= maxTimeForRequestInSecond
+                }.doOnCompleted {
+                    Log.d("TK", "DONE")
+                }.subscribe {
+                    CleengManager.fetchAvailableSubscriptions(context, params) { status: WebService.Status, response: String? ->
+                        //TODO add loop exit conditions when access is granted
                         callback(status, response)
                     }
                 }
-
-            }
-        }, intervalInSecond.toLong())
     }
-
 }

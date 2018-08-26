@@ -5,14 +5,11 @@ import android.content.Intent
 import android.util.Log
 import com.applicaster.billing.v3.handlers.APQueryInventoryFinishedHandler
 import com.applicaster.billing.v3.util.Purchase
-import com.applicaster.cleengloginplugin.*;
-import com.applicaster.cleengloginplugin.R
+import com.applicaster.cleengloginplugin.*
 import com.applicaster.cleengloginplugin.helper.CleengManager
 import com.applicaster.cleengloginplugin.helper.CustomizationHelper
 import com.applicaster.cleengloginplugin.helper.IAPManager
-import com.applicaster.cleengloginplugin.helper.SubscriptionLoaderHelper
 import com.applicaster.cleengloginplugin.remote.WebService
-import com.applicaster.plugin_manager.login.LoginManager
 import kotlinx.android.synthetic.main.restore_activity.*
 import kotlinx.android.synthetic.main.user_input.*
 
@@ -74,14 +71,12 @@ class RestoreActivity : BaseActivity() {
         }
 
         override fun onUnconsumedPurchaseFound(purchase: Purchase?): Boolean {
-            iapManager.loadSubscriptions(purchase,null)
-            return false
+            //iapManager.loadSubscriptions()
+            TODO("Implement later")
         }
 
         override fun onInventoryEmpty() {
             Log.e("HEKP", "EMPTY!!")
         }
-
     }
-
 }
