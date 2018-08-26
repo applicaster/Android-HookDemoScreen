@@ -105,7 +105,7 @@ class SubscriptionsActivity: BaseActivity() {
         }
         var badgeBackground = OSUtil.getDrawableResourceIdentifier("cleeng_login_promotion_icon")
         if (badgeBackground != 0)
-            subscriptionView.badge_text_view.setBackgroundResource(badgeBackground)
+            subscriptionView.badge_text_view.setImageResource(badgeBackground)
 
         subscriptionView.title_text_view.text = subscription.title
         CustomizationHelper.updateTextStyle(this, subscriptionView.title_text_view, "CleengLoginSubscriptionTitle")
