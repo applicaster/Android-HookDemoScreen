@@ -111,7 +111,8 @@ class SubscriptionsActivity: BaseActivity() {
         CustomizationHelper.updateTextStyle(this, subscriptionView.title_text_view, "CleengLoginSubscriptionTitle")
         subscriptionView.description_text_view.text = subscription.description
         CustomizationHelper.updateTextStyle(this, subscriptionView.description_text_view, "CleengLoginSubscriptionDetailsText")
-        subscriptionView.purchase_button.text = "SUBSCRIBE FOR $" + subscription.price.toString()
+        subscriptionView.purchase_button.text =  getString(R.string.subscribe_for)+subscription.price.toString()
+        CustomizationHelper.updateTextStyle(this,subscriptionView.purchase_button, "CleengLoginSubscriptionText")
         var purchaseBtnBackground = OSUtil.getDrawableResourceIdentifier("cleeng_login_subscribe_button")
         if (purchaseBtnBackground != 0)
             subscriptionView.purchase_button.setBackgroundResource(purchaseBtnBackground)
