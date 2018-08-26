@@ -28,7 +28,7 @@ class AlertDialog(private val baseActivity: BaseActivity,
 
         val alertContainer = this.findViewById(R.id.alertContainer) as RelativeLayout
 
-        val alertBgResource = OSUtil.getDrawableResourceIdentifier("cleeng_login_alert_component")
+        val alertBgResource = OSUtil.getColorResourceIdentifier("cleeng_login_alert_component")
         if (alertBgResource != 0)
             alertContainer.setBackgroundResource(alertBgResource)
 
