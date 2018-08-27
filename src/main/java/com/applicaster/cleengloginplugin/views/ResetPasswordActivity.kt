@@ -8,6 +8,7 @@ import com.applicaster.cleengloginplugin.*;
 import com.applicaster.cleengloginplugin.helper.CleengManager
 import com.applicaster.cleengloginplugin.helper.CustomizationHelper
 import com.applicaster.cleengloginplugin.remote.WebService
+import com.applicaster.util.OSUtil
 import kotlinx.android.synthetic.main.reset_password_activity.*
 import kotlinx.android.synthetic.main.user_input.*
 
@@ -29,6 +30,10 @@ class ResetPasswordActivity : BaseActivity() {
         CustomizationHelper.updateButtonViewText(this, R.id.reset_button, RESET_BUTTON,"CleengLoginActionDescriptionText")
         CustomizationHelper.updateBgResource(this,R.id.reset_button,"cleeng_login_sign_in_button")
 
+        val underlineRes = OSUtil.getDrawableResourceIdentifier("cleeng_login_signin_component")
+        if (underlineRes != 0) {
+            restore_email.setBackgroundResource(underlineRes)
+        }
         reset_button.setOnClickListener {
             val emailEditText = this.findViewById(R.id.restore_email) as EditText
             val email = emailEditText.text.takeIf { it.isNotEmpty() }

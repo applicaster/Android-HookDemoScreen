@@ -15,5 +15,6 @@
 
     <dimen name="subscription_badge_width">76dp</dimen>
     <dimen name="subscription_badge_height">34.4dp</dimen>
+    <dimen name="edit_text_height">47dp</dimen>
 
 </resources>

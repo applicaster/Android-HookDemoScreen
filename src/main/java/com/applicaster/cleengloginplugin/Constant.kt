@@ -22,6 +22,7 @@ const val NO_ACCOUNT_HINT = "cleeng_login_no_account"
 const val SIGN_UP_LABEL_TEXT = "cleeng_login_sign_up"
 const val RESET_PASSWORD_ACTION_TEXT = "cleeng_login_reset_password_action"
 const val ACCOUNT_HINT = "cleeng_login_account"
+const val HAVE_ACCOUNT="cleeng_login_have_account"
 const val SIGN_IN_LABEL_TEXT = "cleeng_login_sign_in"
 
 const val RESTORE_TITLE = "cleeng_login_restore_title"

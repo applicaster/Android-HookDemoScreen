@@ -1,5 +1,6 @@
 package com.applicaster.cleengloginplugin.views
 
+import android.app.LauncherActivity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -16,6 +17,7 @@ import com.applicaster.model.APModel
 import com.applicaster.plugin_manager.login.LoginManager
 import com.applicaster.plugin_manager.playersmanager.Playable
 import com.applicaster.util.OSUtil
+import kotlinx.android.synthetic.main.account_sign_text_with_action.*
 import kotlinx.android.synthetic.main.subscription_activity.*
 import kotlinx.android.synthetic.main.subscription_item.view.*
 
@@ -68,9 +70,12 @@ class SubscriptionsActivity: BaseActivity() {
         super.customize()
         CustomizationHelper.updateTextView(this, R.id.title, SUBSCRIPTION_TITLE,"CleengLoginTitle")
         CustomizationHelper.updateTextView(this, R.id.sign_up_action_text, SIGN_IN_LABEL_TEXT,"CleengLoginActionText")
-        CustomizationHelper.updateTextView(this, R.id.sign_up_text, ACCOUNT_HINT, "CleengLoginActionDescriptionText")
+        CustomizationHelper.updateTextView(this, R.id.sign_up_text, HAVE_ACCOUNT, "CleengLoginActionDescriptionText")
         CustomizationHelper.updateTextView(this, R.id.legal_bottom_bar_text, LOGIN_LEGAL,"CleengLoginLegalText")
 
+        sign_up_action_text.setOnClickListener {
+            LoginActivity.launchLogin(this, null)
+        }
         //CustomizationHelper.updateBgColor(this, R.id.legal_bottom_bar, "cleeng_login_bottom_legal_background_color")
 
         updateViews()

@@ -13,6 +13,7 @@ import com.applicaster.cleengloginplugin.remote.WebService
 import com.applicaster.plugin_manager.login.LoginManager
 import com.applicaster.plugin_manager.playersmanager.Playable
 import com.applicaster.util.FacebookUtil
+import com.applicaster.util.OSUtil
 import com.applicaster.util.StringUtil
 import com.applicaster.util.facebook.listeners.FBAuthoriziationListener
 import com.applicaster.util.facebook.permissions.APPermissionsType
@@ -40,7 +41,11 @@ class LoginActivity : BaseActivity() {
         CustomizationHelper.updateButtonViewText(this, R.id.action_button, SIGN_IN_BUTTON, "CleengLoginSignInButtonText")
         CustomizationHelper.updateBgResource(this,R.id.action_button,"cleeng_login_sign_in_button")
 
-
+        val underlineRes = OSUtil.getDrawableResourceIdentifier("cleeng_login_signin_component")
+        if (underlineRes != 0) {
+            input_email.setBackgroundResource(underlineRes)
+            input_password.setBackgroundResource(underlineRes)
+        }
 
         updateViews()
 
@@ -65,8 +70,13 @@ class LoginActivity : BaseActivity() {
 
         }
 
-        bottom_bar_container.setOnClickListener{
-            RestoreActivity.launchRestoreActivity(this)
+        if( !StringUtil.booleanValue(PluginConfigurationHelper.getConfigurationValue(PURCHASE_RESTORE_AVAILABLE) as String)) {
+            bottom_bar_container.visibility = GONE
+
+        } else {
+            bottom_bar_container.setOnClickListener {
+                RestoreActivity.launchRestoreActivity(this)
+            }
         }
 
         forgot_password.setOnClickListener{

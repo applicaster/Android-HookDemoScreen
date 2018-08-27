@@ -13,6 +13,7 @@ import com.applicaster.cleengloginplugin.remote.WebService
 import com.applicaster.model.APModel
 import com.applicaster.plugin_manager.playersmanager.Playable
 import com.applicaster.util.FacebookUtil
+import com.applicaster.util.OSUtil
 import com.applicaster.util.StringUtil
 import com.applicaster.util.facebook.listeners.FBAuthoriziationListener
 import com.applicaster.util.facebook.permissions.APPermissionsType
@@ -40,6 +41,12 @@ class SignUpActivity : BaseActivity() {
         CustomizationHelper.updateBgResource(this,R.id.action_button,"cleeng_login_sign_up_button")
 
 
+        val underlineRes = OSUtil.getDrawableResourceIdentifier("cleeng_login_signin_component")
+        if (underlineRes != 0) {
+            input_email.setBackgroundResource(underlineRes)
+            input_password.setBackgroundResource(underlineRes)
+        }
+
         updateViews()
 
         action_button.setOnClickListener {
@@ -63,10 +70,15 @@ class SignUpActivity : BaseActivity() {
             this.finish()
         }
 
-        bottom_bar_container_new_account.setOnClickListener{
-            RestoreActivity.launchRestoreActivity(this)
-            this.finish()
-       }
+        if( !StringUtil.booleanValue(PluginConfigurationHelper.getConfigurationValue(PURCHASE_RESTORE_AVAILABLE) as String)) {
+            bottom_bar_container_new_account.visibility = View.GONE
+
+        } else {
+            bottom_bar_container_new_account.setOnClickListener{
+                RestoreActivity.launchRestoreActivity(this)
+                this.finish()
+            }
+        }
     }
 
     fun updateViews() {

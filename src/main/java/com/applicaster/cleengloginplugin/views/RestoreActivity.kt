@@ -10,6 +10,7 @@ import com.applicaster.cleengloginplugin.helper.CleengManager
 import com.applicaster.cleengloginplugin.helper.CustomizationHelper
 import com.applicaster.cleengloginplugin.helper.IAPManager
 import com.applicaster.cleengloginplugin.remote.WebService
+import com.applicaster.util.OSUtil
 import kotlinx.android.synthetic.main.restore_activity.*
 import kotlinx.android.synthetic.main.user_input.*
 
@@ -36,6 +37,11 @@ class RestoreActivity : BaseActivity() {
         CustomizationHelper.updateButtonViewText(this, R.id.action_button, RESTORE_BUTTON,"CleengLoginRestoreButtonText")
         CustomizationHelper.updateBgResource(this,R.id.action_button,"cleeng_login_restore_button")
 
+        val underlineRes = OSUtil.getDrawableResourceIdentifier("cleeng_login_signin_component")
+        if (underlineRes != 0) {
+            input_email.setBackgroundResource(underlineRes)
+            input_password.setBackgroundResource(underlineRes)
+        }
 
         action_button.setOnClickListener {
             val user = this.getUserFromInput() ?: return@setOnClickListener
@@ -67,7 +73,6 @@ class RestoreActivity : BaseActivity() {
 
     private val handler = object :APQueryInventoryFinishedHandler {
         override fun onInventoryQueryFailed() {
-            Log.e("HEKP", "onInventoryQueryFailed!!")
         }
 
         override fun onUnconsumedPurchaseFound(purchase: Purchase?): Boolean {
@@ -76,7 +81,7 @@ class RestoreActivity : BaseActivity() {
         }
 
         override fun onInventoryEmpty() {
-            Log.e("HEKP", "EMPTY!!")
+
         }
     }
 }

@@ -9,7 +9,7 @@
     <EditText
         android:id="@+id/input_email"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/edit_text_height"
         android:hint="E-mail"
         android:inputType="textEmailAddress"
         app:layout_constraintEnd_toEndOf="parent"
@@ -19,9 +19,9 @@
     <EditText
         android:id="@+id/input_password"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/edit_text_height"
         android:hint="Password"
-        android:layout_marginTop="25dp"
+        android:layout_marginTop="16dp"
         android:inputType="textPassword"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
