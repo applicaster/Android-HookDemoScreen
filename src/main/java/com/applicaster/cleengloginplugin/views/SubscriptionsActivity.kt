@@ -5,11 +5,8 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.ScrollView
 import com.applicaster.cleengloginplugin.*
 import com.applicaster.cleengloginplugin.helper.CleengManager
-import com.applicaster.cleengloginplugin.helper.CleengUtil
 import com.applicaster.cleengloginplugin.helper.CustomizationHelper
 import com.applicaster.cleengloginplugin.helper.IAPManager
 import com.applicaster.cleengloginplugin.models.Subscription
@@ -19,8 +16,6 @@ import com.applicaster.model.APModel
 import com.applicaster.plugin_manager.login.LoginManager
 import com.applicaster.plugin_manager.playersmanager.Playable
 import com.applicaster.util.OSUtil
-import com.applicaster.util.StringUtil
-import kotlinx.android.synthetic.main.bottom_bar.*
 import kotlinx.android.synthetic.main.subscription_activity.*
 import kotlinx.android.synthetic.main.subscription_item.view.*
 
@@ -73,7 +68,7 @@ class SubscriptionsActivity: BaseActivity() {
         super.customize()
         CustomizationHelper.updateTextView(this, R.id.title, SUBSCRIPTION_TITLE,"CleengLoginTitle")
         CustomizationHelper.updateTextView(this, R.id.sign_up_action_text, SIGN_IN_LABEL_TEXT,"CleengLoginActionText")
-        CustomizationHelper.updateTextView(this, R.id.sign_up_text, ALREADY_HAVE_ACCOUNT_HINT, "CleengLoginActionDescriptionText")
+        CustomizationHelper.updateTextView(this, R.id.sign_up_text, ACCOUNT_HINT, "CleengLoginActionDescriptionText")
         CustomizationHelper.updateTextView(this, R.id.legal_bottom_bar_text, LOGIN_LEGAL,"CleengLoginLegalText")
 
         //CustomizationHelper.updateBgColor(this, R.id.legal_bottom_bar, "cleeng_login_bottom_legal_background_color")

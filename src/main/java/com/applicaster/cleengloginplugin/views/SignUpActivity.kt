@@ -31,7 +31,7 @@ class SignUpActivity : BaseActivity() {
         CustomizationHelper.updateImageView(this, R.id.app_logo, "cleeng_login_logo")
         CustomizationHelper.updateTextView(this, R.id.enter_details, NEW_ACCOUNT_TITLE, "CleengLoginDescriptionText")
         CustomizationHelper.updateTextView(this, R.id.sign_up_action_text, SIGN_IN_LABEL_TEXT, "CleengLoginActionText")
-        CustomizationHelper.updateTextView(this, R.id.sign_up_text, ALREADY_HAVE_ACCOUNT_HINT, "CleengLoginActionDescriptionText")
+        CustomizationHelper.updateTextView(this, R.id.sign_up_text, ACCOUNT_HINT, "CleengLoginActionDescriptionText")
 
         CustomizationHelper.updateEditTextView(this, R.id.input_email, EMAIL_PLACEHOLDER, true)
         CustomizationHelper.updateEditTextView(this, R.id.input_password, PASSWORD_PLACEHOLDER, true)
