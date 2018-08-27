@@ -1,11 +1,6 @@
 package com.applicaster.cleengloginplugin.helper
 
-import android.app.Activity
 import android.content.Context
-import android.net.Uri
-import android.view.View
-import android.widget.Toast
-import com.android.volley.Request
 import com.applicaster.app.APProperties
 import com.applicaster.atom.model.APAtomEntry
 import com.applicaster.cleengloginplugin.models.PurchaseItem
@@ -15,17 +10,12 @@ import com.applicaster.cleengloginplugin.remote.JsonParams
 import com.applicaster.cleengloginplugin.remote.Params
 import com.applicaster.cleengloginplugin.remote.ResponseParser
 import com.applicaster.cleengloginplugin.remote.WebService
-import com.applicaster.controller.PlayerLoader
 import com.applicaster.loader.json.APVodItemLoader
 import com.applicaster.model.APModel
 import com.applicaster.model.APVodItem
-import com.applicaster.player.PlayerLoaderI
-import com.applicaster.plugin_manager.login.LoginContract
-import com.applicaster.plugin_manager.playersmanager.Playable
 import com.applicaster.util.AppData
 import com.applicaster.util.StringUtil
 import com.applicaster.util.asynctask.AsyncTaskListener
-import org.json.JSONObject
 
 object CleengManager {
 
@@ -104,22 +94,25 @@ object CleengManager {
     fun fetchAvailableSubscriptions(context: Context, params: Params?, callback: (WebService.Status, String?) -> Unit) {
         this.availableSubscriptions.clear()
 
-        var finalParams = params ?: Params()
+        val finalParams = params ?: Params()
         if(currentUser != null && StringUtil.isNotEmpty(currentUser?.token)) {
             finalParams["token"] = currentUser?.token!!
         }
 
-        this.webService.performApiRequest(WebService.ApiRequest.Subscriptions, finalParams, context) { status: WebService.Status, response: String? ->
-            val responseParser = ResponseParser()
-            responseParser.handleAvailableSubscriptionsResponse(status, response)
-
-            if (responseParser.status == WebService.Status.Success) {
-                if (responseParser.availableSubscriptions != null) {
-                    this.availableSubscriptions.addAll(responseParser.availableSubscriptions!!)
-                }
-            }
-
+        this.webService.performApiRequest(WebService.ApiRequest.Subscriptions, finalParams, context) { status, response ->
             callback(status, response)
+        }
+    }
+
+    fun parseAvailableSubscriptions(status: WebService.Status, response: String?) {
+
+        val responseParser = ResponseParser()
+        responseParser.handleAvailableSubscriptionsResponse(status, response)
+
+        if (responseParser.status == WebService.Status.Success) {
+            if (responseParser.availableSubscriptions != null) {
+                this.availableSubscriptions.addAll(responseParser.availableSubscriptions!!)
+            }
         }
     }
 

@@ -56,9 +56,10 @@ class SubscriptionsActivity: BaseActivity() {
                 this.dismissLoading()
 
                 if (status == WebService.Status.Success) {
-                    this.presentSubscriptions()
+                    CleengManager.parseAvailableSubscriptions(status, response)
+                    presentSubscriptions()
                 } else {
-                    this.showError(status, response)
+                    showError(status, response)
                 }
             }
         } else {

@@ -77,9 +77,7 @@ abstract class BaseActivity : AppCompatActivity() {
     }
 
     fun showLoading() {
-        if(progress_bar != null){
-            progressBar.visibility = View.VISIBLE
-        }
+        progressBar.visibility = View.VISIBLE
     }
 
     /**

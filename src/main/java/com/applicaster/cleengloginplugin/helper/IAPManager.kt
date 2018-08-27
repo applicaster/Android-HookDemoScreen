@@ -66,20 +66,15 @@ class IAPManager(private val mContext: Context, var callback: (WebService.Status
                 if (result.isSuccess) {
                     //purchase success need to subscribe to Cleeng
                     if (info != null && StringUtil.isNotEmpty(CleengManager.currentUser?.token)) {
-                        CleengManager.subscribe(CleengManager.currentUser?.token!!, authID, PurchaseItem(info.token, info.sku, info.signature, info.purchaseTime, info.purchaseState,
-                                info.packageName, info.originalJson, info.orderId, info.itemType, info.developerPayload), mContext) { status: WebService.Status, response: String? ->
+
+                        //TODO constructor is crazy long. change to Builder pattern
+                        val purchaseItem = PurchaseItem(info.token, info.sku, info.signature, info.purchaseTime, info.purchaseState, info.packageName, info.originalJson, info.orderId, info.itemType, info.developerPayload)
+
+                        CleengManager.subscribe(CleengManager.currentUser?.token!!, authID, purchaseItem, mContext) { status, response ->
                             if (status == WebService.Status.Success) {
                                 loadSubscriptions(authID)
                             } else {
-                                // try again
-                                CleengManager.subscribe(CleengManager.currentUser?.token!!, authID, PurchaseItem(info.token, info.sku, info.signature, info.purchaseTime, info.purchaseState,
-                                        info.packageName, info.originalJson, info.orderId, info.itemType, info.developerPayload), mContext) { status: WebService.Status, response: String? ->
-                                    if (status == WebService.Status.Success) {
-                                        loadSubscriptions(authID)
-                                    } else {
-                                        callback(status, response)
-                                    }
-                                }
+                                callback(status, response)
                             }
                         }
                     }
@@ -94,7 +89,7 @@ class IAPManager(private val mContext: Context, var callback: (WebService.Status
 
         if (StringUtil.isNotEmpty(token)) {
 
-            val subscriptionHelper = SubscriptionLoaderHelper(mContext, token!!, authID, 60, 5) { status: WebService.Status, response: String? ->
+            val subscriptionHelper = SubscriptionLoaderHelper(mContext, token!!, authID, 60, 5) { status, response ->
                 callback(status, response)
             }
             subscriptionHelper.load()
@@ -105,4 +100,3 @@ class IAPManager(private val mContext: Context, var callback: (WebService.Status
         return mHelper?.handleActivityResult(requestCode, resultCode, data)
     }
 }
-
