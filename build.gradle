@@ -60,7 +60,7 @@ repositories {
 dependencies {
 
     // Applicaster SDK
-    def applicasterSDKPath = 'com.applicaster:applicaster-android-sdk:2.32.21'
+    def applicasterSDKPath = 'com.applicaster:applicaster-android-sdk:2.32.23'
 
     // Check if an open SDK is defined - if not use the closed one.
     def devSDK = findProject(':applicaster-android-sdk')
