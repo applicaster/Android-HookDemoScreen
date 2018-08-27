@@ -8,7 +8,6 @@ import com.applicaster.util.StringUtil
 import org.json.JSONArray
 import org.json.JSONObject
 
-
 class ResponseParser {
     var status = WebService.Status.Unknown
 

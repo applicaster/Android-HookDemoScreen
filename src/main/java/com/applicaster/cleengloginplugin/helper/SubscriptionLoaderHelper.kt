@@ -22,24 +22,34 @@ class SubscriptionLoaderHelper constructor(val context: Context, val userToken: 
             params["offers"] = authID
         }
 
-        //TODO make the network request other place than the subscribe() since it runs on UI Thread (unnecessary thread switching).
         Observable.interval(interval, TimeUnit.SECONDS)
+                .take((maxTimeForRequestInSecond / interval).toInt())
+                .flatMap {
+
+                    Observable.create(Observable.OnSubscribe<Boolean> { subscriber ->
+
+                        CleengManager.fetchAvailableSubscriptions(context, params) { status, response ->
+
+                            //TODO also check if access is granted on the specific item user purchased
+                            if (status == WebService.Status.Success) {
+                                callback(status, response)
+                                subscriber.onNext(true)
+                            } else {
+                                subscriber.onNext(false)
+                            }
+
+                            subscriber.onCompleted()
+                        }
+                    })
+                }
                 .takeUntil {
-                    val timeElapsed = (it + 1) * interval
-                    return@takeUntil timeElapsed >= maxTimeForRequestInSecond
+                    return@takeUntil it
                 }
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe {
-
-                    CleengManager.fetchAvailableSubscriptions(context, params) { status, response ->
-
-                        //TODO also check if access is granted on the specific item user purchased
-                        if (status == WebService.Status.Success) {
-                            dismissLoading()
-                            callback(status, response)
-                        }
-                    }
+                .doOnCompleted {
+                    dismissLoading()
                 }
+                .subscribe()
     }
 
     private fun dismissLoading() {
