@@ -1,7 +1,12 @@
 package com.applicaster.cleengloginplugin.helper
 
+import android.app.Activity
 import android.content.Context
+import android.net.Uri
+import android.view.View
+import android.widget.Toast
 import com.android.volley.Request
+import com.applicaster.app.APProperties
 import com.applicaster.atom.model.APAtomEntry
 import com.applicaster.cleengloginplugin.models.PurchaseItem
 import com.applicaster.cleengloginplugin.models.Subscription
@@ -10,8 +15,16 @@ import com.applicaster.cleengloginplugin.remote.JsonParams
 import com.applicaster.cleengloginplugin.remote.Params
 import com.applicaster.cleengloginplugin.remote.ResponseParser
 import com.applicaster.cleengloginplugin.remote.WebService
+import com.applicaster.controller.PlayerLoader
+import com.applicaster.loader.json.APVodItemLoader
 import com.applicaster.model.APModel
+import com.applicaster.model.APVodItem
+import com.applicaster.player.PlayerLoaderI
+import com.applicaster.plugin_manager.login.LoginContract
+import com.applicaster.plugin_manager.playersmanager.Playable
+import com.applicaster.util.AppData
 import com.applicaster.util.StringUtil
+import com.applicaster.util.asynctask.AsyncTaskListener
 import org.json.JSONObject
 
 object CleengManager {
@@ -20,6 +33,8 @@ object CleengManager {
 
     //save all availableSubscription
     val availableSubscriptions = emptyList<Subscription>().toMutableList()
+
+    private lateinit var itemLoader : APVodItemLoader
 
     //save current user cached with the user offers.
     var currentUser: User? = null
@@ -209,6 +224,28 @@ object CleengManager {
         }
 
         return true
+    }
+
+    fun isItemLocked(model: Any?, callback: (Boolean) -> Unit) {
+        if (model is APModel)
+            callback(this.isItemLocked(model))
+        else if (model is String) {
+            itemLoader = APVodItemLoader(object : AsyncTaskListener<APVodItem> {
+
+                override fun handleException(e: Exception) {
+                    callback(false)
+                }
+                override fun onTaskStart() {
+
+                }
+
+                override fun onTaskComplete(result: APVodItem) {
+                    callback(isItemLocked(itemLoader.bean))
+                }
+            }, model, AppData.getProperty(APProperties.ACCOUNT_ID_KEY), AppData.getProperty(APProperties.BROADCASTER_ID_KEY))
+            itemLoader.loadBean()
+        }
+
     }
 
     private fun isUserOffersComply(provider_id: String?): Boolean {

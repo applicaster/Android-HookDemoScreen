@@ -9,6 +9,7 @@ import android.widget.Button
 import android.widget.ScrollView
 import com.applicaster.cleengloginplugin.*
 import com.applicaster.cleengloginplugin.helper.CleengManager
+import com.applicaster.cleengloginplugin.helper.CleengUtil
 import com.applicaster.cleengloginplugin.helper.CustomizationHelper
 import com.applicaster.cleengloginplugin.helper.IAPManager
 import com.applicaster.cleengloginplugin.models.Subscription
@@ -18,6 +19,7 @@ import com.applicaster.model.APModel
 import com.applicaster.plugin_manager.login.LoginManager
 import com.applicaster.plugin_manager.playersmanager.Playable
 import com.applicaster.util.OSUtil
+import com.applicaster.util.StringUtil
 import kotlinx.android.synthetic.main.bottom_bar.*
 import kotlinx.android.synthetic.main.subscription_activity.*
 import kotlinx.android.synthetic.main.subscription_item.view.*
@@ -48,7 +50,7 @@ class SubscriptionsActivity: BaseActivity() {
         if (mPlayable != null) {
             val authIds = CleengManager.getAuthIds(mPlayable)
             if(authIds != null && !authIds.isEmpty()) {
-                params["offers"] = authIds.joinToString()
+                params["offers"] = authIds.joinToString().replace("\\s".toRegex(), "")
                 params["byAuthId"] = "1"
             }
         }
