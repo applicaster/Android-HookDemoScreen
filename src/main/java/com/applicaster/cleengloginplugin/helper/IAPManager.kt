@@ -72,7 +72,7 @@ class IAPManager(private val mContext: Context, var callback: (WebService.Status
 
                         CleengManager.subscribe(CleengManager.currentUser?.token!!, authID, purchaseItem, mContext) { status, response ->
                             if (status == WebService.Status.Success) {
-                                loadSubscriptions(authID)
+                                loadSubscriptions(authID, productId)
                             } else {
                                 callback(status, response)
                             }
@@ -83,13 +83,13 @@ class IAPManager(private val mContext: Context, var callback: (WebService.Status
         }
     }
 
-    fun loadSubscriptions(authID: String) {
+    fun loadSubscriptions(authID: String, productId: String) {
 
         val token = CleengManager.currentUser?.token
 
         if (StringUtil.isNotEmpty(token)) {
 
-            val subscriptionHelper = SubscriptionLoaderHelper(mContext, token!!, authID, 60, 5) { status, response ->
+            val subscriptionHelper = SubscriptionLoaderHelper(mContext, productId, token!!, authID, 60, 5) { status, response ->
                 callback(status, response)
             }
             subscriptionHelper.load()
