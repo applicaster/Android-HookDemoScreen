@@ -62,7 +62,7 @@
         android:fillViewport="true"
         app:layout_constraintEnd_toEndOf="@id/end_guideline"
         app:layout_constraintStart_toStartOf="@id/start_guideline"
-        app:layout_constraintBottom_toTopOf="@id/bottom_bar"
+        app:layout_constraintBottom_toTopOf="@id/legal_bottom_bar"
         app:layout_constraintTop_toBottomOf="@id/subscription_sign_up_hint"
         android:layout_marginTop="77dp"
         android:measureAllChildren="false"
