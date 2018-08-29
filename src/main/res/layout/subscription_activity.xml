@@ -83,10 +83,10 @@
         android:layout_width="0dp"
         android:layout_height="@dimen/bottom_bar_height"
         android:layout_centerVertical="true"
+        android:background="#42cb0800"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        android:background="#4222365e">
+        app:layout_constraintStart_toStartOf="parent">
 
         <TextView
             android:id="@+id/legal_bottom_bar_text"
