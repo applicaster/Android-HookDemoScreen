@@ -15,7 +15,7 @@ import com.applicaster.plugin_manager.login.LoginManager
 import com.applicaster.plugin_manager.playersmanager.Playable
 import com.applicaster.util.StringUtil
 
-class CleengLoginPlugin :  BaseLoginContract(), ApplicationLoaderHookUpI {
+class CleengLoginPlugin :  BaseLoginContract() {
 
     override fun executeOnStartup(context: Context, listener: HookListener) {
         val showOnAppLaunch = StringUtil.booleanValue(this.pluginParams[START_ON_LAUNCH] as String)

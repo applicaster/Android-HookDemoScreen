@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.view.View.GONE
 import android.widget.Button
+import com.applicaster.authprovider.AuthenticationProviderUtil
 import com.applicaster.cleengloginplugin.*;
 import com.applicaster.cleengloginplugin.R
 import com.applicaster.cleengloginplugin.helper.CleengManager
@@ -33,8 +34,6 @@ class LoginActivity : BaseActivity() {
         CustomizationHelper.updateTextView(this, R.id.enter_details, LOGIN_DETAILS, "CleengLoginDescriptionText")
         CustomizationHelper.updateTextView(this, R.id.sign_up_action_text, SIGN_UP_LABEL_TEXT, "CleengLoginActionText")
         CustomizationHelper.updateTextView(this, R.id.sign_up_text, NO_ACCOUNT_HINT, "CleengLoginActionDescriptionText")
-
-
         CustomizationHelper.updateEditTextView(this, R.id.input_email, EMAIL_PLACEHOLDER, true)
         CustomizationHelper.updateEditTextView(this, R.id.input_password, PASSWORD_PLACEHOLDER, true)
         CustomizationHelper.updateTextView(this, R.id.forgot_password, RESET_PASSWORD_ACTION_TEXT, "CleengLoginActionDescriptionText")
@@ -50,16 +49,20 @@ class LoginActivity : BaseActivity() {
         updateViews()
 
         action_button.setOnClickListener {
-            val user = this.getUserFromInput() ?: return@setOnClickListener
+            val user = this.getUserFromInput()
 
-            this.showLoading()
-            CleengManager.login(user, this) { status: WebService.Status, response: String?  ->
-                this.dismissLoading()
+            if(user != null) {
 
-                if (status == WebService.Status.Success) {
-                    loginSuccessful()
-                } else {
-                    this.showError(status, response)
+                showLoading()
+
+                CleengManager.login(user, this) { status, response ->
+                    this.dismissLoading()
+
+                    if (status == WebService.Status.Success) {
+                        loginSuccessful()
+                    } else {
+                        showError(status, response)
+                    }
                 }
             }
         }
@@ -128,9 +131,13 @@ class LoginActivity : BaseActivity() {
     }
 
     private fun loginSuccessful() {
-        if(CleengManager.userHasActiveOffer() && isPlayableSupported()) {
-                LoginManager.notifyEvent(this,LoginManager.RequestType.LOGIN, true)
-        }else{
+        if (CleengManager.userHasActiveOffer()) {
+
+            CleengManager.currentUser?.userOffers?.forEach {
+                AuthenticationProviderUtil.addToken(it.authId, it.token)
+            }
+            LoginManager.notifyEvent(this, LoginManager.RequestType.LOGIN, true)
+        } else {
             SubscriptionsActivity.launchSubscriptionsActivity(this, playable)
         }
         finish()

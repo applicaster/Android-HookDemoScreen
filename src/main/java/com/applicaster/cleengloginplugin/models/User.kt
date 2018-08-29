@@ -7,5 +7,4 @@ class User(val email: String?,
            var userOffers: ArrayList<Offer>?,
            var ownedSubscriptions: ArrayList<Subscription>?)
 
-var owenedSubscriptions: ArrayList<Subscription>? = null
-
+var ownedSubscriptions: ArrayList<Subscription> = ArrayList()

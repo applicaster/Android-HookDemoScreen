@@ -146,8 +146,6 @@ object CleengManager {
         this.webService.performApiRequest(WebService.ApiRequest.ResetPassword, params, context) { status: WebService.Status, response: String? ->
             if (status == WebService.Status.Success) {
                 callback(status, response)
-            } else {
-
             }
         }
     }
@@ -160,8 +158,6 @@ object CleengManager {
         this.webService.performApiRequest(WebService.ApiRequest.ExtendToken, params, context) { status: WebService.Status, response: String? ->
             if (status == WebService.Status.Success) {
                 callback(status, response)
-            } else {
-
             }
         }
     }
@@ -209,7 +205,7 @@ object CleengManager {
         if (model.authorization_providers_ids == null || model.authorization_providers_ids.isEmpty())
             return false
 
-        for (i in 0 until model.authorization_providers_ids.size) {
+            for (i in 0 until model.authorization_providers_ids.size) {
             val providerId = model.authorization_providers_ids[i]
             if (isUserOffersComply(providerId)) {
                 return false

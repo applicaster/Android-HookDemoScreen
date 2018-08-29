@@ -12,6 +12,7 @@ import java.io.UnsupportedEncodingException
 import java.nio.charset.Charset
 
 class CleengUtil{
+
     companion object {
         @JvmStatic
         fun isTokenValid(jwtToken: String?): Boolean {
@@ -30,9 +31,8 @@ class CleengUtil{
             } catch (e: UnsupportedEncodingException) {
                 e.printStackTrace()
             }
-            return false;
+            return false
         }
-
 
         @JvmStatic
         fun getUser(): User? {
@@ -57,13 +57,13 @@ class CleengUtil{
 
         @JvmStatic
         fun setUser(user: User?) {
-            var userJson = SerializationUtils.toJson(user,User ::class.java)
+            val userJson = SerializationUtils.toJson(user, User::class.java)
             PreferenceUtil.getInstance().setStringPref("USER", userJson)
         }
 
         @JvmStatic
         fun addSubscriptionToUser( subscription: Subscription) {
-            var user = getUser()
+            val user = getUser()
             if (user != null) {
                 val subs = user.ownedSubscriptions ?: ArrayList()
                 subs.add(subscription)

@@ -80,15 +80,6 @@ abstract class BaseActivity : AppCompatActivity() {
         progressBar.visibility = View.VISIBLE
     }
 
-    /**
-     * check if login launched with playable item, if yes and the user have offer that comply the playable
-     * return true, else return false.
-     */
-    fun isPlayableSupported(): Boolean {
-        if(playable == null) return true;
-        return CleengManager.isItemLocked(playable)
-    }
-
     fun showError(status: WebService.Status, response: String?) {
         val internalResponse = JSONObject(response)
         val errorCode = if(internalResponse.has("code")) internalResponse.get("code") else -1

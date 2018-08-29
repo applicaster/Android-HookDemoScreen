@@ -25,14 +25,7 @@ class SubscriptionsActivity: BaseActivity() {
 
     private var fromStartUp: Boolean = false
     private var mPlayable: Playable? = null
-
-    private val iapManager = IAPManager(this) { status: WebService.Status, response: String? ->
-        if (status == WebService.Status.Success) {
-            LoginManager.notifyEvent(this, LoginManager.RequestType.LOGIN, true)
-        } else {
-            this.showError(status, response)
-        }
-    }
+    private val iapManager = IAPManager(this)
 
     override fun getContentViewResId(): Int {
         return R.layout.subscription_activity;

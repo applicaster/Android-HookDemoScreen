@@ -12,9 +12,10 @@ import com.applicaster.billing.v3.util.IabResult
 import com.applicaster.billing.v3.util.Purchase
 import com.applicaster.cleengloginplugin.models.PurchaseItem
 import com.applicaster.cleengloginplugin.remote.WebService
+import com.applicaster.cleengloginplugin.views.SubscriptionsActivity
 import com.applicaster.util.StringUtil
 
-class IAPManager(private val mContext: Context, var callback: (WebService.Status, String?) -> Unit) {
+class IAPManager(private val mContext: Context) {
 
     private val TAG = APBillingUtil::class.java.simpleName
     private var mHelper: IabHelper? = null
@@ -33,11 +34,10 @@ class IAPManager(private val mContext: Context, var callback: (WebService.Status
     }
 
     fun getInventory(productIds: List<String>?, handler: APQueryInventoryFinishedHandler) {
-        mHelper?.queryInventoryAsync(true, productIds, IabHelper.QueryInventoryFinishedListener { result, inventory ->
+        mHelper?.queryInventoryAsync(true, productIds) { result, inventory ->
             if (result.isFailure) {
                 handler.onInventoryQueryFailed()
                 Log.d(TAG, "Query Inventory Failed")
-                return@QueryInventoryFinishedListener
             } else {
                 if (inventory != null) {
                     var isRelatedPurchaseFound = false
@@ -57,25 +57,21 @@ class IAPManager(private val mContext: Context, var callback: (WebService.Status
                     }
                 }
             }
-        })
+        }
     }
 
     fun startPurchase(productId: String, authID: String) {
-        mHelper?.launchSubscriptionPurchaseFlow(mContext as Activity, productId, APBillingUtil.PURCHASE_REQUEST_CODE) { result: IabResult?, info: Purchase? ->
-            if (result != null) {
-                if (result.isSuccess) {
-                    //purchase success need to subscribe to Cleeng
-                    if (info != null && StringUtil.isNotEmpty(CleengManager.currentUser?.token)) {
+        mHelper?.launchSubscriptionPurchaseFlow(mContext as Activity, productId, APBillingUtil.PURCHASE_REQUEST_CODE) { result, info ->
+            if (result.isSuccess) {
+                //purchase success need to subscribe to Cleeng
+                if (info != null && StringUtil.isNotEmpty(CleengManager.currentUser?.token)) {
 
-                        //TODO constructor is crazy long. change to Builder pattern
-                        val purchaseItem = PurchaseItem(info.token, info.sku, info.signature, info.purchaseTime, info.purchaseState, info.packageName, info.originalJson, info.orderId, info.itemType, info.developerPayload)
+                    //TODO constructor is crazy long. change to Builder pattern
+                    val purchaseItem = PurchaseItem(info.token, info.sku, info.signature, info.purchaseTime, info.purchaseState, info.packageName, info.originalJson, info.orderId, info.itemType, info.developerPayload)
 
-                        CleengManager.subscribe(CleengManager.currentUser?.token!!, authID, purchaseItem, mContext) { status, response ->
-                            if (status == WebService.Status.Success) {
-                                loadSubscriptions(authID, productId)
-                            } else {
-                                callback(status, response)
-                            }
+                    CleengManager.subscribe(CleengManager.currentUser?.token!!, authID, purchaseItem, mContext) { status, response ->
+                        if (status == WebService.Status.Success) {
+                            loadSubscriptions(authID, productId)
                         }
                     }
                 }
@@ -89,8 +85,11 @@ class IAPManager(private val mContext: Context, var callback: (WebService.Status
 
         if (StringUtil.isNotEmpty(token)) {
 
-            val subscriptionHelper = SubscriptionLoaderHelper(mContext, productId, token!!, authID, 60, 5) { status, response ->
-                callback(status, response)
+            val subscriptionHelper = SubscriptionLoaderHelper(mContext, productId, token!!, authID, 60, 5) { isSuccess ->
+
+                if (isSuccess && mContext is SubscriptionsActivity) {
+                    mContext.finish()
+                }
             }
             subscriptionHelper.load()
         }

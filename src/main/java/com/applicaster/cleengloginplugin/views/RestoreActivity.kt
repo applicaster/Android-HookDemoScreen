@@ -16,8 +16,7 @@ import kotlinx.android.synthetic.main.user_input.*
 
 class RestoreActivity : BaseActivity() {
 
-    private val iapManager = IAPManager(this) { status: WebService.Status, response: String? ->
-    }
+    private val iapManager = IAPManager(this)
 
     override fun getContentViewResId(): Int {
         return R.layout.restore_activity;
@@ -30,7 +29,6 @@ class RestoreActivity : BaseActivity() {
         CustomizationHelper.updateTextView(this, R.id.restore_description, RESTORE_DESCRIPTION,"CleengLoginDescriptionText")
         CustomizationHelper.updateTextView(this, R.id.bottom_bar_action_text, RESTORE_HELP_ACTION,"CleengLoginActionText")
         CustomizationHelper.updateTextView(this, R.id.bottom_bar_title, RESTORE_HELP_TEXT,"CleengLoginActionDescriptionText")
-
         CustomizationHelper.updateEditTextView(this, R.id.input_email, EMAIL_PLACEHOLDER, true)
         CustomizationHelper.updateEditTextView(this, R.id.input_password, PASSWORD_PLACEHOLDER, true)
         CustomizationHelper.updateTextView(this, R.id.forgot_password, RESET_PASSWORD_ACTION_TEXT, "CleengLoginActionDescriptionText")
@@ -47,7 +45,7 @@ class RestoreActivity : BaseActivity() {
             val user = this.getUserFromInput() ?: return@setOnClickListener
 
             this.showLoading()
-            CleengManager.register(user, this) { status: WebService.Status, response: String? ->
+            CleengManager.register(user, this) { status, response ->
                 this.dismissLoading()
 
                 iapManager.getInventory(null , handler)
