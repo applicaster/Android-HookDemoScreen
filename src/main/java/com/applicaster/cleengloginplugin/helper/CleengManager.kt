@@ -22,7 +22,8 @@ object CleengManager {
     private val webService = WebService()
 
     //save all availableSubscription
-    val availableSubscriptions = emptyList<Subscription>().toMutableList()
+    var availableSubscriptions = emptyList<Subscription>().toMutableList()
+    val purchasedItems = emptyList<PurchaseItem>().toMutableList()
 
     private lateinit var itemLoader : APVodItemLoader
 
@@ -104,16 +105,10 @@ object CleengManager {
         }
     }
 
-    fun parseAvailableSubscriptions(status: WebService.Status, response: String?) {
+    fun parseAvailableSubscriptions(status: WebService.Status, response: String?, context: Context) {
 
         val responseParser = ResponseParser()
-        responseParser.handleAvailableSubscriptionsResponse(status, response)
-
-        if (responseParser.status == WebService.Status.Success) {
-            if (responseParser.availableSubscriptions != null) {
-                this.availableSubscriptions.addAll(responseParser.availableSubscriptions!!)
-            }
-        }
+        responseParser.handleAvailableSubscriptionsResponse(status, response, context)
     }
 
     fun subscribe(userToken: String, authID: String, purchaseItem: PurchaseItem, context: Context, subscribeCallback: (WebService.Status, String?) -> Unit) {

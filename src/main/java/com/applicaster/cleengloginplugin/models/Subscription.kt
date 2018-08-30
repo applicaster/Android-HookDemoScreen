@@ -1,8 +1,12 @@
 package com.applicaster.cleengloginplugin.models
 
-class Subscription(val title: String,
-                   val description: String,
-                   val price: Double,
-                   val id: String,
+data class Subscription(val id: String,
                    val androidProductId: String,
-                   val authID: String)
+                   val authID: String) {
+
+
+    var title: String? = null
+    var description: String? = null
+    var price: String? = null
+
+}

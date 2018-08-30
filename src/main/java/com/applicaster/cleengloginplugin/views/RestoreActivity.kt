@@ -48,7 +48,10 @@ class RestoreActivity : BaseActivity() {
             CleengManager.register(user, this) { status, response ->
                 this.dismissLoading()
 
-                iapManager.getInventory(null , handler)
+//                iapManager.init(null, null)
+//                iapManager.getInventory(null)  {
+//
+//                }
             }
         }
 

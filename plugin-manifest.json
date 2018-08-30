@@ -208,6 +208,11 @@
     },
     {
       "type": "text",
+      "key": "cleeng_login_subscribe",
+      "tooltip_text": "Text for subscribe button action. For example: SUBSCRIBE FOR"
+    },
+    {
+      "type": "text",
       "key": "cleeng_login_error_internal_title",
       "tooltip_text": "Text for internal alert title. For example: Error"
     },

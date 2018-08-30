@@ -5,57 +5,70 @@ import android.content.Context
 import android.content.Intent
 import android.util.Log
 import com.applicaster.billing.v3.handlers.APIabSetupFinishedHandler
-import com.applicaster.billing.v3.handlers.APQueryInventoryFinishedHandler
-import com.applicaster.billing.v3.util.APBillingUtil
-import com.applicaster.billing.v3.util.IabHelper
-import com.applicaster.billing.v3.util.IabResult
-import com.applicaster.billing.v3.util.Purchase
+import com.applicaster.billing.v3.util.*
 import com.applicaster.cleengloginplugin.models.PurchaseItem
 import com.applicaster.cleengloginplugin.remote.WebService
 import com.applicaster.cleengloginplugin.views.SubscriptionsActivity
 import com.applicaster.util.StringUtil
+import kotlin.collections.HashMap
 
 class IAPManager(private val mContext: Context) {
 
     private val TAG = APBillingUtil::class.java.simpleName
     private var mHelper: IabHelper? = null
 
-    fun init(productId: String, authID: String) {
-        mHelper = APBillingUtil.initBillingHelper(mContext, object : APIabSetupFinishedHandler {
-
-            override fun onIabSetupSucceeded() {
-                startPurchase(productId, authID)
-            }
-
-            override fun onIabSetupFailed() {
-                APBillingUtil.showInappBillingNotSupportedDialog(mContext)
-            }
-        })
+    fun init(setupFinishedHandler: APIabSetupFinishedHandler) {
+        mHelper = APBillingUtil.initBillingHelper(mContext, setupFinishedHandler)
     }
 
-    fun getInventory(productIds: List<String>?, handler: APQueryInventoryFinishedHandler) {
+    fun getInventory(productIds: List<String>?, handler: (Boolean) -> Unit) {
         mHelper?.queryInventoryAsync(true, productIds) { result, inventory ->
             if (result.isFailure) {
-                handler.onInventoryQueryFailed()
+                handler(false)
                 Log.d(TAG, "Query Inventory Failed")
             } else {
                 if (inventory != null) {
-                    var isRelatedPurchaseFound = false
-                    val ownedProductsIds = inventory.allOwnedSkus
-                    if (ownedProductsIds.size > 0) {
-                        for (productId in ownedProductsIds) {
-                            val purchase = inventory.getPurchase(productId)
-                            if (purchase != null) {
-                                isRelatedPurchaseFound = isRelatedPurchaseFound || handler.onUnconsumedPurchaseFound(purchase) // This will keep isRelatedPurchaseFound true after the first time it has become true
+                    val allProductsIds = inventory.allSkus
+                    if (allProductsIds.size > 0) {
+
+                        val items = HashMap<String, SkuDetails>()
+
+                        for (productId in allProductsIds) {
+                            val product = inventory.getSkuDetails(productId)
+                            if (product != null) {
+                                items[productId] = product
                             }
                         }
-                        if (!isRelatedPurchaseFound) {
-                            handler.onInventoryEmpty()
+
+                        for (subscription in CleengManager.availableSubscriptions)   {
+                            val item = items[subscription.androidProductId]
+                            subscription.description = item?.description
+                            subscription.price = item?.price
+                            subscription.title = item?.title
                         }
-                    } else {
-                        handler.onInventoryEmpty()
+
                     }
+                    val purchasedProductsIds = inventory.allOwnedSkus
+                    if (purchasedProductsIds.size > 0) {
+                        val items = HashMap<String, Purchase>()
+                        for (productId in purchasedProductsIds) {
+                            val purchase = inventory.getPurchase(productId)
+                            if (purchase != null) {
+                                items[productId] = purchase
+                            }
+                        }
+//
+//                        for (subscription in CleengManager.purchasedItems)   {
+//                            val item = items[subscription.androidProductId]
+//                            subscription.description = item?.description
+//                            subscription.price = item?.price
+//                            subscription.title = item?.title
+//                        }
+                    }
+                    handler(true)
                 }
+
+                handler(false)
             }
         }
     }

@@ -1,20 +1,21 @@
 package com.applicaster.cleengloginplugin.views
 
-import android.app.LauncherActivity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
+import com.applicaster.billing.v3.handlers.APIabSetupFinishedHandler
+import com.applicaster.billing.v3.util.APBillingUtil
 import com.applicaster.cleengloginplugin.*
 import com.applicaster.cleengloginplugin.helper.CleengManager
 import com.applicaster.cleengloginplugin.helper.CustomizationHelper
 import com.applicaster.cleengloginplugin.helper.IAPManager
+import com.applicaster.cleengloginplugin.helper.PluginConfigurationHelper
 import com.applicaster.cleengloginplugin.models.Subscription
 import com.applicaster.cleengloginplugin.remote.Params
 import com.applicaster.cleengloginplugin.remote.WebService
 import com.applicaster.model.APModel
-import com.applicaster.plugin_manager.login.LoginManager
 import com.applicaster.plugin_manager.playersmanager.Playable
 import com.applicaster.util.OSUtil
 import kotlinx.android.synthetic.main.account_sign_text_with_action.*
@@ -45,18 +46,18 @@ class SubscriptionsActivity: BaseActivity() {
             }
         }
         if (CleengManager.availableSubscriptions.count() == 0 || playable != null) {
+            showLoading()
             CleengManager.fetchAvailableSubscriptions(this, params) { status: WebService.Status, response: String? ->
                 this.dismissLoading()
 
                 if (status == WebService.Status.Success) {
-                    CleengManager.parseAvailableSubscriptions(status, response)
-                    presentSubscriptions()
+                    CleengManager.parseAvailableSubscriptions(status, response, this)
                 } else {
                     showError(status, response)
                 }
             }
         } else {
-            this.presentSubscriptions()
+            presentSubscriptions()
         }
     }
 
@@ -83,10 +84,12 @@ class SubscriptionsActivity: BaseActivity() {
         }
     }
 
-    private fun presentSubscriptions() {
+    fun presentSubscriptions() {
+        dismissLoading()
         for (subscription in CleengManager.availableSubscriptions) {
             subscriptionsContainer.addView(this.getSubscriptionView(subscription,subscriptionsContainer))
         }
+
     }
 
     private fun getSubscriptionView(subscription: Subscription, container: ViewGroup): View {
@@ -104,14 +107,25 @@ class SubscriptionsActivity: BaseActivity() {
         CustomizationHelper.updateTextStyle(this, subscriptionView.title_text_view, "CleengLoginSubscriptionTitle")
         subscriptionView.description_text_view.text = subscription.description
         CustomizationHelper.updateTextStyle(this, subscriptionView.description_text_view, "CleengLoginSubscriptionDetailsText")
-        subscriptionView.purchase_button.text =  getString(R.string.subscribe_for)+subscription.price.toString()
+        val price = "${PluginConfigurationHelper.getConfigurationValue("cleeng_login_subscribe")} ${subscription.price}"
+        subscriptionView.purchase_button.text =  price
         CustomizationHelper.updateTextStyle(this,subscriptionView.purchase_button, "CleengLoginSubscriptionText")
         var purchaseBtnBackground = OSUtil.getDrawableResourceIdentifier("cleeng_login_subscribe_button")
         if (purchaseBtnBackground != 0)
             subscriptionView.purchase_button.setBackgroundResource(purchaseBtnBackground)
         subscriptionView.purchase_button.setOnClickListener {
 
-            iapManager.init(subscription.androidProductId, subscription.authID)
+            iapManager.init(object : APIabSetupFinishedHandler {
+
+                override fun onIabSetupSucceeded() {
+                    iapManager.startPurchase(subscription.androidProductId, subscription.authID)
+                }
+
+                override fun onIabSetupFailed() {
+                    APBillingUtil.showInappBillingNotSupportedDialog(this@SubscriptionsActivity)
+                }
+            })
+
         }
 
         return subscriptionView
