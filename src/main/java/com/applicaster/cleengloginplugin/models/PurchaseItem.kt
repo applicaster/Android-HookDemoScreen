@@ -1,5 +1,7 @@
 package com.applicaster.cleengloginplugin.models
 
+import com.applicaster.billing.v3.util.Purchase
+
 data class PurchaseItem(val token: String,
                    val sku: String,
                    val signature: String,
@@ -48,5 +50,17 @@ data class PurchaseItem(val token: String,
                 itemType,
                 developerPayload
         )
+
+        fun build(purchase: Purchase) = PurchaseItem.Builder()
+                            .token(purchase.token)
+                            .sku(purchase.sku)
+                            .signature(purchase.signature)
+                            .purchaseTime(purchase.purchaseTime)
+                            .purchaseState(purchase.purchaseState)
+                            .packageName(purchase.packageName)
+                            .originalJson(purchase.originalJson)
+                            .orderId(purchase.orderId)
+                            .itemType(purchase.itemType)
+                            .developerPayload(purchase.developerPayload).build()
     }
 }

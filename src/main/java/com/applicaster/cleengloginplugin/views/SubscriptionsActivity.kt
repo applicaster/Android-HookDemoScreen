@@ -18,6 +18,7 @@ import com.applicaster.cleengloginplugin.remote.WebService
 import com.applicaster.model.APModel
 import com.applicaster.plugin_manager.playersmanager.Playable
 import com.applicaster.util.OSUtil
+import com.applicaster.util.StringUtil
 import kotlinx.android.synthetic.main.account_sign_text_with_action.*
 import kotlinx.android.synthetic.main.subscription_activity.*
 import kotlinx.android.synthetic.main.subscription_item.view.*
@@ -48,7 +49,6 @@ class SubscriptionsActivity: BaseActivity() {
         if (CleengManager.availableSubscriptions.count() == 0 || playable != null) {
             showLoading()
             CleengManager.fetchAvailableSubscriptions(this, params) { status: WebService.Status, response: String? ->
-                this.dismissLoading()
 
                 if (status == WebService.Status.Success) {
                     CleengManager.parseAvailableSubscriptions(status, response, this)
@@ -77,19 +77,19 @@ class SubscriptionsActivity: BaseActivity() {
     }
 
     fun updateViews() {
-        fromStartUp = intent.getBooleanExtra(SUBSCRIPTION_FROM_START_UP, false)
-
-        if(!fromStartUp){
+        if (StringUtil.isNotEmpty(CleengManager.currentUser?.token) && CleengManager.userHasValidToken()) {
             subscription_sign_up_hint.visibility = View.GONE
+
         }
     }
 
     fun presentSubscriptions() {
         dismissLoading()
         for (subscription in CleengManager.availableSubscriptions) {
-            subscriptionsContainer.addView(this.getSubscriptionView(subscription,subscriptionsContainer))
+            //ignore purchased items
+            if(!CleengManager.purchasedItems.contains(subscription.androidProductId))
+                subscriptionsContainer.addView(this.getSubscriptionView(subscription,subscriptionsContainer))
         }
-
     }
 
     private fun getSubscriptionView(subscription: Subscription, container: ViewGroup): View {
@@ -115,17 +115,23 @@ class SubscriptionsActivity: BaseActivity() {
             subscriptionView.purchase_button.setBackgroundResource(purchaseBtnBackground)
         subscriptionView.purchase_button.setOnClickListener {
 
-            iapManager.init(object : APIabSetupFinishedHandler {
+            if (StringUtil.isEmpty(CleengManager.currentUser?.token)) {
+                val purchaseData = HashMap<String, String>()
+                purchaseData["androidProductId"] = subscription.androidProductId
+                purchaseData["authID"] = subscription.authID
+                SignUpActivity.launchSignUpActivity(this, playable, true, purchaseData)
+            } else {
+                iapManager.init(object : APIabSetupFinishedHandler {
 
-                override fun onIabSetupSucceeded() {
-                    iapManager.startPurchase(subscription.androidProductId, subscription.authID)
-                }
+                    override fun onIabSetupSucceeded() {
+                        iapManager.startPurchase(subscription.androidProductId, subscription.authID)
+                    }
 
-                override fun onIabSetupFailed() {
-                    APBillingUtil.showInappBillingNotSupportedDialog(this@SubscriptionsActivity)
-                }
-            })
-
+                    override fun onIabSetupFailed() {
+                        APBillingUtil.showInappBillingNotSupportedDialog(this@SubscriptionsActivity)
+                    }
+                })
+            }
         }
 
         return subscriptionView
@@ -138,15 +144,12 @@ class SubscriptionsActivity: BaseActivity() {
 
     companion object {
 
-        private const val SUBSCRIPTION_FROM_START_UP = "from_Start_up"
-
-        fun launchSubscriptionsActivity(context: Context, playable: Playable?, fromStartUp: Boolean = false) {
+        fun launchSubscriptionsActivity(context: Context, playable: Playable?) {
             val intent = Intent(context, SubscriptionsActivity::class.java)
             if (playable is APModel) {
                 intent.putExtra("authIds", playable.authorization_providers_ids)
                 intent.putExtra(PLAYABLE, playable)
             }
-            intent.putExtra(SUBSCRIPTION_FROM_START_UP, fromStartUp);
             context.startActivity(intent)
         }
     }

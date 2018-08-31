@@ -37,7 +37,7 @@ class CleengLoginPlugin :  BaseLoginContract() {
 
         if(CleengManager.userHasValidToken()) {
                 //if user has valid token open subscription screen (user already logged in)
-                SubscriptionsActivity.launchSubscriptionsActivity(context, playable, true)
+                SubscriptionsActivity.launchSubscriptionsActivity(context, playable)
         }
         else {
               openFirstScreen(context, playable)
@@ -80,7 +80,7 @@ class CleengLoginPlugin :  BaseLoginContract() {
     private fun openFirstScreen(context: Context, playable: Playable?) {
         var firstScreenValue = this.pluginParams[LOGIN_FIRST_SCREEN]
         when (firstScreenValue) {
-            "subscriptions" -> SubscriptionsActivity.launchSubscriptionsActivity(context, playable, true)
+            "subscriptions" -> SubscriptionsActivity.launchSubscriptionsActivity(context, playable)
             "login" -> LoginActivity.launchLogin(context, playable)
             "sign up" -> SignUpActivity.launchSignUpActivity(context, playable)
             else -> LoginActivity.launchLogin(context, playable)

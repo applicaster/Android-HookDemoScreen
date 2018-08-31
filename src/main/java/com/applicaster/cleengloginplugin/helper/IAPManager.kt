@@ -50,19 +50,16 @@ class IAPManager(private val mContext: Context) {
                     }
                     val purchasedProductsIds = inventory.allOwnedSkus
                     if (purchasedProductsIds.size > 0) {
-                        val items = HashMap<String, Purchase>()
                         for (productId in purchasedProductsIds) {
                             val purchase = inventory.getPurchase(productId)
                             if (purchase != null) {
-                                val purItem = PurchaseItem()
-                                items[productId] = purchase
-
+                                val purchaseItem = PurchaseItem.Builder().build(purchase)
+                                CleengManager.purchasedItems[productId] = purchaseItem
                             }
                         }
                     }
                     handler(true)
                 }
-
                 handler(false)
             }
         }
@@ -74,18 +71,8 @@ class IAPManager(private val mContext: Context) {
                 //purchase success need to subscribe to Cleeng
                 if (info != null && StringUtil.isNotEmpty(CleengManager.currentUser?.token)) {
 
-                    val purchaseItem = PurchaseItem.Builder()
-                            .token(info.token)
-                            .sku(info.sku)
-                            .signature(info.signature)
-                            .purchaseTime(info.purchaseTime)
-                            .purchaseState(info.purchaseState)
-                            .packageName(info.packageName)
-                            .originalJson(info.originalJson)
-                            .orderId(info.orderId)
-                            .itemType(info.itemType)
-                            .developerPayload(info.developerPayload).build()
-
+                    val purchaseItem = PurchaseItem.Builder().build(info)
+                    CleengManager.purchasedItems[info.sku] = purchaseItem
                     CleengManager.subscribe(CleengManager.currentUser?.token!!, authID, purchaseItem, mContext) { status, response ->
                         if (status == WebService.Status.Success) {
                             loadSubscriptions(authID, productId)
