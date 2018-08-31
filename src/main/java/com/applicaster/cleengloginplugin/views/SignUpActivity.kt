@@ -77,7 +77,6 @@ class SignUpActivity : BaseActivity() {
                     } else {
                         SubscriptionsActivity.launchSubscriptionsActivity(this@SignUpActivity, playable)
                     }
-                    this.finish()
                 } else {
                     this.showError(status, response)
                 }
@@ -126,8 +125,12 @@ class SignUpActivity : BaseActivity() {
                                 dismissLoading()
 
                                 if (status == WebService.Status.Success) {
-                                    SubscriptionsActivity.launchSubscriptionsActivity(this@SignUpActivity, playable)
-                                    finish()
+                                    if (continueToPayment) {
+                                        purchase()
+                                    } else {
+                                        SubscriptionsActivity.launchSubscriptionsActivity(this@SignUpActivity, playable)
+                                        finish()
+                                    }
                                 } else {
                                     showError(status, response)
                                 }

@@ -75,7 +75,7 @@ class IAPManager(private val mContext: Context) {
                     CleengManager.purchasedItems[info.sku] = purchaseItem
                     CleengManager.subscribe(CleengManager.currentUser?.token!!, itemId, purchaseItem, mContext, isAuthId) { status, response ->
                         if (status == WebService.Status.Success) {
-                            loadSubscriptions(itemId, productId)
+                            loadSubscriptions(itemId, productId, isAuthId)
                         }
                     }
                 }
@@ -83,14 +83,12 @@ class IAPManager(private val mContext: Context) {
         }
     }
 
-    fun loadSubscriptions(authID: String, productId: String) {
+    fun loadSubscriptions(itemId: String, productId: String, isAuthId: Boolean) {
 
         val token = CleengManager.currentUser?.token
 
         if (StringUtil.isNotEmpty(token)) {
-
-            val subscriptionHelper = SubscriptionLoaderHelper(mContext, productId, token!!, authID, 60, 5) { isSuccess ->
-
+            val subscriptionHelper = SubscriptionLoaderHelper(mContext, productId, token!!, itemId, isAuthId,60, 5) { isSuccess ->
                 if (isSuccess && mContext is SubscriptionsActivity) {
                     mContext.finish()
                 }

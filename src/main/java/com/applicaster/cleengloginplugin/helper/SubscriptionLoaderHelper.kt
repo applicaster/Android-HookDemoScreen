@@ -1,6 +1,7 @@
 package com.applicaster.cleengloginplugin.helper
 
 import android.content.Context
+import android.util.Log
 import com.applicaster.authprovider.AuthenticationProviderUtil
 import com.applicaster.cleengloginplugin.remote.Params
 import com.applicaster.cleengloginplugin.remote.WebService
@@ -12,7 +13,7 @@ import rx.Observable
 import rx.android.schedulers.AndroidSchedulers
 import java.util.concurrent.TimeUnit
 
-class SubscriptionLoaderHelper constructor(val context: Context, val productId: String, val userToken: String, private val authID: String?, val maxTimeForRequestInSecond: Long, val interval: Long, val callback: (Boolean) -> Unit) {
+class SubscriptionLoaderHelper constructor(val context: Context, val productId: String, val userToken: String, private val itemID: String?, private val isAuthId: Boolean, val maxTimeForRequestInSecond: Long, val interval: Long, val callback: (Boolean) -> Unit) {
 
     lateinit var offerId: String
     fun load() {
@@ -21,11 +22,10 @@ class SubscriptionLoaderHelper constructor(val context: Context, val productId: 
 
         val params = Params()
         params["token"] = userToken
-        if (StringUtil.isNotEmpty(authID)) {
+        if (isAuthId) {
             params["byAuthId"] = "1"
-            params["offers"] = authID!!
         } else {
-
+            params["offers"] = itemID!!
         }
 
         Observable.interval(0, interval, TimeUnit.SECONDS)
@@ -36,16 +36,23 @@ class SubscriptionLoaderHelper constructor(val context: Context, val productId: 
 
                         CleengManager.fetchAvailableSubscriptions(context, params) { status, response ->
 
-                            if (status == WebService.Status.Success && isPurchaseSucceed(response, productId)) {
-                                addApplicasterToken(offerId)
-                                subscriber.onNext(true)
-                            } else {
-                                subscriber.onNext(false)
-                            }
+                            if (status == WebService.Status.Success) {
+                                if (status == WebService.Status.Success && isPurchaseSucceed(response, productId)) {
+                                    addApplicasterToken(offerId)
+                                    subscriber.onNext(true)
+                                } else {
+                                    subscriber.onNext(false)
+                                }
 
-                            subscriber.onCompleted()
+                                subscriber.onCompleted()
+                            } else {
+                                Log.e("SubscriptionLoader", response.toString())
+                            }
                         }
                     })
+                }
+                .doOnError {
+                    Log.e("SubscriptionLoader", it.message)
                 }
                 .takeUntil {
                     return@takeUntil it
@@ -69,8 +76,8 @@ class SubscriptionLoaderHelper constructor(val context: Context, val productId: 
 
                 for (i in 0 until json.length()) {
                     var jsonOffers = json.getJSONObject(i)
-                    if (offerId == jsonOffers.optString("offerId")) {
-                        AuthenticationProviderUtil.addToken(authID, jsonOffers.optString("token"))
+                    if (offerId == jsonOffers.optString("offerId") && isAuthId) {
+                        AuthenticationProviderUtil.addToken(itemID, jsonOffers.optString("token"))
                     }
                 }
             }

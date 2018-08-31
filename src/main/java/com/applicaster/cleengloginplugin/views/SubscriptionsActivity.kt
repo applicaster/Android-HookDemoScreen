@@ -25,9 +25,9 @@ import kotlinx.android.synthetic.main.subscription_item.view.*
 
 class SubscriptionsActivity: BaseActivity() {
 
-    private var fromStartUp: Boolean = false
     private var mPlayable: Playable? = null
     private val iapManager = IAPManager(this)
+    var isActiveUser :Boolean = false
 
     override fun getContentViewResId(): Int {
         return R.layout.subscription_activity;
@@ -77,18 +77,21 @@ class SubscriptionsActivity: BaseActivity() {
     }
 
     fun updateViews() {
-        if (StringUtil.isNotEmpty(CleengManager.currentUser?.token) && CleengManager.userHasValidToken()) {
+        isActiveUser = StringUtil.isNotEmpty(CleengManager.currentUser?.token) && CleengManager.userHasValidToken()
+        if (isActiveUser)
             subscription_sign_up_hint.visibility = View.GONE
-
-        }
     }
 
     fun presentSubscriptions() {
         dismissLoading()
         for (subscription in CleengManager.availableSubscriptions) {
-            //ignore purchased items
-            if(!CleengManager.purchasedItems.contains(subscription.androidProductId))
-                subscriptionsContainer.addView(this.getSubscriptionView(subscription,subscriptionsContainer))
+            if (isActiveUser) {
+                //ignore purchased items
+                if (!CleengManager.purchasedItems.contains(subscription.androidProductId))
+                    subscriptionsContainer.addView(this.getSubscriptionView(subscription, subscriptionsContainer))
+            } else {
+                subscriptionsContainer.addView(this.getSubscriptionView(subscription, subscriptionsContainer))
+            }
         }
     }
 
