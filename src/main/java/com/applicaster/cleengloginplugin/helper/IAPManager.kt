@@ -54,16 +54,11 @@ class IAPManager(private val mContext: Context) {
                         for (productId in purchasedProductsIds) {
                             val purchase = inventory.getPurchase(productId)
                             if (purchase != null) {
+                                val purItem = PurchaseItem()
                                 items[productId] = purchase
+
                             }
                         }
-//
-//                        for (subscription in CleengManager.purchasedItems)   {
-//                            val item = items[subscription.androidProductId]
-//                            subscription.description = item?.description
-//                            subscription.price = item?.price
-//                            subscription.title = item?.title
-//                        }
                     }
                     handler(true)
                 }
@@ -79,8 +74,17 @@ class IAPManager(private val mContext: Context) {
                 //purchase success need to subscribe to Cleeng
                 if (info != null && StringUtil.isNotEmpty(CleengManager.currentUser?.token)) {
 
-                    //TODO constructor is crazy long. change to Builder pattern
-                    val purchaseItem = PurchaseItem(info.token, info.sku, info.signature, info.purchaseTime, info.purchaseState, info.packageName, info.originalJson, info.orderId, info.itemType, info.developerPayload)
+                    val purchaseItem = PurchaseItem.Builder()
+                            .token(info.token)
+                            .sku(info.sku)
+                            .signature(info.signature)
+                            .purchaseTime(info.purchaseTime)
+                            .purchaseState(info.purchaseState)
+                            .packageName(info.packageName)
+                            .originalJson(info.originalJson)
+                            .orderId(info.orderId)
+                            .itemType(info.itemType)
+                            .developerPayload(info.developerPayload).build()
 
                     CleengManager.subscribe(CleengManager.currentUser?.token!!, authID, purchaseItem, mContext) { status, response ->
                         if (status == WebService.Status.Success) {

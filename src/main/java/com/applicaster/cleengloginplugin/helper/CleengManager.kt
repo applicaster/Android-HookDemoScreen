@@ -23,7 +23,7 @@ object CleengManager {
 
     //save all availableSubscription
     var availableSubscriptions = emptyList<Subscription>().toMutableList()
-    val purchasedItems = emptyList<PurchaseItem>().toMutableList()
+    var purchasedItems = emptyList<PurchaseItem>().toMutableList()
 
     private lateinit var itemLoader : APVodItemLoader
 
