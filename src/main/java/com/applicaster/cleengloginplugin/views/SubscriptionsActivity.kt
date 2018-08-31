@@ -114,17 +114,21 @@ class SubscriptionsActivity: BaseActivity() {
         if (purchaseBtnBackground != 0)
             subscriptionView.purchase_button.setBackgroundResource(purchaseBtnBackground)
         subscriptionView.purchase_button.setOnClickListener {
+            var itemId = subscription.authID
+            val isAuthId = StringUtil.isNotEmpty(itemId)
+            if (!isAuthId) itemId = subscription.id
 
             if (StringUtil.isEmpty(CleengManager.currentUser?.token)) {
                 val purchaseData = HashMap<String, String>()
                 purchaseData["androidProductId"] = subscription.androidProductId
                 purchaseData["authID"] = subscription.authID
+                purchaseData["offerId"] = subscription.id
                 SignUpActivity.launchSignUpActivity(this, playable, true, purchaseData)
             } else {
                 iapManager.init(object : APIabSetupFinishedHandler {
 
                     override fun onIabSetupSucceeded() {
-                        iapManager.startPurchase(subscription.androidProductId, subscription.authID)
+                        iapManager.startPurchase(subscription.androidProductId, itemId, isAuthId)
                     }
 
                     override fun onIabSetupFailed() {

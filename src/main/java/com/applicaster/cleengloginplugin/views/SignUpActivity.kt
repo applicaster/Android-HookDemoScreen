@@ -31,22 +31,19 @@ class SignUpActivity : BaseActivity() {
     private lateinit var extraData: HashMap<String,String>
     private val iapManager = IAPManager(this)
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        continueToPayment = intent.getBooleanExtra("continueToPayment", false)
-        if (continueToPayment) {
-            extraData = intent.getSerializableExtra("extraData") as HashMap<String, String>
-        }
-
-    }
-
     override fun getContentViewResId(): Int {
         return R.layout.new_account_activiy;
     }
 
     override fun customize() {
         super.customize()
+
+        continueToPayment = intent.getBooleanExtra("continueToPayment", false)
+        if (continueToPayment) {
+            extraData = intent.getSerializableExtra("extraData") as HashMap<String, String>
+        }
+
+
         CustomizationHelper.updateImageView(this, R.id.app_logo, "cleeng_login_logo")
         CustomizationHelper.updateTextView(this, R.id.enter_details, NEW_ACCOUNT_TITLE, "CleengLoginDescriptionText")
         CustomizationHelper.updateTextView(this, R.id.sign_up_action_text, SIGN_IN_LABEL_TEXT, "CleengLoginActionText")
@@ -76,8 +73,7 @@ class SignUpActivity : BaseActivity() {
 
                 if (status == WebService.Status.Success) {
                     if (continueToPayment) {
-                        if (StringUtil.isNotEmpty(extraData["androidProductId"]) && StringUtil.isNotEmpty(extraData["authID"]))
-                            purchase(extraData["androidProductId"]!!, extraData["authID"]!!)
+                        purchase()
                     } else {
                         SubscriptionsActivity.launchSubscriptionsActivity(this@SignUpActivity, playable)
                     }
@@ -147,17 +143,25 @@ class SignUpActivity : BaseActivity() {
         forgot_password.visibility = View.INVISIBLE;
     }
 
-    private fun purchase(productId: String, authId: String) {
-        iapManager.init(object : APIabSetupFinishedHandler {
+    private fun purchase() {
+        val androidProductId = extraData["androidProductId"]
+        var itemId = extraData["authID"]
+        val isAuthId = StringUtil.isNotEmpty(itemId)
+        if (!isAuthId) itemId = extraData["offerId"]
 
-            override fun onIabSetupSucceeded() {
-                iapManager.startPurchase(productId, authId)
-            }
 
-            override fun onIabSetupFailed() {
-                APBillingUtil.showInappBillingNotSupportedDialog(this@SignUpActivity)
-            }
-        })
+        if (StringUtil.isNotEmpty(androidProductId) && StringUtil.isNotEmpty(itemId)) {
+            iapManager.init(object : APIabSetupFinishedHandler {
+
+                override fun onIabSetupSucceeded() {
+                    iapManager.startPurchase(androidProductId!!, itemId!!, isAuthId)
+                }
+
+                override fun onIabSetupFailed() {
+                    APBillingUtil.showInappBillingNotSupportedDialog(this@SignUpActivity)
+                }
+            })
+        }
     }
 
     companion object {
@@ -166,9 +170,9 @@ class SignUpActivity : BaseActivity() {
             if (playable != null && playable is APModel) {
                 intent.putExtra("authIds", playable.authorization_providers_ids)
                 intent.putExtra(PLAYABLE, playable)
-                intent.putExtra("continueToPayment", continueToPayment)
-                intent.putExtra("extraData", extraData)
             }
+            intent.putExtra("continueToPayment", continueToPayment)
+            intent.putExtra("extraData", extraData)
             context.startActivity(intent)
         }
     }

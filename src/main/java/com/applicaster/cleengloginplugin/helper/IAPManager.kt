@@ -65,7 +65,7 @@ class IAPManager(private val mContext: Context) {
         }
     }
 
-    fun startPurchase(productId: String, authID: String) {
+    fun startPurchase(productId: String, itemId: String, isAuthId: Boolean) {
         mHelper?.launchSubscriptionPurchaseFlow(mContext as Activity, productId, APBillingUtil.PURCHASE_REQUEST_CODE) { result, info ->
             if (result.isSuccess) {
                 //purchase success need to subscribe to Cleeng
@@ -73,9 +73,9 @@ class IAPManager(private val mContext: Context) {
 
                     val purchaseItem = PurchaseItem.Builder().build(info)
                     CleengManager.purchasedItems[info.sku] = purchaseItem
-                    CleengManager.subscribe(CleengManager.currentUser?.token!!, authID, purchaseItem, mContext) { status, response ->
+                    CleengManager.subscribe(CleengManager.currentUser?.token!!, itemId, purchaseItem, mContext, isAuthId) { status, response ->
                         if (status == WebService.Status.Success) {
-                            loadSubscriptions(authID, productId)
+                            loadSubscriptions(itemId, productId)
                         }
                     }
                 }

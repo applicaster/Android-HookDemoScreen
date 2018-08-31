@@ -12,7 +12,7 @@ import rx.Observable
 import rx.android.schedulers.AndroidSchedulers
 import java.util.concurrent.TimeUnit
 
-class SubscriptionLoaderHelper constructor(val context: Context, val productId: String, val userToken: String, val authID: String, val maxTimeForRequestInSecond: Long, val interval: Long, val callback: (Boolean) -> Unit) {
+class SubscriptionLoaderHelper constructor(val context: Context, val productId: String, val userToken: String, private val authID: String?, val maxTimeForRequestInSecond: Long, val interval: Long, val callback: (Boolean) -> Unit) {
 
     lateinit var offerId: String
     fun load() {
@@ -23,7 +23,9 @@ class SubscriptionLoaderHelper constructor(val context: Context, val productId: 
         params["token"] = userToken
         if (StringUtil.isNotEmpty(authID)) {
             params["byAuthId"] = "1"
-            params["offers"] = authID
+            params["offers"] = authID!!
+        } else {
+
         }
 
         Observable.interval(0, interval, TimeUnit.SECONDS)

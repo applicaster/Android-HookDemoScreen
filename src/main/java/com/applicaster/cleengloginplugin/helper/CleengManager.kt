@@ -111,9 +111,13 @@ object CleengManager {
         responseParser.handleAvailableSubscriptionsResponse(status, response, context)
     }
 
-    fun subscribe(userToken: String, authID: String, purchaseItem: PurchaseItem, context: Context, subscribeCallback: (WebService.Status, String?) -> Unit) {
+    fun subscribe(userToken: String, itemId: String, purchaseItem: PurchaseItem, context: Context, isAuthId: Boolean, subscribeCallback: (WebService.Status, String?) -> Unit) {
         val params = JsonParams()
-        params.put("authId" , authID)
+
+        if(isAuthId)
+            params.put("authId" , itemId)
+        else
+            params.put("offerId", itemId)
         params.put("token" , userToken) //the empty token
 
         val receipt = JsonParams()
