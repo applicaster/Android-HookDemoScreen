@@ -6,8 +6,6 @@ import com.applicaster.authprovider.AuthenticationProviderUtil
 import com.applicaster.cleengloginplugin.remote.Params
 import com.applicaster.cleengloginplugin.remote.WebService
 import com.applicaster.cleengloginplugin.views.BaseActivity
-import com.applicaster.cleengloginplugin.views.SubscriptionsActivity
-import com.applicaster.util.StringUtil
 import org.json.JSONArray
 import rx.Observable
 import rx.android.schedulers.AndroidSchedulers
@@ -54,10 +52,13 @@ class SubscriptionLoaderHelper constructor(val context: Context, val productId: 
                     return@takeUntil it
                 }
                 .observeOn(AndroidSchedulers.mainThread())
-                .doOnCompleted {
+                .subscribe({
+                    Log.d("SubscriptionLoader", "request status is $it")
+                }, {
                     dismissLoading()
-                }
-                .subscribe()
+                }, {
+                    dismissLoading()
+                })
     }
 
     private fun addApplicasterToken(offerId: String) {
