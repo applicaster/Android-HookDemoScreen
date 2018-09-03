@@ -43,7 +43,6 @@ class SignUpActivity : BaseActivity() {
             extraData = intent.getSerializableExtra("extraData") as HashMap<String, String>
         }
 
-
         CustomizationHelper.updateImageView(this, R.id.app_logo, "cleeng_login_logo")
         CustomizationHelper.updateTextView(this, R.id.enter_details, NEW_ACCOUNT_TITLE, "CleengLoginDescriptionText")
         CustomizationHelper.updateTextView(this, R.id.sign_up_action_text, SIGN_IN_LABEL_TEXT, "CleengLoginActionText")
@@ -147,6 +146,7 @@ class SignUpActivity : BaseActivity() {
     }
 
     private fun purchase() {
+        showLoading()
         val androidProductId = extraData["androidProductId"]
         var itemId = extraData["authID"]
         val isAuthId = StringUtil.isNotEmpty(itemId)

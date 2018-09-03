@@ -24,9 +24,8 @@ class SubscriptionLoaderHelper constructor(val context: Context, val productId: 
         params["token"] = userToken
         if (isAuthId) {
             params["byAuthId"] = "1"
-        } else {
-            params["offers"] = itemID!!
         }
+        params["offers"] = itemID!!
 
         Observable.interval(0, interval, TimeUnit.SECONDS)
                 .take((maxTimeForRequestInSecond / interval).toInt())
@@ -50,9 +49,6 @@ class SubscriptionLoaderHelper constructor(val context: Context, val productId: 
                             }
                         }
                     })
-                }
-                .doOnError {
-                    Log.e("SubscriptionLoader", it.message)
                 }
                 .takeUntil {
                     return@takeUntil it

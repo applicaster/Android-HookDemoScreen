@@ -16,7 +16,7 @@
   "dependency_name": "com.applicaster:CleengLoginPlugin-Android",
   "dependency_version": "1.0.+",
   "whitelisted_account_ids": [],
-  "min_zapp_sdk": "6.2.0-rc4",
+  "min_zapp_sdk": "6.7.0b16",
   "deprecated_since_zapp_sdk": "",
   "unsupported_since_zapp_sdk": "",
   "react_native": false,
