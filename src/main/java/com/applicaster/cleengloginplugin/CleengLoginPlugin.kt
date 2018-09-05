@@ -26,7 +26,11 @@ class CleengLoginPlugin : LoginContract {
     override fun executeOnStartup(context: Context, listener: HookListener) {
         val showOnAppLaunch = StringUtil.booleanValue(PluginConfigurationHelper.getConfigurationValue(START_ON_LAUNCH) as String)
         if (showOnAppLaunch && !CleengManager.userHasValidToken()) {
-            // TODO register to broadcast and finish hook after successful login (implemented LoginContract now)
+
+            LoginManager.registerToEvent(context, LoginManager.RequestType.LOGIN, LoginManager.LoginContractBroadcasterReceiver {
+                if (it) listener.onHookFinished()
+            })
+
             openFirstScreen(context, null)
         } else {
             listener.onHookFinished()
@@ -55,12 +59,10 @@ class CleengLoginPlugin : LoginContract {
         return CleengManager.isItemLocked(model)
     }
 
-    override fun isItemLocked(context: Context?, model: Any?, callback: LoginContract.Callback?) {
-        val receiver = LoginManager.LoginContractBroadcasterReceiver(callback)
-        LoginManager.registerToEvent(context, LoginManager.RequestType.LOCKED, receiver)
+    override fun isItemLocked(context: Context, model: Any?, callback: LoginContract.Callback) {
 
         CleengManager.isItemLocked(model) {
-            LoginManager.notifyEvent(context, LoginManager.RequestType.LOCKED, it)
+            callback.onResult(it)
         }
     }
 

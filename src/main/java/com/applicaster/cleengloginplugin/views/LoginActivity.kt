@@ -136,6 +136,8 @@ class LoginActivity : BaseActivity() {
             CleengManager.currentUser?.userOffers?.forEach {
                 AuthenticationProviderUtil.addToken(it.authId, it.token)
             }
+
+            LoginManager.notifyEvent(this, LoginManager.RequestType.LOGIN, true)
         } else {
             SubscriptionsActivity.launchSubscriptionsActivity(this, playable)
         }
