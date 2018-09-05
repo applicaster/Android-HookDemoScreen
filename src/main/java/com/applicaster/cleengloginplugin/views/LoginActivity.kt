@@ -114,13 +114,11 @@ class LoginActivity : BaseActivity() {
 
                                     if (status == WebService.Status.Success) {
                                        loginSuccessful()
-
                                     } else {
                                         showError(status, response)
                                     }
                                 }
                             }
-
                         }
 
                         override fun onCancel() {

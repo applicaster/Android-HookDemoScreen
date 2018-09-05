@@ -19,16 +19,16 @@ class CleengLoginPlugin : LoginContract {
         CleengManager.logout()
     }
 
-    override fun executeOnApplicationReady(context: Context?, listener: HookListener?) {
-        listener?.onHookFinished()
+    override fun executeOnApplicationReady(context: Context?, listener: HookListener) {
+        listener.onHookFinished()
     }
 
     override fun executeOnStartup(context: Context, listener: HookListener) {
         val showOnAppLaunch = StringUtil.booleanValue(PluginConfigurationHelper.getConfigurationValue(START_ON_LAUNCH) as String)
         if (showOnAppLaunch && !CleengManager.userHasValidToken()) {
 
-            LoginManager.registerToEvent(context, LoginManager.RequestType.LOGIN, LoginManager.LoginContractBroadcasterReceiver {
-                if (it) listener.onHookFinished()
+            LoginManager.registerToEvent(context, LoginManager.RequestType.LOGIN, LoginManager.LoginContractBroadcasterReceiver { isSuccess ->
+                if (isSuccess) listener.onHookFinished()
             })
 
             openFirstScreen(context, null)

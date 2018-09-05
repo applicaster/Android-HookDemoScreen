@@ -80,6 +80,7 @@ class SubscriptionLoaderHelper constructor(val context: Context, val productId: 
                         user.userOffers.add(Offer(offerId, jsonOffers.optString("token"), itemID))
                     }
                 }
+                CleengManager.setUser(user)
             }
         }
     }
