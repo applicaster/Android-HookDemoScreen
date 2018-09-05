@@ -9,6 +9,7 @@ import com.applicaster.billing.v3.util.*
 import com.applicaster.cleengloginplugin.models.PurchaseItem
 import com.applicaster.cleengloginplugin.remote.WebService
 import com.applicaster.cleengloginplugin.views.SubscriptionsActivity
+import com.applicaster.plugin_manager.login.LoginManager
 import com.applicaster.util.StringUtil
 import kotlin.collections.HashMap
 
@@ -89,7 +90,9 @@ class IAPManager(private val mContext: Context) {
 
         if (StringUtil.isNotEmpty(token)) {
             val subscriptionHelper = SubscriptionLoaderHelper(mContext, productId, token!!, itemId, isAuthId,60, 5) { isSuccess ->
+
                 if (isSuccess && mContext is SubscriptionsActivity) {
+                    LoginManager.notifyEvent(mContext, LoginManager.RequestType.LOGIN, true)
                     mContext.finish()
                 }
             }

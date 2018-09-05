@@ -6,41 +6,47 @@ import com.applicaster.cleengloginplugin.helper.PluginConfigurationHelper
 import com.applicaster.cleengloginplugin.views.LoginActivity
 import com.applicaster.cleengloginplugin.views.SignUpActivity
 import com.applicaster.cleengloginplugin.views.SubscriptionsActivity
-import com.applicaster.model.APModel
-import com.applicaster.plugin_manager.hook.ApplicationLoaderHookUpI
 import com.applicaster.plugin_manager.hook.HookListener
-import com.applicaster.plugin_manager.login.BaseLoginContract
 import com.applicaster.plugin_manager.login.LoginContract
 import com.applicaster.plugin_manager.login.LoginManager
 import com.applicaster.plugin_manager.playersmanager.Playable
 import com.applicaster.util.StringUtil
 
-class CleengLoginPlugin :  BaseLoginContract() {
+class CleengLoginPlugin : LoginContract {
+
+    override fun logout(context: Context?, additionalParams: MutableMap<Any?, Any?>?, callback: LoginContract.Callback?) {
+        CleengManager.logout()
+    }
+
+    override fun executeOnApplicationReady(context: Context?, listener: HookListener?) {
+        listener?.onHookFinished()
+    }
 
     override fun executeOnStartup(context: Context, listener: HookListener) {
-        val showOnAppLaunch = StringUtil.booleanValue(this.pluginParams[START_ON_LAUNCH] as String)
+        val showOnAppLaunch = StringUtil.booleanValue(PluginConfigurationHelper.getConfigurationValue(START_ON_LAUNCH) as String)
         if (showOnAppLaunch && !CleengManager.userHasValidToken()) {
-            val loginManagerBroadcastReceiver = LoginManager.LoginContractBroadcasterReceiver {
-                listener.onHookFinished()
-            }
-            //need to call onHookFinished in case that user press on back in the login activity
-            LoginManager.registerToEvent(context, LoginManager.RequestType.LOGIN, loginManagerBroadcastReceiver)
-            LoginManager.registerToEvent(context,LoginManager.RequestType.CLOSED,loginManagerBroadcastReceiver)
+            // TODO register to broadcast and finish hook after successful login (implemented LoginContract now)
             openFirstScreen(context, null)
-
         } else {
             listener.onHookFinished()
         }
     }
 
-    override fun login(context: Context, playable: Playable?, additionalParams: MutableMap<Any?, Any?>?) {
+    override fun login(context: Context, additionalParams: MutableMap<Any?, Any?>?, callback: LoginContract.Callback?) {
+        openFirstScreen(context, null)
+    }
 
-        if(CleengManager.userHasValidToken()) {
-                //if user has valid token open subscription screen (user already logged in)
-                SubscriptionsActivity.launchSubscriptionsActivity(context, playable)
-        }
-        else {
-              openFirstScreen(context, playable)
+    override fun login(context: Context, playable: Playable?, additionalParams: MutableMap<Any?, Any?>?, callback: LoginContract.Callback) {
+
+        LoginManager.registerToEvent(context, LoginManager.RequestType.LOGIN, LoginManager.LoginContractBroadcasterReceiver {
+            callback.onResult(it)
+        })
+
+        if (CleengManager.userHasValidToken()) {
+            //if user has valid token open subscription screen (user already logged in)
+            SubscriptionsActivity.launchSubscriptionsActivity(context, playable)
+        } else {
+            openFirstScreen(context, playable)
         }
     }
 
@@ -55,30 +61,18 @@ class CleengLoginPlugin :  BaseLoginContract() {
         CleengManager.isItemLocked(model) {
             LoginManager.notifyEvent(context, LoginManager.RequestType.LOCKED, it)
         }
-
     }
 
     override fun isTokenValid(): Boolean {
         return CleengManager.userHasValidToken()
     }
 
-    override fun logout(context: Context?, additionalParams: MutableMap<Any?, Any?>?) {
-        CleengManager.logout()
-    }
-
-    override fun login(context: Context?, additionalParams: MutableMap<Any?, Any?>?) {
-        if (context != null) {
-            openFirstScreen(context, null)
-        }
-    }
-
     override fun setPluginConfigurationParams(params: MutableMap<Any?, Any?>?) {
-        super.setPluginConfigurationParams(params)
         PluginConfigurationHelper.setConfigurationMap(params as Map<String, String>)
     }
 
     private fun openFirstScreen(context: Context, playable: Playable?) {
-        var firstScreenValue = this.pluginParams[LOGIN_FIRST_SCREEN]
+        val firstScreenValue = PluginConfigurationHelper.getConfigurationValue(LOGIN_FIRST_SCREEN)
         when (firstScreenValue) {
             "subscriptions" -> SubscriptionsActivity.launchSubscriptionsActivity(context, playable)
             "login" -> LoginActivity.launchLogin(context, playable)
@@ -86,4 +80,20 @@ class CleengLoginPlugin :  BaseLoginContract() {
             else -> LoginActivity.launchLogin(context, playable)
         }
     }
+
+    // region NOT IMPLEMENTED
+
+    override fun getToken(): String {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun setToken(token: String?) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun handlePluginScheme(context: Context?, data: MutableMap<String, String>?): Boolean {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    // endregion
 }

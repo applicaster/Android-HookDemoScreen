@@ -52,7 +52,7 @@ class CleengUtil{
                 fbID = user.getString("facebookId")
             }
 
-            return User(user.getString("email"), null, fbID, user.getString("token"), offers, null)
+            return User(user.getString("email"), null, fbID, user.getString("token"), offers)
         }
 
         @JvmStatic
@@ -63,12 +63,7 @@ class CleengUtil{
 
         @JvmStatic
         fun addSubscriptionToUser( subscription: Subscription) {
-            val user = getUser()
-            if (user != null) {
-                val subs = user.ownedSubscriptions ?: ArrayList()
-                subs.add(subscription)
-                user.ownedSubscriptions = subs
-            }
+            getUser()?.ownedSubscriptions?.add(subscription)
         }
     }
 }

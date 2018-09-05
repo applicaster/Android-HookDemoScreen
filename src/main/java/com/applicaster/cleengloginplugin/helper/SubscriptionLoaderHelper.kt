@@ -3,6 +3,7 @@ package com.applicaster.cleengloginplugin.helper
 import android.content.Context
 import android.util.Log
 import com.applicaster.authprovider.AuthenticationProviderUtil
+import com.applicaster.cleengloginplugin.models.Offer
 import com.applicaster.cleengloginplugin.remote.Params
 import com.applicaster.cleengloginplugin.remote.WebService
 import com.applicaster.cleengloginplugin.views.BaseActivity
@@ -11,7 +12,7 @@ import rx.Observable
 import rx.android.schedulers.AndroidSchedulers
 import java.util.concurrent.TimeUnit
 
-class SubscriptionLoaderHelper constructor(val context: Context, val productId: String, val userToken: String, private val itemID: String?, private val isAuthId: Boolean, val maxTimeForRequestInSecond: Long, val interval: Long, val callback: (Boolean) -> Unit) {
+class SubscriptionLoaderHelper constructor(val context: Context, val productId: String, val userToken: String, private val itemID: String, private val isAuthId: Boolean, val maxTimeForRequestInSecond: Long, val interval: Long, val callback: (Boolean) -> Unit) {
 
     lateinit var offerId: String
     fun load() {
@@ -23,7 +24,7 @@ class SubscriptionLoaderHelper constructor(val context: Context, val productId: 
         if (isAuthId) {
             params["byAuthId"] = "1"
         }
-        params["offers"] = itemID!!
+        params["offers"] = itemID
 
         Observable.interval(0, interval, TimeUnit.SECONDS)
                 .take((maxTimeForRequestInSecond / interval).toInt())
@@ -38,12 +39,13 @@ class SubscriptionLoaderHelper constructor(val context: Context, val productId: 
                                     addApplicasterToken(offerId)
                                     subscriber.onNext(true)
                                 } else {
+                                    // Sending false will continue the loop (check takeUntil operator)
                                     subscriber.onNext(false)
                                 }
 
                                 subscriber.onCompleted()
                             } else {
-                                Log.e("SubscriptionLoader", response.toString())
+                                Log.e("SubscriptionLoader", "failed to fetch subscriptions: ${response.toString()}")
                             }
                         }
                     })
@@ -53,7 +55,7 @@ class SubscriptionLoaderHelper constructor(val context: Context, val productId: 
                 }
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
-                    Log.d("SubscriptionLoader", "request status is $it")
+                    callback(it)
                 }, {
                     dismissLoading()
                 }, {
@@ -72,9 +74,10 @@ class SubscriptionLoaderHelper constructor(val context: Context, val productId: 
                 }
 
                 for (i in 0 until json.length()) {
-                    var jsonOffers = json.getJSONObject(i)
+                    val jsonOffers = json.getJSONObject(i)
                     if (offerId == jsonOffers.optString("offerId") && isAuthId) {
                         AuthenticationProviderUtil.addToken(itemID, jsonOffers.optString("token"))
+                        user.userOffers.add(Offer(offerId, jsonOffers.optString("token"), itemID))
                     }
                 }
             }

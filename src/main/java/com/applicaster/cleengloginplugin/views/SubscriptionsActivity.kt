@@ -71,7 +71,6 @@ class SubscriptionsActivity: BaseActivity() {
         sign_up_action_text.setOnClickListener {
             LoginActivity.launchLogin(this, null)
         }
-        //CustomizationHelper.updateBgColor(this, R.id.legal_bottom_bar, "cleeng_login_bottom_legal_background_color")
 
         updateViews()
     }

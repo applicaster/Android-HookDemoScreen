@@ -57,7 +57,7 @@ object CleengManager {
             responseParser.handleLoginResponse(status, response)
 
             if (responseParser.status == WebService.Status.Success) {
-                setUser(User(user.email, "", user.facebookId, responseParser.token, responseParser.offers, null))
+                setUser(User(user.email, "", user.facebookId, responseParser.token, responseParser.offers))
             }
 
             callback(status, response)
@@ -85,7 +85,7 @@ object CleengManager {
             responseParser.handleLoginResponse(status, response)
 
             if (responseParser.status == WebService.Status.Success) {
-                setUser(User(user.email, "", user.facebookId, responseParser.token, responseParser.offers, null))
+                setUser(User(user.email, "", user.facebookId, responseParser.token, responseParser.offers))
             }
 
             callback(status, response)
@@ -176,13 +176,14 @@ object CleengManager {
     }
 
     private fun getUser(): User? {
-        if( currentUser != null ) return currentUser
-        this.currentUser = CleengUtil.getUser()
+        if (currentUser == null)
+            currentUser = CleengUtil.getUser()
+
         return currentUser
     }
 
     fun userHasValidToken(): Boolean {
-        var user: User? = getUser() ?: return false
+        val user: User? = getUser() ?: return false
         return CleengUtil.isTokenValid(user?.token)
     }
 

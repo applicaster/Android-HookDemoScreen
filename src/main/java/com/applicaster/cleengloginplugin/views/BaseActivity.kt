@@ -6,17 +6,13 @@ import android.view.View
 import android.widget.EditText
 import android.widget.ImageView
 import com.applicaster.cleengloginplugin.*
-import com.applicaster.cleengloginplugin.R
-import com.applicaster.cleengloginplugin.helper.CleengManager
 import com.applicaster.cleengloginplugin.helper.CustomizationHelper
 import com.applicaster.cleengloginplugin.models.User
 import com.applicaster.cleengloginplugin.remote.WebService
 import com.applicaster.model.APUser
-import com.applicaster.plugin_manager.login.LoginManager
 import com.applicaster.plugin_manager.playersmanager.Playable
 import com.applicaster.util.FacebookUtil
 import com.applicaster.util.asynctask.AsyncTaskListener
-import kotlinx.android.synthetic.main.login_activity.*
 import org.json.JSONObject
 import java.util.*
 
@@ -50,7 +46,6 @@ abstract class BaseActivity : AppCompatActivity() {
         if (backButton != null) {
             CustomizationHelper.updateImageView(backButton,"cleeng_login_back_button" )
             backButton.setOnClickListener {
-                closeLoginPluginFromHook()
                 this.finish()
             }
         }
@@ -58,19 +53,10 @@ abstract class BaseActivity : AppCompatActivity() {
         if (closeButton != null) {
             CustomizationHelper.updateImageView(closeButton,"cleeng_login_close_button" )
             closeButton.setOnClickListener {
-                closeLoginPluginFromHook()
                 this.finish()
             }
         }
     }
-
-    /***
-     * When login launched from Hook we should notify that login is closed in order to continue the into flow by calling hookFinish
-     */
-    private fun closeLoginPluginFromHook() {
-        LoginManager.notifyEvent(this, LoginManager.RequestType.CLOSED, false);
-    }
-
 
     fun dismissLoading() {
         progressBar.visibility = View.GONE
@@ -119,7 +105,7 @@ abstract class BaseActivity : AppCompatActivity() {
                 email.toString(),
                 password.toString(),
                 null,
-                null, null, null)
+                null)
     }
 
     protected fun fetchUserData(): User? {
@@ -134,7 +120,7 @@ abstract class BaseActivity : AppCompatActivity() {
                         result.email,
                         null,
                         result.id,
-                        null, null, null)
+                        null)
 
             }
 
@@ -144,10 +130,5 @@ abstract class BaseActivity : AppCompatActivity() {
         })
 
         return user
-    }
-
-    override fun onBackPressed() {
-        super.onBackPressed()
-        closeLoginPluginFromHook();
     }
 }
