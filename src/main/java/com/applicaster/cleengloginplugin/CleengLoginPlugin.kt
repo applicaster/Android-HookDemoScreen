@@ -2,7 +2,6 @@ package com.applicaster.cleengloginplugin
 
 import android.content.Context
 import com.applicaster.cleengloginplugin.helper.CleengManager
-import com.applicaster.cleengloginplugin.helper.CleengUtil
 import com.applicaster.cleengloginplugin.helper.PluginConfigurationHelper
 import com.applicaster.cleengloginplugin.views.LoginActivity
 import com.applicaster.cleengloginplugin.views.SignUpActivity
@@ -85,7 +84,7 @@ class CleengLoginPlugin : LoginContract {
     // region NOT IMPLEMENTED
 
     override fun getToken(): String {
-        return CleengUtil.getUser()?.token ?: ""
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
     override fun setToken(token: String?) {
