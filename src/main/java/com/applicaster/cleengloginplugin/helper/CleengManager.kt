@@ -149,14 +149,14 @@ object CleengManager {
         }
     }
 
-    fun extendToken(user: User, context: Context, callback: (WebService.Status, String?) -> Unit) {
+    fun extendToken(user: User, context: Context, callback: (String?) -> Unit) {
         val params = Params()
         if(StringUtil.isNotEmpty(currentUser?.token))
             params["token"] = user.token!!
 
         this.webService.performApiRequest(WebService.ApiRequest.ExtendToken, params, context) { status: WebService.Status, response: String? ->
             if (status == WebService.Status.Success) {
-                callback(status, response)
+                callback(response)
             }
         }
     }

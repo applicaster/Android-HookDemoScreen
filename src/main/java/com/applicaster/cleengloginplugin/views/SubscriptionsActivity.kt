@@ -46,7 +46,7 @@ class SubscriptionsActivity: BaseActivity() {
                 params["byAuthId"] = "1"
             }
         }
-        if (CleengManager.availableSubscriptions.count() == 0 || playable != null) {
+        if (CleengManager.availableSubscriptions.count() == 0) {
             showLoading()
             CleengManager.fetchAvailableSubscriptions(this, params) { status: WebService.Status, response: String? ->
 

@@ -8,6 +8,7 @@ import com.applicaster.cleengloginplugin.remote.Params
 import com.applicaster.cleengloginplugin.remote.WebService
 import com.applicaster.cleengloginplugin.views.BaseActivity
 import org.json.JSONArray
+import org.json.JSONException
 import rx.Observable
 import rx.android.schedulers.AndroidSchedulers
 import java.util.concurrent.TimeUnit
@@ -64,14 +65,11 @@ class SubscriptionLoaderHelper constructor(val context: Context, val productId: 
     }
 
     private fun addApplicasterToken(offerId: String) {
-        val user = CleengUtil.getUser()
-        if (user != null) {
-            CleengManager.extendToken(user, context) { status, response ->
-                val json = try {
-                    JSONArray(response)
-                } catch (e: Exception) {
-                    return@extendToken
-                }
+        val user = CleengUtil.getUser() ?: return
+
+        CleengManager.extendToken(user, context) { response ->
+            try {
+                val json = JSONArray(response)
 
                 for (i in 0 until json.length()) {
                     val jsonOffers = json.getJSONObject(i)
@@ -80,25 +78,31 @@ class SubscriptionLoaderHelper constructor(val context: Context, val productId: 
                         user.userOffers.add(Offer(offerId, jsonOffers.optString("token"), itemID))
                     }
                 }
+
                 CleengManager.setUser(user)
+
+            } catch (e: JSONException) {
+                Log.d("SubscriptionLoader", e.toString())
             }
         }
     }
 
     private fun isPurchaseSucceed(response: String?, productId: String): Boolean {
-        val json = try {
-            JSONArray(response)
-        } catch (e: Exception) {
-            return false
+        try {
+            val json = JSONArray(response)
+
+            for (i in 0 until json.length()) {
+                val jsonSubscription = json.getJSONObject(i)
+                if (jsonSubscription.optString("androidProductId") == productId) {
+                    offerId = jsonSubscription.optString("id")
+                    return jsonSubscription.optBoolean("accessGranted")
+                }
+            }
+
+        } catch (e: JSONException) {
+            Log.d("SubscriptionLoader", e.toString())
         }
 
-        for (i in 0 until json.length()) {
-            var jsonSubscription = json.getJSONObject(i)
-            if (jsonSubscription.optString("androidProductId") == productId) {
-                offerId = jsonSubscription.optString("id")
-                return jsonSubscription.optBoolean("accessGranted")
-            }
-        }
         return false
     }
 
