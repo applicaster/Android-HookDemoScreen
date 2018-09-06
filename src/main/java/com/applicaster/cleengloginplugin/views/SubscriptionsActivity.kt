@@ -16,6 +16,7 @@ import com.applicaster.cleengloginplugin.models.Subscription
 import com.applicaster.cleengloginplugin.remote.Params
 import com.applicaster.cleengloginplugin.remote.WebService
 import com.applicaster.model.APModel
+import com.applicaster.plugin_manager.login.LoginManager
 import com.applicaster.plugin_manager.playersmanager.Playable
 import com.applicaster.util.OSUtil
 import com.applicaster.util.StringUtil
@@ -86,8 +87,12 @@ class SubscriptionsActivity: BaseActivity() {
         for (subscription in CleengManager.availableSubscriptions) {
             if (isActiveUser) {
                 //ignore purchased items
-                if (!CleengManager.purchasedItems.contains(subscription.androidProductId))
+                if (CleengManager.purchasedItems.contains(subscription.androidProductId)) {
+                    LoginManager.notifyEvent(this, LoginManager.RequestType.LOGIN, true)
+                    finish()
+                } else {
                     subscriptionsContainer.addView(this.getSubscriptionView(subscription, subscriptionsContainer))
+                }
             } else {
                 subscriptionsContainer.addView(this.getSubscriptionView(subscription, subscriptionsContainer))
             }

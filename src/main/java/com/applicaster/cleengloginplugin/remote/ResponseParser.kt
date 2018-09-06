@@ -66,9 +66,8 @@ class ResponseParser {
         iapManager.init(object : APIabSetupFinishedHandler {
 
             override fun onIabSetupSucceeded() {
-                iapManager.getInventory(productIds) {succeed ->
-                    if(succeed)
-                        (context as? SubscriptionsActivity)?.presentSubscriptions()
+                iapManager.getInventory(productIds) { isSuccess ->
+                    if (isSuccess) (context as? SubscriptionsActivity)?.presentSubscriptions()
                 }
             }
 
@@ -80,12 +79,15 @@ class ResponseParser {
     }
 
     private fun parseOngoingSubscriptions(data: JSONObject) {
-        var offerId: String = data.getString("offerId")
-        var token: String =  data.getString("token")
-        var authId: String = data.getString("authId")
-        offers.add(Offer(offerId,token,authId))
-    }
 
+        with(data) {
+
+            offers.add(Offer(
+                    getString("offerId"),
+                    getString("token"),
+                    getString("authId")))
+        }
+    }
 
     private fun parseAccessGranted(subscription : Subscription) {
         CleengUtil.addSubscriptionToUser(subscription)
