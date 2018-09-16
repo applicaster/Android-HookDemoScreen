@@ -84,19 +84,15 @@ class CleengLoginPlugin : LoginContract {
         }
     }
 
-    // region NOT IMPLEMENTED
-
     override fun getToken(): String {
         return CleengUtil.getUser()?.token ?: ""
     }
 
     override fun setToken(token: String?) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        TODO("not implemented")
     }
 
     override fun handlePluginScheme(context: Context?, data: MutableMap<String, String>?): Boolean {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        TODO("not implemented")
     }
-
-    // endregion
 }

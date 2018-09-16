@@ -35,19 +35,14 @@ class SubscriptionLoaderHelper constructor(val context: Context, val productId: 
 
                         CleengManager.fetchAvailableSubscriptions(context, params) { status, response ->
 
-                            if (status == WebService.Status.Success) {
-                                if (status == WebService.Status.Success && isPurchaseSucceed(response, productId)) {
-                                    addApplicasterToken(offerId)
-                                    subscriber.onNext(true)
-                                } else {
-                                    // Sending false will continue the loop (check takeUntil operator)
-                                    subscriber.onNext(false)
-                                }
-
-                                subscriber.onCompleted()
+                            if (status == WebService.Status.Success && isPurchaseSucceed(response, productId)) {
+                                subscriber.onNext(true)
                             } else {
-                                Log.e("SubscriptionLoader", "failed to fetch subscriptions: ${response.toString()}")
+                                // Sending false will continue the loop (@takeUntil operator)
+                                subscriber.onNext(false)
                             }
+
+                            subscriber.onCompleted()
                         }
                     })
                 }
@@ -55,8 +50,11 @@ class SubscriptionLoaderHelper constructor(val context: Context, val productId: 
                     return@takeUntil it
                 }
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({
-                    callback(it)
+                .subscribe({ purchaseSuccess ->
+
+                    if (purchaseSuccess) {
+                        addApplicasterToken(offerId, callback)
+                    }
                 }, {
                     dismissLoading()
                 }, {
@@ -64,10 +62,11 @@ class SubscriptionLoaderHelper constructor(val context: Context, val productId: 
                 })
     }
 
-    private fun addApplicasterToken(offerId: String) {
+    private fun addApplicasterToken(offerId: String, callback: (Boolean) -> Unit) {
         val user = CleengUtil.getUser() ?: return
 
         CleengManager.extendToken(user, context) { response ->
+
             try {
                 val json = JSONArray(response)
 
@@ -80,8 +79,10 @@ class SubscriptionLoaderHelper constructor(val context: Context, val productId: 
                 }
 
                 CleengManager.setUser(user)
+                callback(true)
 
             } catch (e: JSONException) {
+                callback(false)
                 Log.d("SubscriptionLoader", e.toString())
             }
         }

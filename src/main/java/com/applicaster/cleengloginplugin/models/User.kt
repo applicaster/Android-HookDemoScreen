@@ -3,7 +3,7 @@ package com.applicaster.cleengloginplugin.models
 import android.support.annotation.Keep
 
 @Keep
-class User(val email: String?,
+data class User(val email: String?,
            val password: String?,
            val facebookId: String?,
            var token: String?,
