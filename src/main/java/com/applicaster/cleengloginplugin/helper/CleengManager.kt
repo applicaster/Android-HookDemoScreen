@@ -142,10 +142,8 @@ object CleengManager {
         val params = Params()
         params["email"] = email
 
-        this.webService.performApiRequest(WebService.ApiRequest.ResetPassword, params, context) { status: WebService.Status, response: String? ->
-            if (status == WebService.Status.Success) {
-                callback(status, response)
-            }
+        this.webService.performApiRequest(WebService.ApiRequest.ResetPassword, params, context) { status, response ->
+            callback(status, response)
         }
     }
 

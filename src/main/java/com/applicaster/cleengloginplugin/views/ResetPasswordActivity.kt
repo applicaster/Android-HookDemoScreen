@@ -39,6 +39,7 @@ class ResetPasswordActivity : BaseActivity() {
             val email = emailEditText.text.takeIf { it.isNotEmpty() }
 
             this.showLoading()
+            
             CleengManager.resetPassword(email.toString(),this) { status: WebService.Status, response: String? ->
                 this.dismissLoading()
                 if (status == WebService.Status.Success) {
@@ -46,7 +47,6 @@ class ResetPasswordActivity : BaseActivity() {
                 } else {
                     showError(status, response)
                 }
-
             }
         }
 
