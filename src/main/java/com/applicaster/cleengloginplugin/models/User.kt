@@ -1,8 +1,5 @@
 package com.applicaster.cleengloginplugin.models
 
-import android.support.annotation.Keep
-
-@Keep
 data class User(val email: String?,
            val password: String?,
            val facebookId: String?,

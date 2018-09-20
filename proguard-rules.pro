@@ -2,3 +2,7 @@
     public <fields>;
     public <methods>;
 }
+
+-keep class com.applicaster.cleengloginplugin.models.** {
+    *;
+}

@@ -1,9 +1,7 @@
 package com.applicaster.cleengloginplugin.models
 
-import android.support.annotation.Keep
 import com.applicaster.billing.v3.util.Purchase
 
-@Keep
 data class PurchaseItem(val token: String,
                    val sku: String,
                    val signature: String,
