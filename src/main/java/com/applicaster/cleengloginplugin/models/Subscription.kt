@@ -8,5 +8,7 @@ data class Subscription(val id: String,
     var title: String? = null
     var description: String? = null
     var price: String? = null
+    var type: String? = null
+
 
 }

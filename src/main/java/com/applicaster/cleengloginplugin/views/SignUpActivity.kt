@@ -157,7 +157,7 @@ class SignUpActivity : BaseActivity() {
             iapManager.init(object : APIabSetupFinishedHandler {
 
                 override fun onIabSetupSucceeded() {
-                    iapManager.startPurchase(androidProductId!!, itemId!!, isAuthId)
+                    iapManager.startPurchase(androidProductId!!, itemId!!, isAuthId, extraData["itemType"])
                 }
 
                 override fun onIabSetupFailed() {
