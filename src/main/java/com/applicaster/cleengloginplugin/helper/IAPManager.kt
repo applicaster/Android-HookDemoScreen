@@ -6,6 +6,7 @@ import android.content.Intent
 import android.util.Log
 import com.applicaster.billing.v3.handlers.APIabSetupFinishedHandler
 import com.applicaster.billing.v3.util.*
+import com.applicaster.cleengloginplugin.ITEM_TYPE_INAPP
 import com.applicaster.cleengloginplugin.models.PurchaseItem
 import com.applicaster.cleengloginplugin.remote.WebService
 import com.applicaster.cleengloginplugin.views.SubscriptionsActivity
@@ -68,7 +69,7 @@ class IAPManager(private val mContext: Context) {
     }
 
     fun startPurchase(productId: String, itemId: String, isAuthId: Boolean, itemType: String?) {
-        if (StringUtil.isNotEmpty(itemType) && "inapp".equals(itemType)) {
+        if (StringUtil.isNotEmpty(itemType) && ITEM_TYPE_INAPP == itemType) {
             mHelper?.launchPurchaseFlow(mContext as Activity, productId, APBillingUtil.PURCHASE_REQUEST_CODE) { result, info ->
                 if (result.isSuccess) {
                     continuePurchaseFlow(info, productId, itemId, isAuthId)

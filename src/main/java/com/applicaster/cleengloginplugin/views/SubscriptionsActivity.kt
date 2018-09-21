@@ -130,7 +130,7 @@ class SubscriptionsActivity: BaseActivity() {
                 purchaseData["androidProductId"] = subscription.androidProductId
                 purchaseData["authID"] = subscription.authID
                 purchaseData["offerId"] = subscription.id
-                purchaseData["itemType"] = subscription.type ?: "subscription"
+                purchaseData["itemType"] = subscription.type ?: ITEM_TYPE_SUBS
                 SignUpActivity.launchSignUpActivity(this, playable, true, purchaseData)
             } else {
                 iapManager.init(object : APIabSetupFinishedHandler {

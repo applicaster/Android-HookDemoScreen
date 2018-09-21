@@ -42,6 +42,9 @@ const val LOGIN_LEGAL = "cleeng_login_legal"
 const val SUBSCRIPTION1 = "cleeng_login_subscription"
 const val SUBSCRIPTION_DETAILS = "cleeng_login_subscription_details"
 
+const val ITEM_TYPE_INAPP = "inapp"
+const val ITEM_TYPE_SUBS = "subs"
+
 //errors
 const val LOGIN_INTERNAL_ERROR_TITLE = "cleeng_login_error_internal_title"
 const val LOGIN_INTERNAL_ERROR_MESSAGE = "cleeng_login_error_internal_message"
