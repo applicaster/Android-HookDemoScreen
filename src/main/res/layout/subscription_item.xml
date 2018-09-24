@@ -16,7 +16,7 @@
         android:paddingLeft="20dp"
         android:orientation="vertical">
 
-        <TextView
+        <com.applicaster.util.ui.CustomTextView
             android:id="@+id/title_text_view"
             android:layout_width="match_parent"
             android:layout_height="0dp"
@@ -25,7 +25,7 @@
             android:gravity="center"
             android:singleLine="true" />
 
-        <TextView
+        <com.applicaster.util.ui.CustomTextView
             android:id="@+id/description_text_view"
             android:layout_width="match_parent"
             android:layout_height="0dp"
@@ -41,7 +41,7 @@
             android:layout_marginBottom="12dp"
             android:layout_weight="1">
 
-            <Button
+            <com.applicaster.util.ui.CustomButton
                 android:id="@+id/purchase_button"
                 android:layout_width="176dp"
                 android:layout_height="36dp"

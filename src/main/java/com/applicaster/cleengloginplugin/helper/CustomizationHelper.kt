@@ -13,6 +13,8 @@ import com.applicaster.app.CustomApplication
 import com.applicaster.util.OSUtil
 import com.applicaster.util.StringUtil
 import com.applicaster.util.TextUtil
+import com.applicaster.util.ui.CustomButton
+import com.applicaster.util.ui.CustomEditText
 
 class CustomizationHelper{
     companion object {
@@ -47,7 +49,7 @@ class CustomizationHelper{
 
         @JvmStatic
         fun updateEditTextView(activity : Activity, id: Int , key : String , isHint: Boolean) {
-            val editText = activity.findViewById(id) as EditText? ?: return
+            val editText = activity.findViewById(id) as CustomEditText? ?: return
             var textValue = PluginConfigurationHelper.getConfigurationValue(key)
             textValue = if (StringUtil.isNotEmpty(textValue))  textValue else key
             if (!isHint) {
@@ -61,7 +63,7 @@ class CustomizationHelper{
 
         @JvmStatic
         fun updateButtonViewText(activity: Activity, id: Int, key: String, style: String?) {
-            val button = activity.findViewById(id) as Button? ?: return
+            val button = activity.findViewById(id) as CustomButton? ?: return
             var textValue = PluginConfigurationHelper.getConfigurationValue(key)
             textValue = if (StringUtil.isNotEmpty(textValue))  textValue else key
             button.text = textValue

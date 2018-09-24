@@ -93,7 +93,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
-        <TextView
+        <com.applicaster.util.ui.CustomTextView
             android:id="@+id/legal_bottom_bar_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

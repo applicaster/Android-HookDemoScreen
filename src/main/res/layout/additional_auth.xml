@@ -19,7 +19,7 @@
             android:layout_marginLeft="40dp"
             android:scaleType="fitCenter" />
 
-        <Button
+        <com.applicaster.util.ui.CustomButton
             android:id="@+id/fb_btn"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -50,7 +50,7 @@
             android:layout_marginLeft="40dp"
             android:scaleType="fitCenter" />
 
-        <Button
+        <com.applicaster.util.ui.CustomButton
             android:id="@+id/google_btn"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
