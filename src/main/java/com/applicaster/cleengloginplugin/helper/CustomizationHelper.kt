@@ -3,14 +3,16 @@ package com.applicaster.cleengloginplugin.helper
 import android.app.Activity
 import android.content.Context
 import android.os.Build
+import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
-import com.applicaster.cleengloginplugin.views.SignUpActivity
+import com.applicaster.app.CustomApplication
 import com.applicaster.util.OSUtil
 import com.applicaster.util.StringUtil
+import com.applicaster.util.TextUtil
 
 class CustomizationHelper{
     companion object {
@@ -104,7 +106,17 @@ class CustomizationHelper{
                 } else {
                     view.setTextAppearance(context, styleRedId)
                 }
+                TextUtil.setTextFont(view, getFontName(key))
             }
+        }
+
+        private fun getFontName(key: String) : String {
+            val attributes: IntArray= intArrayOf(OSUtil.getAttributeResourceIdentifier("customtypeface"))
+            val styles = CustomApplication.getAppContext().obtainStyledAttributes(OSUtil.getStyleResourceIdentifier(key), attributes)
+
+            val font = styles.getString(0)
+            styles.recycle()
+            return font
         }
 
     }
