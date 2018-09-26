@@ -70,7 +70,7 @@ class SubscriptionsActivity: BaseActivity() {
         CustomizationHelper.updateTextView(this, R.id.legal_bottom_bar_text, LOGIN_LEGAL,"CleengLoginLegalText")
 
         sign_up_action_text.setOnClickListener {
-            LoginActivity.launchLogin(this, null)
+            LoginActivity.launchLogin(this, null, trigger)
         }
 
         updateViews()
@@ -131,7 +131,7 @@ class SubscriptionsActivity: BaseActivity() {
                 purchaseData["authID"] = subscription.authID
                 purchaseData["offerId"] = subscription.id
                 purchaseData["itemType"] = subscription.type ?: ITEM_TYPE_SUBS
-                SignUpActivity.launchSignUpActivity(this, playable, true, purchaseData)
+                SignUpActivity.launchSignUpActivity(this, playable, trigger, true, purchaseData)
             } else {
                 iapManager.init(object : APIabSetupFinishedHandler {
 
@@ -156,12 +156,13 @@ class SubscriptionsActivity: BaseActivity() {
 
     companion object {
 
-        fun launchSubscriptionsActivity(context: Context, playable: Playable?) {
+        fun launchSubscriptionsActivity(context: Context, playable: Playable?, trigger: String?) {
             val intent = Intent(context, SubscriptionsActivity::class.java)
             if (playable is APModel) {
                 intent.putExtra("authIds", playable.authorization_providers_ids)
                 intent.putExtra(PLAYABLE, playable)
             }
+            if (trigger != null) intent.putExtra(TRIGGER, trigger)
             context.startActivity(intent)
         }
     }

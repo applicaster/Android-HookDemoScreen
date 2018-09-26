@@ -7,6 +7,7 @@ import android.widget.Button
 import com.applicaster.authprovider.AuthenticationProviderUtil
 import com.applicaster.cleengloginplugin.*;
 import com.applicaster.cleengloginplugin.R
+import com.applicaster.cleengloginplugin.helper.AnalyticsHelper
 import com.applicaster.cleengloginplugin.helper.CleengManager
 import com.applicaster.cleengloginplugin.helper.CustomizationHelper
 import com.applicaster.cleengloginplugin.helper.PluginConfigurationHelper
@@ -55,6 +56,8 @@ class LoginActivity : BaseActivity() {
 
                 showLoading()
 
+                AnalyticsHelper.sendLoginEvent(AnalyticsHelper.START_LOGIN, null, trigger ?: "")
+
                 CleengManager.login(user, this) { status, response ->
                     this.dismissLoading()
 
@@ -62,13 +65,15 @@ class LoginActivity : BaseActivity() {
                         loginSuccessful()
                     } else {
                         showError(status, response)
+                        AnalyticsHelper.sendErrorEvent(AnalyticsHelper.LOGIN_DOES_NOT_SUCCEED,trigger ?: "", "Error Returned", response)
+
                     }
                 }
             }
         }
 
         sign_up_hint.setOnClickListener {
-            SignUpActivity.launchSignUpActivity(this, playable)
+            SignUpActivity.launchSignUpActivity(this, playable, trigger)
             this.finish()
 
         }
@@ -83,7 +88,7 @@ class LoginActivity : BaseActivity() {
         }
 
         forgot_password.setOnClickListener{
-            ResetPasswordActivity.launchResetActivity(this)
+            ResetPasswordActivity.launchResetActivity(this, trigger)
         }
     }
 
@@ -102,13 +107,14 @@ class LoginActivity : BaseActivity() {
                     FacebookUtil.updateTokenIfNeeded(this, APPermissionsType.Custom, object : FBAuthoriziationListener {
 
                         override fun onError(error: Exception) {
-                            //We could show a message error in case we would like it
+                            AnalyticsHelper.sendErrorEvent(AnalyticsHelper.LOGIN_DOES_NOT_SUCCEED,trigger ?: "", "Error Returned", error.message)
                         }
 
                         override fun onSuccess() {
                             val user = fetchUserData()
                             if (user != null) {
                                 showLoading()
+                                AnalyticsHelper.sendLoginEvent(AnalyticsHelper.START_LOGIN, null, trigger ?: "")
                                 CleengManager.login(user, this@LoginActivity) { status: WebService.Status, response: String?  ->
                                     dismissLoading()
 
@@ -116,12 +122,14 @@ class LoginActivity : BaseActivity() {
                                        loginSuccessful()
                                     } else {
                                         showError(status, response)
+                                        AnalyticsHelper.sendErrorEvent(AnalyticsHelper.LOGIN_DOES_NOT_SUCCEED,trigger ?: "", "Error Returned", response)
                                     }
                                 }
                             }
                         }
 
                         override fun onCancel() {
+                            AnalyticsHelper.sendErrorEvent(AnalyticsHelper.LOGIN_DOES_NOT_SUCCEED,trigger ?: "", "User Cancels")
                         }
                     })
                 }
@@ -137,17 +145,18 @@ class LoginActivity : BaseActivity() {
 
             LoginManager.notifyEvent(this, LoginManager.RequestType.LOGIN, true)
         } else {
-            SubscriptionsActivity.launchSubscriptionsActivity(this, playable)
+            SubscriptionsActivity.launchSubscriptionsActivity(this, playable, trigger)
         }
+        AnalyticsHelper.sendLoginEvent(AnalyticsHelper.LOGIN_SUCCEEDS, null, trigger ?: "")
         finish()
     }
 
     companion object {
-        fun launchLogin(context: Context, playable: Playable?) {
+        fun launchLogin(context: Context, playable: Playable?, trigger: String?) {
             val intent = Intent(context,LoginActivity::class.java)
-            if (playable != null) {
-                intent.putExtra(PLAYABLE, playable)
-            }
+
+            if (playable != null) intent.putExtra(PLAYABLE, playable)
+            if (trigger != null) intent.putExtra(TRIGGER, trigger)
             context.startActivity(intent)
         }
     }

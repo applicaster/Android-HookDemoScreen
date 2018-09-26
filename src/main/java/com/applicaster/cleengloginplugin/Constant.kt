@@ -11,7 +11,7 @@ const val SIGN_UP_BUTTON = "cleeng_login_sign_up_button"
 const val SIGN_IN_BUTTON = "cleeng_login_sign_in_button"
 const val LOGIN_FIRST_SCREEN="cleeng_login_first_screen"
 
-const val PLAYABLE="playable"
+const val PLAYABLE = "playable"
 
 
 const val ACTION_ALTERNATIVE = "cleeng_login_action_alternative"
@@ -51,4 +51,7 @@ const val LOGIN_INTERNAL_ERROR_MESSAGE = "cleeng_login_error_internal_message"
 const val LOGIN_CREDENTAIL_ERROR_TITLE  = "cleeng_login_error_credentials_title"
 const val LOGIN_CREDENTAIL_ERROR_MESSAGE = "cleeng_login_error_credentials_message"
 
+
+// analytics
+const val TRIGGER = "trigger"
 

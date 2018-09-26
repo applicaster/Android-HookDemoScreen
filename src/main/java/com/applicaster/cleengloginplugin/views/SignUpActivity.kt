@@ -2,17 +2,13 @@ package com.applicaster.cleengloginplugin.views
 
 import android.content.Context
 import android.content.Intent
-import android.os.Bundle
 import android.view.View
 import android.widget.Button
 import com.applicaster.billing.v3.handlers.APIabSetupFinishedHandler
 import com.applicaster.billing.v3.util.APBillingUtil
 import com.applicaster.cleengloginplugin.*;
 import com.applicaster.cleengloginplugin.R
-import com.applicaster.cleengloginplugin.helper.CleengManager
-import com.applicaster.cleengloginplugin.helper.CustomizationHelper
-import com.applicaster.cleengloginplugin.helper.IAPManager
-import com.applicaster.cleengloginplugin.helper.PluginConfigurationHelper
+import com.applicaster.cleengloginplugin.helper.*
 import com.applicaster.cleengloginplugin.remote.WebService
 import com.applicaster.model.APModel
 import com.applicaster.plugin_manager.playersmanager.Playable
@@ -67,6 +63,7 @@ class SignUpActivity : BaseActivity() {
             val user = this.getUserFromInput() ?: return@setOnClickListener
 
             this.showLoading()
+            AnalyticsHelper.sendLoginEvent(AnalyticsHelper.START_REGISTRATION, null, trigger ?: "")
             CleengManager.register(user, this) { status: WebService.Status, response: String? ->
                 this.dismissLoading()
 
@@ -74,16 +71,17 @@ class SignUpActivity : BaseActivity() {
                     if (continueToPayment) {
                         purchase()
                     } else {
-                        SubscriptionsActivity.launchSubscriptionsActivity(this@SignUpActivity, playable)
+                        SubscriptionsActivity.launchSubscriptionsActivity(this@SignUpActivity, playable, trigger)
                     }
                 } else {
                     this.showError(status, response)
+                    AnalyticsHelper.sendErrorEvent(AnalyticsHelper.REGISTRATION_DOES_NOT_SUCCEED,trigger ?: "", "Error Returned", response)
                 }
             }
         }
 
         sign_in_hint.setOnClickListener{
-            LoginActivity.launchLogin(this, playable);
+            LoginActivity.launchLogin(this, playable, trigger)
             this.finish()
         }
 
@@ -113,7 +111,7 @@ class SignUpActivity : BaseActivity() {
                 FacebookUtil.updateTokenIfNeeded(this, APPermissionsType.Custom, object : FBAuthoriziationListener {
 
                     override fun onError(error: Exception) {
-                        //We could show a message error in case we would like it
+                        AnalyticsHelper.sendErrorEvent(AnalyticsHelper.REGISTRATION_DOES_NOT_SUCCEED,trigger ?: "", "Error Returned", error.message)
                     }
 
                     override fun onSuccess() {
@@ -124,20 +122,25 @@ class SignUpActivity : BaseActivity() {
                                 dismissLoading()
 
                                 if (status == WebService.Status.Success) {
+                                    AnalyticsHelper.sendLoginEvent(AnalyticsHelper.REGISTRATION_SUCCEEDS, null, trigger ?: "")
                                     if (continueToPayment) {
                                         purchase()
                                     } else {
-                                        SubscriptionsActivity.launchSubscriptionsActivity(this@SignUpActivity, playable)
+                                        SubscriptionsActivity.launchSubscriptionsActivity(this@SignUpActivity, playable, trigger)
                                         finish()
                                     }
                                 } else {
                                     showError(status, response)
+                                    AnalyticsHelper.sendErrorEvent(AnalyticsHelper.REGISTRATION_DOES_NOT_SUCCEED,trigger ?: "", "Error Returned", response)
+
                                 }
                             }
                         }
                     }
 
                     override fun onCancel() {
+                        AnalyticsHelper.sendErrorEvent(AnalyticsHelper.REGISTRATION_DOES_NOT_SUCCEED,trigger ?: "", "User Cancels")
+
                     }
                 })
             }
@@ -168,12 +171,13 @@ class SignUpActivity : BaseActivity() {
     }
 
     companion object {
-        fun launchSignUpActivity(context: Context, playable: Playable?, continueToPayment: Boolean = false, extraData: HashMap<String, String>? = null) {
+        fun launchSignUpActivity(context: Context, playable: Playable?, trigger: String?, continueToPayment: Boolean = false, extraData: HashMap<String, String>? = null) {
             val intent = Intent(context,SignUpActivity::class.java)
             if (playable != null && playable is APModel) {
                 intent.putExtra("authIds", playable.authorization_providers_ids)
                 intent.putExtra(PLAYABLE, playable)
             }
+            if (trigger != null) intent.putExtra(TRIGGER, trigger)
             intent.putExtra("continueToPayment", continueToPayment)
             intent.putExtra("extraData", extraData)
             context.startActivity(intent)

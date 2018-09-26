@@ -6,6 +6,7 @@ import android.view.View
 import android.widget.EditText
 import android.widget.ImageView
 import com.applicaster.cleengloginplugin.*
+import com.applicaster.cleengloginplugin.helper.AnalyticsHelper
 import com.applicaster.cleengloginplugin.helper.CustomizationHelper
 import com.applicaster.cleengloginplugin.models.User
 import com.applicaster.cleengloginplugin.remote.WebService
@@ -19,6 +20,7 @@ import java.util.*
 abstract class BaseActivity : AppCompatActivity() {
 
     var playable: Playable? = null
+    var trigger: String? = null
     private lateinit var progressBar: View
 
     abstract fun getContentViewResId(): Int
@@ -27,6 +29,7 @@ abstract class BaseActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         playable = intent.getSerializableExtra(PLAYABLE) as Playable?
+        trigger = intent.getSerializableExtra(TRIGGER) as String?
 
         this.setContentView(this.getContentViewResId())
         progressBar = findViewById(R.id.progress_bar)

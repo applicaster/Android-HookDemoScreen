@@ -61,7 +61,7 @@ class RestoreActivity : BaseActivity() {
         }
 
         forgot_password.setOnClickListener{
-            ResetPasswordActivity.launchResetActivity(this)
+            ResetPasswordActivity.launchResetActivity(this, trigger)
         }
     }
 
@@ -69,20 +69,6 @@ class RestoreActivity : BaseActivity() {
     companion object {
         fun launchRestoreActivity(context: Context) {
             context.startActivity(Intent(context, RestoreActivity::class.java))
-        }
-    }
-
-    private val handler = object :APQueryInventoryFinishedHandler {
-        override fun onInventoryQueryFailed() {
-        }
-
-        override fun onUnconsumedPurchaseFound(purchase: Purchase?): Boolean {
-            //iapManager.loadSubscriptions()
-            TODO("Implement later")
-        }
-
-        override fun onInventoryEmpty() {
-
         }
     }
 }

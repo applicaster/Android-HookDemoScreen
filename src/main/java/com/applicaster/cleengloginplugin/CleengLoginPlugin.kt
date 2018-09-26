@@ -31,14 +31,14 @@ class CleengLoginPlugin : LoginContract {
                 if (isSuccess) listener.onHookFinished()
             })
 
-            openFirstScreen(context, null)
+            openFirstScreen(context, null, "App Launch")
         } else {
             listener.onHookFinished()
         }
     }
 
     override fun login(context: Context, additionalParams: MutableMap<Any?, Any?>?, callback: LoginContract.Callback?) {
-        openFirstScreen(context, null)
+        openFirstScreen(context, null, "Category")
     }
 
     override fun login(context: Context, playable: Playable?, additionalParams: MutableMap<Any?, Any?>?, callback: LoginContract.Callback) {
@@ -49,9 +49,9 @@ class CleengLoginPlugin : LoginContract {
 
         if (CleengManager.userHasValidToken()) {
             //if user has valid token open subscription screen (user already logged in)
-            SubscriptionsActivity.launchSubscriptionsActivity(context, playable)
+            SubscriptionsActivity.launchSubscriptionsActivity(context, playable, "VOD Item")
         } else {
-            openFirstScreen(context, playable)
+            openFirstScreen(context, playable, "VOD Item")
         }
     }
 
@@ -74,13 +74,13 @@ class CleengLoginPlugin : LoginContract {
         PluginConfigurationHelper.setConfigurationMap(params as Map<String, String>)
     }
 
-    private fun openFirstScreen(context: Context, playable: Playable?) {
+    private fun openFirstScreen(context: Context, playable: Playable?, trigger: String) {
         val firstScreenValue = PluginConfigurationHelper.getConfigurationValue(LOGIN_FIRST_SCREEN)
         when (firstScreenValue) {
-            "subscriptions" -> SubscriptionsActivity.launchSubscriptionsActivity(context, playable)
-            "login" -> LoginActivity.launchLogin(context, playable)
-            "sign up" -> SignUpActivity.launchSignUpActivity(context, playable)
-            else -> LoginActivity.launchLogin(context, playable)
+            "subscriptions" -> SubscriptionsActivity.launchSubscriptionsActivity(context, playable, trigger)
+            "login" -> LoginActivity.launchLogin(context, playable, trigger)
+            "sign up" -> SignUpActivity.launchSignUpActivity(context, playable, trigger)
+            else -> LoginActivity.launchLogin(context, playable, trigger)
         }
     }
 

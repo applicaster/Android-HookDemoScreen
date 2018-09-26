@@ -2,7 +2,6 @@ package com.applicaster.cleengloginplugin.views
 
 import android.content.Context
 import android.content.Intent
-import android.view.View
 import android.widget.EditText
 import com.applicaster.cleengloginplugin.*;
 import com.applicaster.cleengloginplugin.helper.CleengManager
@@ -10,7 +9,6 @@ import com.applicaster.cleengloginplugin.helper.CustomizationHelper
 import com.applicaster.cleengloginplugin.remote.WebService
 import com.applicaster.util.OSUtil
 import kotlinx.android.synthetic.main.reset_password_activity.*
-import kotlinx.android.synthetic.main.user_input.*
 
 class ResetPasswordActivity : BaseActivity() {
 
@@ -43,7 +41,7 @@ class ResetPasswordActivity : BaseActivity() {
             CleengManager.resetPassword(email.toString(),this) { status: WebService.Status, response: String? ->
                 this.dismissLoading()
                 if (status == WebService.Status.Success) {
-                    LoginActivity.launchLogin(this, null)
+                    LoginActivity.launchLogin(this, null, trigger)
                 } else {
                     showError(status, response)
                 }
@@ -58,8 +56,10 @@ class ResetPasswordActivity : BaseActivity() {
     }
 
     companion object {
-        fun launchResetActivity(context: Context) {
-            context.startActivity(Intent(context, ResetPasswordActivity::class.java))
+        fun launchResetActivity(context: Context, trigger: String?) {
+            val intent = Intent(context, ResetPasswordActivity::class.java)
+            if (trigger != null) intent.putExtra(TRIGGER, trigger)
+            context.startActivity(intent)
         }
     }
 }
