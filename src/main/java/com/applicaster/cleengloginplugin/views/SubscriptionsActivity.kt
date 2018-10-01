@@ -9,10 +9,12 @@ import com.applicaster.billing.v3.handlers.APIabSetupFinishedHandler
 import com.applicaster.billing.v3.util.APBillingUtil
 import com.applicaster.cleengloginplugin.*
 import com.applicaster.cleengloginplugin.helper.CleengManager
+import com.applicaster.cleengloginplugin.helper.CleengUtil
 import com.applicaster.cleengloginplugin.helper.CustomizationHelper
 import com.applicaster.cleengloginplugin.helper.IAPManager
 import com.applicaster.cleengloginplugin.helper.PluginConfigurationHelper
 import com.applicaster.cleengloginplugin.models.Subscription
+import com.applicaster.cleengloginplugin.models.ownedSubscriptions
 import com.applicaster.cleengloginplugin.remote.Params
 import com.applicaster.cleengloginplugin.remote.WebService
 import com.applicaster.model.APModel
@@ -88,8 +90,10 @@ class SubscriptionsActivity: BaseActivity() {
             if (isActiveUser) {
                 //ignore purchased items
                 if (CleengManager.purchasedItems.contains(subscription.androidProductId)) {
-                    LoginManager.notifyEvent(this, LoginManager.RequestType.LOGIN, true)
-                    finish()
+                    if(checkCleengUser(subscription)) {
+                        LoginManager.notifyEvent(this, LoginManager.RequestType.LOGIN, true)
+                        finish()
+                    }
                 } else {
                     subscriptionsContainer.addView(this.getSubscriptionView(subscription, subscriptionsContainer))
                 }
@@ -97,6 +101,13 @@ class SubscriptionsActivity: BaseActivity() {
                 subscriptionsContainer.addView(this.getSubscriptionView(subscription, subscriptionsContainer))
             }
         }
+    }
+
+    private fun checkCleengUser(subscription: Subscription): Boolean {
+        val ownedSubs = CleengUtil.getUser()?.ownedSubscriptions
+        if(ownedSubs != null && ownedSubs.isNotEmpty())
+            return ownedSubs.contains(subscription)
+        return false
     }
 
     private fun getSubscriptionView(subscription: Subscription, container: ViewGroup): View {
