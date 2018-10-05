@@ -4,6 +4,8 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.util.Log
+import android.view.View
+import android.widget.Toast
 import com.applicaster.billing.v3.handlers.APIabSetupFinishedHandler
 import com.applicaster.billing.v3.util.*
 import com.applicaster.cleengloginplugin.ITEM_TYPE_INAPP
@@ -68,17 +70,20 @@ class IAPManager(private val mContext: Context) {
         }
     }
 
-    fun startPurchase(productId: String, itemId: String, isAuthId: Boolean, itemType: String?) {
+    fun startPurchase(productId: String, itemId: String, isAuthId: Boolean, itemType: String?, callback: (Boolean) -> Unit) {
         if (StringUtil.isNotEmpty(itemType) && ITEM_TYPE_INAPP == itemType) {
             mHelper?.launchPurchaseFlow(mContext as Activity, productId, APBillingUtil.PURCHASE_REQUEST_CODE) { result, info ->
                 if (result.isSuccess) {
                     continuePurchaseFlow(info, productId, itemId, isAuthId)
                 }
+                callback(result.isSuccess)
             }
         } else {
             mHelper?.launchSubscriptionPurchaseFlow(mContext as Activity, productId, APBillingUtil.PURCHASE_REQUEST_CODE) { result, info ->
                 if (result.isSuccess) {
                     continuePurchaseFlow(info, productId, itemId, isAuthId)
+                } else {
+                    Toast.makeText(mContext, result.message, Toast.LENGTH_LONG).show()
                 }
             }
         }

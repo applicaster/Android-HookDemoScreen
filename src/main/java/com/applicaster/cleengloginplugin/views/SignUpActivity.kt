@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.view.View
 import android.widget.Button
+import android.widget.Toast
 import com.applicaster.billing.v3.handlers.APIabSetupFinishedHandler
 import com.applicaster.billing.v3.util.APBillingUtil
 import com.applicaster.cleengloginplugin.*;
@@ -160,7 +161,13 @@ class SignUpActivity : BaseActivity() {
             iapManager.init(object : APIabSetupFinishedHandler {
 
                 override fun onIabSetupSucceeded() {
-                    iapManager.startPurchase(androidProductId!!, itemId!!, isAuthId, extraData["itemType"])
+                    iapManager.startPurchase(androidProductId!!, itemId!!, isAuthId, extraData["itemType"]) { succeed ->
+                        if(!succeed) {
+                            dismissLoading()
+                            Toast.makeText(this@SignUpActivity, "Failed or Canceled", Toast.LENGTH_LONG).show()
+                            finish()
+                        }
+                    }
                 }
 
                 override fun onIabSetupFailed() {
@@ -182,5 +189,10 @@ class SignUpActivity : BaseActivity() {
             intent.putExtra("extraData", extraData)
             context.startActivity(intent)
         }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        iapManager.handleActivityResult(requestCode, resultCode, data)
     }
 }

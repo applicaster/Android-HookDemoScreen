@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import com.applicaster.billing.v3.handlers.APIabSetupFinishedHandler
 import com.applicaster.billing.v3.util.APBillingUtil
 import com.applicaster.cleengloginplugin.*
@@ -64,6 +65,11 @@ class SubscriptionsActivity: BaseActivity() {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        updateViews()
+    }
+
     override fun customize() {
         super.customize()
         CustomizationHelper.updateTextView(this, R.id.title, SUBSCRIPTION_TITLE,"CleengLoginTitle")
@@ -74,8 +80,6 @@ class SubscriptionsActivity: BaseActivity() {
         sign_up_action_text.setOnClickListener {
             LoginActivity.launchLogin(this, null, trigger)
         }
-
-        updateViews()
     }
 
     fun updateViews() {
@@ -147,7 +151,11 @@ class SubscriptionsActivity: BaseActivity() {
                 iapManager.init(object : APIabSetupFinishedHandler {
 
                     override fun onIabSetupSucceeded() {
-                        iapManager.startPurchase(subscription.androidProductId, itemId, isAuthId, subscription.type)
+                        iapManager.startPurchase(subscription.androidProductId, itemId, isAuthId, subscription.type) {succeed ->
+                            if (!succeed)
+                                Toast.makeText(this@SubscriptionsActivity, "Failed or Canceled", Toast.LENGTH_LONG).show()
+
+                        }
                     }
 
                     override fun onIabSetupFailed() {
