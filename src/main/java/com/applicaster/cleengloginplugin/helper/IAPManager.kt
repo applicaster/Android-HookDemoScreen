@@ -4,14 +4,12 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.util.Log
-import android.view.View
 import android.widget.Toast
 import com.applicaster.billing.v3.handlers.APIabSetupFinishedHandler
 import com.applicaster.billing.v3.util.*
 import com.applicaster.cleengloginplugin.ITEM_TYPE_INAPP
 import com.applicaster.cleengloginplugin.models.PurchaseItem
 import com.applicaster.cleengloginplugin.remote.WebService
-import com.applicaster.cleengloginplugin.views.SubscriptionsActivity
 import com.applicaster.plugin_manager.login.LoginManager
 import com.applicaster.util.StringUtil
 import kotlin.collections.HashMap
@@ -104,14 +102,14 @@ class IAPManager(private val mContext: Context) {
         }
     }
 
-    fun loadSubscriptions(itemId: String, productId: String, isAuthId: Boolean) {
+    private fun loadSubscriptions(itemId: String, productId: String, isAuthId: Boolean) {
 
         val token = CleengManager.currentUser?.token
 
         if (StringUtil.isNotEmpty(token)) {
             val subscriptionHelper = SubscriptionLoaderHelper(mContext, productId, token!!, itemId, isAuthId,60, 5) { isSuccess ->
 
-                if (isSuccess && mContext is SubscriptionsActivity) {
+                if ((isSuccess && mContext is Activity)) {
                     LoginManager.notifyEvent(mContext, LoginManager.RequestType.LOGIN, true)
                     mContext.finish()
                 }
