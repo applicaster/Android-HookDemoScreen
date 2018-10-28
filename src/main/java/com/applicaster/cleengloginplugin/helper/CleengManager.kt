@@ -105,10 +105,10 @@ object CleengManager {
         }
     }
 
-    fun parseAvailableSubscriptions(status: WebService.Status, response: String?, context: Context) {
+    fun parseAvailableSubscriptions(response: String?, context: Context) {
 
         val responseParser = ResponseParser()
-        responseParser.handleAvailableSubscriptionsResponse(status, response, context)
+        responseParser.handleAvailableSubscriptionsResponse(response, context)
     }
 
     fun subscribe(userToken: String, itemId: String, purchaseItem: PurchaseItem, context: Context, isAuthId: Boolean, subscribeCallback: (WebService.Status, String?) -> Unit) {
@@ -131,7 +131,7 @@ object CleengManager {
 
         params.put("receipt" , receipt)
 
-        this.webService.performApiJSONRequest(WebService.ApiRequest.SyncPurchases, params, context) { status: WebService.Status, response: String? ->
+        this.webService.performApiJSONRequest(WebService.ApiRequest.SyncPurchases, params, context) { status, response ->
             if (status == WebService.Status.Success) {
                 subscribeCallback(status, response)
             }

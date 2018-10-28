@@ -91,7 +91,7 @@ class SignUpActivity : BaseActivity() {
 
         } else {
             bottom_bar_container_new_account.setOnClickListener{
-                RestoreActivity.launchRestoreActivity(this)
+                RestoreActivity.launchRestoreActivity(this, playable)
                 this.finish()
             }
         }

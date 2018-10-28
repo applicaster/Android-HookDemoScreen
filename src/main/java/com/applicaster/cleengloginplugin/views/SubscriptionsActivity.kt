@@ -55,7 +55,7 @@ class SubscriptionsActivity: BaseActivity() {
             CleengManager.fetchAvailableSubscriptions(this, params) { status: WebService.Status, response: String? ->
 
                 if (status == WebService.Status.Success) {
-                    CleengManager.parseAvailableSubscriptions(status, response, this)
+                    CleengManager.parseAvailableSubscriptions(response, this)
                 } else {
                     showError(status, response)
                 }

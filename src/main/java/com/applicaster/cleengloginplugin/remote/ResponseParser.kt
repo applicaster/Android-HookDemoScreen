@@ -41,7 +41,7 @@ class ResponseParser {
         }
     }
 
-    fun handleAvailableSubscriptionsResponse(status: WebService.Status, data: String?, context: Context) {
+    fun handleAvailableSubscriptionsResponse(data: String?, context: Context) {
         val availableSubscriptions = ArrayList<Subscription>()
         val productIds = ArrayList<String>()
         val json = try { JSONArray(data) } catch (e: Exception) { return }

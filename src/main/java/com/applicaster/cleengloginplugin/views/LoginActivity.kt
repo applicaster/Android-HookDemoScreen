@@ -83,7 +83,7 @@ class LoginActivity : BaseActivity() {
 
         } else {
             bottom_bar_container.setOnClickListener {
-                RestoreActivity.launchRestoreActivity(this)
+                RestoreActivity.launchRestoreActivity(this, playable)
             }
         }
 

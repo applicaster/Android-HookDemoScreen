@@ -92,7 +92,7 @@ abstract class BaseActivity : AppCompatActivity() {
         this.showAlertDialog(localizationKeys[0], localizationKeys[1],{})
     }
 
-    fun showAlertDialog(title: String, subtitle: String, callback: () -> Unit) {
+    fun showAlertDialog(title: String, subtitle: String, callback: (() -> Unit)? = null) {
         val dialog = AlertDialog(this, title, subtitle, callback)
         dialog.show()
     }

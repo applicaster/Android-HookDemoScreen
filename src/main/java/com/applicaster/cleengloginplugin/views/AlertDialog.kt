@@ -13,7 +13,7 @@ import kotlinx.android.synthetic.main.alert.*
 class AlertDialog(private val baseActivity: BaseActivity,
                   private val title: String,
                   private val subtitle: String,
-                  private val callback: () -> Unit)
+                  private val callback: (() -> Unit)?)
     : Dialog(baseActivity, android.R.style.Theme_Translucent) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -48,7 +48,7 @@ class AlertDialog(private val baseActivity: BaseActivity,
         }
         closeButton.setOnClickListener {
             this.dismiss()
-            this.callback()
+            callback?.invoke()
         }
     }
 

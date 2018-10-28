@@ -72,7 +72,7 @@ class SubscriptionLoaderHelper constructor(val context: Context, val productId: 
 
                 for (i in 0 until json.length()) {
                     val jsonOffers = json.getJSONObject(i)
-                    if (offerId == jsonOffers.optString("offerId") && isAuthId) {
+                    if (offerId == jsonOffers.optString("offerId")) {
                         AuthenticationProviderUtil.addToken(itemID, jsonOffers.optString("token"))
                         user.userOffers.add(Offer(offerId, jsonOffers.optString("token"), itemID))
                     }
