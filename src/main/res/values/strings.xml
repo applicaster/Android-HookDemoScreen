@@ -1,4 +1,4 @@
 <resources>
-    <string name="app_name">Cleeng Login Plugin</string>
+    <string name="app_name">Hook Demo App</string>
     <string name="google_sign_in">Sign In with Google</string>
 </resources>

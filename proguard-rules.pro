@@ -1,8 +1,8 @@
--keep public class com.applicaster.cleengloginplugin.CleengLoginPlugin {
+-keep public class com.applicaster.HookDemoActivity {
     public <fields>;
     public <methods>;
 }
 
--keep class com.applicaster.cleengloginplugin.models.** {
+-keep class com.applicaster.** {
     *;
 }
