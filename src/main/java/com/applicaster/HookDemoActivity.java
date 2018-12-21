@@ -1,4 +1,4 @@
-package com.applicaster.hookdemoscreen;
+package com.applicaster;
 
 import android.app.Activity;
 import android.content.Context;
@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.Switch;
 
 import com.applicaster.activities.base.APBaseFragmentActivity;
+import com.applicaster.cleengloginplugin.R;
 import com.applicaster.hook_screen.HookScreen;
 import com.applicaster.hook_screen.HookScreenListener;
 import com.google.gson.Gson;
@@ -38,7 +39,7 @@ public class HookDemoActivity extends APBaseFragmentActivity implements HookScre
 
         hookProps = convertHookMap(getIntent().getStringExtra(HOOK_PROPS_EXTRA));
 
-        setContentView(R.layout.hook_screen_test_fragment);
+        setContentView(R.layout.hook_layout);
 
         Button buttonFail = this.findViewById(R.id.fail_button);
         Button buttonDismiss = this.findViewById(R.id.dismiss_button);
