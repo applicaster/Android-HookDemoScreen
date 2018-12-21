@@ -60,7 +60,7 @@ repositories {
 dependencies {
 
     // Applicaster SDK
-    def applicasterSDKPath = 'com.applicaster:applicaster-android-sdk:2.32.24'
+    def applicasterSDKPath = 'com.applicaster:applicaster-android-sdk:2.30.14'
 
     // Check if an open SDK is defined - if not use the closed one.
     def devSDK = findProject(':applicaster-android-sdk')
@@ -71,12 +71,8 @@ dependencies {
         api (applicasterSDKPath)
     }
 
-    implementation 'com.android.support:appcompat-v7:23.0.1'
     implementation 'com.android.support.constraint:constraint-layout:1.1.0'
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    api 'com.scottyab:secure-preferences-lib:0.1.4'
-    implementation 'com.android.volley:volley:1.0.0'
-    implementation 'com.android.support:cardview-v7:27.0.2'
 
 
 }
