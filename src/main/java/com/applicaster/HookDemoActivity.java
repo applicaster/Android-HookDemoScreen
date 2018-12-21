@@ -4,18 +4,16 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
+import android.support.v7.app.AppCompatActivity;
 import android.widget.Button;
 import android.widget.Switch;
 
-import com.applicaster.activities.base.APBaseFragmentActivity;
 import com.applicaster.cleengloginplugin.R;
 import com.applicaster.hook_screen.HookScreen;
 import com.applicaster.hook_screen.HookScreenListener;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
-import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -24,7 +22,7 @@ import static com.applicaster.hook_screen.a.ACTIVITY_HOOK_COMPLETED;
 import static com.applicaster.hook_screen.a.ACTIVITY_HOOK_RESULT_CODE;
 import static com.applicaster.hook_screen.a.HOOK_PROPS_EXTRA;
 
-public class HookDemoActivity extends APBaseFragmentActivity implements HookScreen {
+public class HookDemoActivity extends AppCompatActivity implements HookScreen {
 
     HookScreenListener hookListener;
     Map<String, Object> hookProps = new HashMap<>();
@@ -45,7 +43,7 @@ public class HookDemoActivity extends APBaseFragmentActivity implements HookScre
         Button buttonDismiss = this.findViewById(R.id.dismiss_button);
         Button buttonSuccess = this.findViewById(R.id.success_button);
 
-        // buttonFail.setOnClickListener((g) -> hookListener.hookFailed(hookProps));
+        buttonFail.setOnClickListener((g) -> hookListener.hookFailed(hookProps));
         buttonDismiss.setOnClickListener((g) -> this.hookDismissed());
         buttonSuccess.setOnClickListener((g) -> sendActivityResult(this, hookProps, ACTIVITY_HOOK_COMPLETED));
 
@@ -90,26 +88,24 @@ public class HookDemoActivity extends APBaseFragmentActivity implements HookScre
     }
 
     @Override
-    public void executeHook(@NotNull Context context, @NotNull HookScreenListener hookListener, @Nullable Map<String, ?> hookProps) {
+    public void executeHook(Context context, HookScreenListener hookListener, Map<String, ?> hookProps) {
         this.hookListener = hookListener;
         Intent intent = new Intent(context, this.getClass());
         startActivityForResult(intent, context, hookProps);
     }
 
-    @NotNull
     @Override
     public HookScreenListener getListener() {
         return hookListener;
     }
 
-    @NotNull
     @Override
     public HashMap<String, String> getHook() {
         return hookScreen;
     }
 
     @Override
-    public void setHook(@NotNull HashMap<String, String> hookScreen) {
+    public void setHook(HashMap<String, String> hookScreen) {
         this.hookScreen = hookScreen;
     }
 }
