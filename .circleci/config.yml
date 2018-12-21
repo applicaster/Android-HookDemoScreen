@@ -3,7 +3,7 @@
 # Check https://circleci.com/docs/2.0/language-java/ for more details
 #
 defaults: &defaults
-  working_directory: ~/applicaster/CleengLoginPlugin-Android
+  working_directory: ~/applicaster/Android-HookDemoScreen
   docker:
     - image: circleci/android:api-26-alpha
 
