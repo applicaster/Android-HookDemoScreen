@@ -27,6 +27,11 @@ public class HookDemoActivity extends AppCompatActivity implements HookScreen {
     Switch switchDismiss;
     Switch switchRecurringow;
 
+    String HOOK_PROPS_EXTRA = "hook_props_extra";
+    int ACTIVITY_HOOK_FAILED = 1002;
+    int ACTIVITY_HOOK_COMPLETED = 1001;
+    int ACTIVITY_HOOK_RESULT_CODE = 1000;
+
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
