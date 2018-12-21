@@ -20,9 +20,9 @@ import org.jetbrains.annotations.NotNull;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.applicaster.hook_screen.HookScreenManager.ACTIVITY_HOOK_COMPLETED;
-import static com.applicaster.hook_screen.HookScreenManager.ACTIVITY_HOOK_RESULT_CODE;
-import static com.applicaster.hook_screen.HookScreenManager.HOOK_PROPS_EXTRA;
+import static com.applicaster.hook_screen.a.ACTIVITY_HOOK_COMPLETED;
+import static com.applicaster.hook_screen.a.ACTIVITY_HOOK_RESULT_CODE;
+import static com.applicaster.hook_screen.a.HOOK_PROPS_EXTRA;
 
 public class HookDemoActivity extends APBaseFragmentActivity implements HookScreen {
 
