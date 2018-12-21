@@ -45,7 +45,7 @@ public class HookDemoActivity extends APBaseFragmentActivity implements HookScre
         Button buttonDismiss = this.findViewById(R.id.dismiss_button);
         Button buttonSuccess = this.findViewById(R.id.success_button);
 
-        // buttonFail.setOnClickListener((g) -> hookListener.hookFailed(hookProps));
+        buttonFail.setOnClickListener((g) -> hookListener.hookFailed(hookProps));
         buttonDismiss.setOnClickListener((g) -> this.hookDismissed());
         buttonSuccess.setOnClickListener((g) -> sendActivityResult(this, hookProps, ACTIVITY_HOOK_COMPLETED));
 
