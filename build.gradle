@@ -124,7 +124,7 @@ publishing {
                 version versionFromTag
 
                 artifactId ARTIFACT_ID
-                artifact "build/outputs/aar/" + ARTIFACT_FILE_NAME + "-release.aar"
+                artifact "build/outputs/aar/${project.getName()}-release.aar"
                 artifact androidJavadocsJar
                 artifact androidSourcesJar
                 pom.withXml {
