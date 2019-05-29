@@ -8,16 +8,19 @@ import android.support.v7.app.AppCompatActivity;
 import android.widget.Button;
 import android.widget.Switch;
 
-import com.applicaster.hook_screen.HookScreen;
 import com.applicaster.hook_screen.HookScreenListener;
+import com.applicaster.hook_screen.OfflineSupportedHookScreen;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.Map;
 
 
-public class HookDemoActivity extends AppCompatActivity implements HookScreen {
+public class HookDemoActivity extends AppCompatActivity implements OfflineSupportedHookScreen {
 
     HookScreenListener hookListener;
     Map<String, Object> hookProps = new HashMap<>();
@@ -107,5 +110,10 @@ public class HookDemoActivity extends AppCompatActivity implements HookScreen {
     @Override
     public void setHook(HashMap<String, String> hookScreen) {
         this.hookScreen = hookScreen;
+    }
+
+    @Override
+    public void executeHookOffline(@NotNull Context context, @NotNull HookScreenListener hookScreenListener, @Nullable Map<String, Object> hookProps) {
+        executeHook(context, hookListener, hookProps);
     }
 }
