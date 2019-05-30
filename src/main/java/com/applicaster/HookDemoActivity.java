@@ -43,7 +43,11 @@ public class HookDemoActivity extends AppCompatActivity implements HookScreen {
         Button buttonDismiss = this.findViewById(R.id.dismiss_button);
         Button buttonSuccess = this.findViewById(R.id.success_button);
 
-        buttonFail.setOnClickListener((g) -> hookListener.hookFailed(hookProps));
+        switchFlow = this.findViewById(R.id.flow_switch);
+        switchDismiss = this.findViewById(R.id.dismiss_switch);
+        switchRecurringow = this.findViewById(R.id.recurring_switch);
+
+        buttonFail.setOnClickListener((g) -> sendActivityResult(this, hookProps, switchFlow.isChecked()? ACTIVITY_HOOK_FAILED: ACTIVITY_HOOK_COMPLETED));
         buttonDismiss.setOnClickListener((g) -> this.hookDismissed());
         buttonSuccess.setOnClickListener((g) -> sendActivityResult(this, hookProps, ACTIVITY_HOOK_COMPLETED));
 
@@ -69,7 +73,7 @@ public class HookDemoActivity extends AppCompatActivity implements HookScreen {
 
     @Override
     public boolean isFlowBlocker() {
-        return switchFlow.isChecked();
+        return switchFlow != null && switchFlow.isChecked();
     }
 
     @Override
