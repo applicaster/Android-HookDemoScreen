@@ -1,12 +1,12 @@
 apply plugin: 'com.android.library'
 
 android {
-    compileSdkVersion 27
-    buildToolsVersion "27.0.3"
+    compileSdkVersion 28
+    buildToolsVersion "28.0.3"
 
     defaultConfig {
-        minSdkVersion 17
-        targetSdkVersion 27
+        minSdkVersion 19
+        targetSdkVersion 28
 
         consumerProguardFiles 'proguard-rules.pro'
     }
@@ -58,7 +58,7 @@ repositories {
 dependencies {
 
     // Applicaster SDK
-    def applicasterSDKPath = 'com.applicaster:applicaster-android-sdk:2.36.2'
+    def applicasterSDKPath = 'com.applicaster:applicaster-android-sdk:4.0.0'
 
     // Check if an open SDK is defined - if not use the closed one.
     def devSDK = findProject(':applicaster-android-sdk')
