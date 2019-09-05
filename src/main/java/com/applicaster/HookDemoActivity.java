@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Switch;
+import android.widget.TextView;
 
 import com.applicaster.hook_screen.HookScreenListener;
 import com.applicaster.hook_screen.OfflineSupportedHookScreen;
@@ -26,6 +27,7 @@ public class HookDemoActivity extends AppCompatActivity implements OfflineSuppor
     private static final String IS_OFFLINE = "is_offline";
     HookScreenListener hookListener;
     Map<String, Object> hookProps = new HashMap<>();
+    Map<String, Object> screenMap = new HashMap<>();
     HashMap<String, String> hookScreen = new HashMap<>();
 
     boolean isOffline;
@@ -53,6 +55,16 @@ public class HookDemoActivity extends AppCompatActivity implements OfflineSuppor
 
         if (getIntent().getBooleanExtra(IS_OFFLINE, false)) {
             offlineIndicator.setVisibility(View.VISIBLE);
+        }
+
+        Map<String, Object> hookScreenMap = ((Map<String, Object>)(getIntent().getSerializableExtra("hookScreen")));
+        if(hookScreenMap.containsKey("screenMap")) {
+            screenMap = convertHookMap((String)hookScreenMap.get("screenMap"));
+            if(screenMap.containsKey("styles")) {
+                TextView text = findViewById(R.id.presentation_style_value);
+                Map<String, Object> stylesMap = (Map<String, Object>) screenMap.get("styles");
+                text.setText((String)stylesMap.get("presentation"));
+            }
         }
 
         switchFlow = this.findViewById(R.id.flow_switch);
@@ -110,6 +122,8 @@ public class HookDemoActivity extends AppCompatActivity implements OfflineSuppor
         if (isOffline) {
             intent.putExtra(IS_OFFLINE, true);
         }
+        intent.putExtra("hookScreen", this.hookScreen);
+
         startActivityForResult(intent, context, hookProps);
     }
 

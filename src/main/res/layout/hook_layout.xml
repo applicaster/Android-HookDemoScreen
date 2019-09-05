@@ -100,20 +100,21 @@
         app:layout_constraintGuide_begin="130dp" />
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/presentation_style_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hook Props size"
+        android:text="Presentation style: "
         app:layout_constraintBottom_toBottomOf="@+id/guideline"
         app:layout_constraintEnd_toEndOf="@+id/guideline2" />
 
     <TextView
-        android:id="@+id/hook_size"
+        android:id="@+id/presentation_style_value"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:editable="true"
         android:inputType="number"
         android:text="TextView"
+        app:layout_constraintBottom_toBottomOf="@+id/guideline"
         app:layout_constraintStart_toStartOf="@+id/guideline2"
         tools:layout_editor_absoluteY="112dp" />
 
