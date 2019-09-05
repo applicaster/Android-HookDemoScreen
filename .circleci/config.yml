@@ -5,7 +5,7 @@
 defaults: &defaults
   working_directory: ~/applicaster/Android-HookDemoScreen
   docker:
-    - image: circleci/android:api-27-alpha
+    - image: circleci/android:api-28
 
 version: 2
 jobs:
