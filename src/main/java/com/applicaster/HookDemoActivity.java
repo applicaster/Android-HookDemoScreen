@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 import android.widget.Button;
 import android.widget.Switch;
 
@@ -22,9 +23,12 @@ import java.util.Map;
 
 public class HookDemoActivity extends AppCompatActivity implements OfflineSupportedHookScreen {
 
+    private static final String IS_OFFLINE = "is_offline";
     HookScreenListener hookListener;
     Map<String, Object> hookProps = new HashMap<>();
     HashMap<String, String> hookScreen = new HashMap<>();
+
+    boolean isOffline;
 
     Switch switchFlow;
     Switch switchDismiss;
@@ -45,12 +49,17 @@ public class HookDemoActivity extends AppCompatActivity implements OfflineSuppor
         Button buttonFail = this.findViewById(R.id.fail_button);
         Button buttonDismiss = this.findViewById(R.id.dismiss_button);
         Button buttonSuccess = this.findViewById(R.id.success_button);
+        View offlineIndicator = findViewById(R.id.offline_indicator);
+
+        if (getIntent().getBooleanExtra(IS_OFFLINE, false)) {
+            offlineIndicator.setVisibility(View.VISIBLE);
+        }
 
         switchFlow = this.findViewById(R.id.flow_switch);
         switchDismiss = this.findViewById(R.id.dismiss_switch);
         switchRecurringow = this.findViewById(R.id.recurring_switch);
 
-        buttonFail.setOnClickListener((g) -> sendActivityResult(this, hookProps, switchFlow.isChecked()? ACTIVITY_HOOK_FAILED: ACTIVITY_HOOK_COMPLETED));
+        buttonFail.setOnClickListener((g) -> sendActivityResult(this, hookProps, switchFlow.isChecked() ? ACTIVITY_HOOK_FAILED : ACTIVITY_HOOK_COMPLETED));
         buttonDismiss.setOnClickListener((g) -> this.hookDismissed());
         buttonSuccess.setOnClickListener((g) -> sendActivityResult(this, hookProps, ACTIVITY_HOOK_COMPLETED));
 
@@ -98,6 +107,9 @@ public class HookDemoActivity extends AppCompatActivity implements OfflineSuppor
     public void executeHook(Context context, HookScreenListener hookListener, Map<String, ?> hookProps) {
         this.hookListener = hookListener;
         Intent intent = new Intent(context, this.getClass());
+        if (isOffline) {
+            intent.putExtra(IS_OFFLINE, true);
+        }
         startActivityForResult(intent, context, hookProps);
     }
 
@@ -118,6 +130,7 @@ public class HookDemoActivity extends AppCompatActivity implements OfflineSuppor
 
     @Override
     public void executeHookOffline(@NotNull Context context, @NotNull HookScreenListener hookScreenListener, @Nullable Map<String, Object> hookProps) {
-        executeHook(context, hookListener, hookProps);
+        isOffline = true;
+        executeHook(context, hookScreenListener, hookProps);
     }
 }
